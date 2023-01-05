@@ -8,14 +8,11 @@
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="style.css" rel="stylesheet">
-
+    <link href="../style.css" rel="stylesheet">
     <style>
-        #logout {
-            position: absolute;
-            right: 5%;
-        }
-       
+      h3 {
+        padding-bottom: 30px;
+      }
     </style>
 </head>
 <body>
@@ -41,15 +38,48 @@
               
             </li>
             
-            <button class="btn btn-outline-success" type="submit" id='logout'>Log uit</button>
+            <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
             
           </div>
         </div>
       </nav>
-
-      <div class="mb-3">
-        <label for="inputPassword" class="form-label">Wachtwoord</label>
-        <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord">
-    </div>
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <h3>Wachtwoord veranderen</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="inputPassword" class="form-label">Huidig wachtwoord</label>
+              <input type="password" class="form-control" id="currentPassword" placeholder="Wachtwoord">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="inputPassword" class="form-label">Nieuw wachtwoord</label>
+              <input type="password" class="form-control" id="newPassword" placeholder="Wachtwoord">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="mb-3">
+              <label for="inputPassword" class="form-label">Herhaal nieuw wachtwoord</label>
+              <input type="password" class="form-control" id="newPasswordCheck" placeholder="Wachtwoord">
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col text-end">
+            
+              <button class="btn btn-success" type="button" onclick="">Bevestig</button>
+          
+          </div>
+        </div>
+      </div>
 </body>
 </html>
