@@ -54,7 +54,18 @@
   </nav>
 
   <div class="container">
-    <table>
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+      </div>
+      <div class="col">
+        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="table">
       <thead>
         <tr>
           <th>Titel</th>
@@ -74,6 +85,10 @@
       document.getElementById('book-row').innerHTML = rows;
 
     });
+
+    function search() {
+      
+    }
   </script>
 </body>
 
