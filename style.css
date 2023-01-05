@@ -1,0 +1,8 @@
+body {
+    margin-top: 80px;
+    font-family: "EuclidSquare", "Calibri";
+}
+#logout {
+    position: absolute;
+    right: 5%;
+  }
