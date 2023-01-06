@@ -13,6 +13,11 @@
       h3 {
         padding-bottom: 30px;
       }
+      .user-succes {
+        font-size: 1.2rem;
+        color: rgb(5, 173, 5);
+        font-weight: 500;
+      }
     </style>
 </head>
 <body>
@@ -86,12 +91,15 @@
         <div class="row">
             <div class="col">
                 <form>
-                    <input type="checkbox" id="admin" name="is_admin" value="Admin">
+                    <input type="checkbox" id="admin" name="is_admin" value="admin">
                     <label for="admin">Admin</label><br>
                 </form>
             </div>
         </div>
         <div class="row">
+            <div class="col">
+                <p id='done' class="user-succes" style='display: none'>Gebruiker toegevoegd!</p>     
+            </div>
           <div class="col text-end">
             
               <button class="btn btn-success" type="button" onclick="createUser()">Toevoegen</button>
@@ -106,30 +114,37 @@
             let firstNameElementValue = document.getElementById('firstName').value;
             let lastNameElementValue = document.getElementById('lastName').value;
             let emailElementValue = document.getElementById('email').value;
-            let adminElementValue = document.getElementById('admin').value;
+            let adminElementValue = document.getElementById('admin').checked;
+
+            // create a new `Date` object
+            let date = new Date().toJSON();
+
 
             // create js object
             let obj = {
                 firstName: firstNameElementValue,
                 lastName: lastNameElementValue,
-                email: emailElementValue,
+                emailAddress: emailElementValue,
+                password: "12345",
+                dateAccountCreated: date,
                 admin: adminElementValue
             }
 
-            alert(obj.firstName)
-
-            //
-
-        // fetch('http://localhost:8080/user/add', {
-        //     method: 'POST',
-        //     body: JSON.stringify(obj),
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // })
-        //     .then(() => {
-        //         alert('Animal saved')
-        //     })
+        fetch('http://localhost:8080/user/create', {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(() => {
+                var text = document.getElementById("done");
+                if (text.style.display === "none") {
+                    text.style.display = "block";
+                } else {
+                    text.style.display = "none";
+                }
+            })
         }
       </script>
 </body>
