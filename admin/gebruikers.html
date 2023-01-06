@@ -59,10 +59,10 @@
       <div class="container">
     <div class="row">
       <div class="col-4">
-        <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+        <input class="form-control me-2" type="search" id="name-search" placeholder="Zoek op ...">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchUser()">Zoek</button>
       </div>
       <div class="col-2">
         <a href='gebruiker_toevoegen.html'><button class="btn btn-outline-success" type="button">Gebruiker toevoegen</button></a>
@@ -77,6 +77,9 @@
           <th>Voornaam</th>
           <th>Achternaam</th>
           <th>Email</th>
+          <th>Datum aangemaakt</th>
+          <th>Status</th>
+          <th>Rol</th>
         </tr>
       </thead>
       <tbody id="book-row"></tbody>
@@ -87,15 +90,62 @@
     fetch('http://localhost:8080/user/all').then(response => response.json()).then(data => {
       let rows = '';
       data.forEach(element => {
-        rows += "<tr><td>" + element.firstName + "</td><td>" + element.lastName + "</td><td>" + element.emailAddress + "</td></tr>";
+        let admin = "Gebruiker"
+        if (element.admin == true) {
+          admin = "Admin"
+        }
+
+        let status = "Actief"
+        if (element.active == false) {
+          status = "Verwijderd"
+        }
+
+        rows += "<tr><td>" + element.firstName + 
+          "</td><td>" + element.lastName + 
+            "</td><td>" + element.emailAddress + 
+              "</td><td>" + element.dateAccountCreated + 
+              "</td><td>" + status +
+                "</td><td>" + admin +
+              "</td></tr>";
       });
       document.getElementById('book-row').innerHTML = rows;
 
     });
 
-    function search() {
+    function searchUser() {
+
+      let nameElementValue = document.getElementById('name-search').value;
+
+      let obj = {
+      }
       
-    }
+      // Promise.all([fetch('http://localhost:8080/user/firstname/'+nameElementValue).then(response => response.json()),
+      // fetch('http://localhost:8080/user/lastname/'+nameElementValue).then(response => response.json())])
+      fetch('http://localhost:8080/user/firstname/'+nameElementValue).then(response => response.json())
+      .then(data => {let rows = '';
+      data.forEach(element => {
+        let admin = "Gebruiker"
+        if (element.admin == true) {
+          admin = "Admin"
+        }
+
+        let status = "Actief"
+        if (element.active == false) {
+          status = "Verwijderd"
+        }
+
+        rows += "<tr><td>" + element.firstName + 
+          "</td><td>" + element.lastName + 
+            "</td><td>" + element.emailAddress + 
+              "</td><td>" + element.dateAccountCreated + 
+              "</td><td>" + status +
+                "</td><td>" + admin +
+              "</td></tr>";
+      });
+      document.getElementById('book-row').innerHTML = rows;
+      
+       
+      })}
   </script>
 </body>
 </html>
