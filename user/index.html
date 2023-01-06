@@ -70,6 +70,7 @@
         <tr>
           <th>Titel</th>
           <th>ISBN</th>
+          <th>Auteur</th>
         </tr>
       </thead>
       <tbody id="book-row"></tbody>
@@ -80,7 +81,10 @@
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
       data.forEach(element => {
-        rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td></tr>";
+          for (let i = 0; i < element.authors.length; i++) {
+              auths += 
+              } 
+        rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + element.authors[0].firstName + " " + element.authors[0].lastName +  "</td></tr>";
       });
       document.getElementById('book-row').innerHTML = rows;
 
