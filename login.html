@@ -71,18 +71,18 @@
         let pw = document.getElementById('inputPassword').value;
 
         //Very very buggy.
-        fetch('http://localhost:8080/user/userpass/'+mail+":"+pw).then((response) => response.json())
-        .then((data) => {
-            console.log(data)
-            if (data == null) {
-                alert('Kon niet inloggen');
-            } else {
-                //window.location = 'admin/index.html';
-                console.log("gelukt");
-            } 
-        })
+        fetch('http://localhost:8080/user/userpass/'+mail+":"+pw)
+  .then((response) => response.json()) 
+  .then((data) => {
+        console.log(data)
+      // Do something with the non-empty JSON object
+      console.log("gelukt");
+    })
+  .catch((error) => {
+    alert('kon niet inloggen');
+  });
+}
 
-    }
 </script>
 
 </html>
