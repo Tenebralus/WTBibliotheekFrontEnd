@@ -5,7 +5,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>Reserveringen</title>
+  <link rel="icon" href="../images/favicon.ico">
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
@@ -19,6 +20,7 @@
       position: absolute;
       right: 5%;
     }
+
   </style>
 </head>
 
@@ -64,6 +66,72 @@
     </div>
   </nav>
 
+  <div class="container">
+    <h3>Reserveringen</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Gebruiker</th>
+          <th>Exemplaar</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="book-row">
+        <!-- <tr>
+          <td>Jip en janneke</td>
+          <td>Auteur1</td>
+          <td>
+            <select>        
+                 <option value="1">1.1</option>
+                 <option value="2">1.2</option>
+                 <option value="3">1.3</option>
+                 <option value="4">1.4</option>
+            </select>
+          </td> 
+          <td><button class="btn btn-outline-success" type="button" id="Uitlenen">Uitlenen</button></td>
+        </tr> -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+  
+
+    // fetch('http://localhost:8080/loans/all').then(response => response.json()).then(data => {
+    //   let rows = '';
+    //   data.forEach(element => {
+
+    //     for (let i = 0; i < element.bookcopy.length; i++) {
+    //       copies += '<option value=' + i + '>' + element.bookcopy[i].bookCopyNr + "</option>";
+    //     }
+        
+    //     rows += "<tr><td>" + element.book.title +  "</td>" +
+    //       "<td>" +  element.user.firstName + element.user.lastName + "</td>" +
+    //       '<td><select>' + copies + 
+    //       '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
+    //   });
+    //   document.getElementById('book-row').innerHTML = rows;
+
+    // });
+    rows = '<tr><td><div class="d-flex align-items-center"><img src="https://media.s-bol.com/YYQ5wpGYjzBK/0AlP4V/850x1200.jpg" style="width: 60px; height: 90px"/>' +
+          '<div class="ms-3"><p>' + "Master your mindset" + "</p></div></div>" +
+          "<td>" + "Bas Doddema" + "</td>" +
+          '<td><select class="form-select"><option value="1">' + "1.1" + "</option>" +
+          '<option value="2">' + "1.2" + "</option>" + 
+          '<option value="3">' + "1.3" + "</option>" + 
+          '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>" +
+          "<tr><td>" + "Boek2" + "</td>" +
+          "<td>" + "Pietje" + "</td>" +
+          '<td><select class="form-select" disabled><option value="1">' + "1.1" + "</option>" +
+          '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
+          
+    document.getElementById('book-row').innerHTML = rows;
+
+ </script>
+
 </body>
+
+
 
 </html>
