@@ -70,8 +70,8 @@
         <tr>
           <th>Titel</th>
           <th>ISBN</th>
-          <th>Auteur</th>
-          <th></th>
+          <th>Auteur(s)</th>
+          <th>Tags</th>
         </tr>
       </thead>
       <tbody id="book-row"></tbody>
@@ -83,6 +83,7 @@
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
       data.forEach(element => {
+        
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {
           auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -90,7 +91,16 @@
             auths += ", "
           }
         }
-        rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + '</td><td><button class="btn btn-outline-success" type="button" id="reserve'+element.id+'">Reserveer</button></td></tr>';
+
+        let tagName = '';
+        for (let i = 0; i < element.tags.length; i++) {
+          tagName += element.tags[i].name
+          if (i < element.tags.length - 1) {
+            tagName += ", "
+          }
+        }
+
+        rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tagName +'</td><td><button class="btn btn-outline-success" type="button" id="reserve'+element.id+'">Reserveer</button></td></tr>';
       });
       document.getElementById('book-row').innerHTML = rows;
 
