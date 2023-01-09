@@ -42,8 +42,8 @@
         <div class="row">
             <div class="col-12">
                 <div class="mb-3">
-                    <label for="exampleFormControlInput1" class="form-label">Emailadres</label>
-                    <input type="email" class="form-control" id="exampleFormControlInput1"
+                    <label for="inputEmail" class="form-label">Emailadres</label>
+                    <input type="email" class="form-control" id="inputEmail"
                         placeholder="naam@workingtalent.nl">
                 </div>
             </div>
@@ -58,10 +58,31 @@
                 <a href=# id="forgotPassword">Wachtwoord vergeten?</a>
             </div>
             <div class="col-6 text-end">
-                <button class="btn btn-success" type="button" id="loginbutton">Log in</button>
+                <button class="btn btn-success" type="button" id="loginbutton" onclick="login()">Log in</button>
             </div>
         </div>
     </div>
 </body>
+
+
+<script>
+    function login() {
+        let mail = document.getElementById('inputEmail').value;
+        let pw = document.getElementById('inputPassword').value;
+
+        //Very very buggy.
+        fetch('http://localhost:8080/user/userpass/'+mail+":"+pw)
+  .then((response) => response.json()) 
+  .then((data) => {
+        console.log(data)
+      // Do something with the non-empty JSON object
+      console.log("gelukt");
+    })
+  .catch((error) => {
+    alert('kon niet inloggen');
+  });
+}
+
+</script>
 
 </html>
