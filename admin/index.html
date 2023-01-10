@@ -119,7 +119,16 @@
     });
 
     function search() {
-      
+
+    }
+
+    function createReservation(clickedId) {
+      let idstr = clickedId.split("reserve");
+      let idnum = parseInt(idstr[1]);
+      fetch('http://localhost:8080/book/'+idnum+'/createreservation', {
+        method : "POST"
+      })
+      .then(alert("Reservering gemaakt"));
     }
   </script>
 </body>
