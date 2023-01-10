@@ -102,7 +102,7 @@
           }
         }
 
-        rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tagName +'</td><td><button class="btn btn-outline-success" type="button" id="reserve'+element.id+'">Reserveer</button></td></tr>';
+        rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tagName +'</td><td><button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve'+element.id+'">Reserveer</button></td></tr>';
       });
       document.getElementById('book-row').innerHTML = rows;
 
@@ -110,6 +110,15 @@
 
     function search() {
       
+    }
+
+    function createReservation(clickedId) {
+      let idstr = clickedId.split("reserve");
+      let idnum = parseInt(idstr[1]);
+      fetch('http://localhost:8080/book/'+idnum+'/createreservation', {
+        method : "POST"
+      })
+      .then(alert("Reservering gemaakt"));
     }
   </script>
 </body>
