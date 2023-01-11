@@ -44,7 +44,7 @@
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
               <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><a class="dropdown-item" href="#">Leningen</a></li>
+              <li><a class="dropdown-item" href="#">Reserveringen en Leningen</a></li>
             </ul>
 
           </li>
@@ -73,7 +73,7 @@
         <tr>
           <th>Titel</th>
           <th>Gebruiker</th>
-          <th>Exemplaar</th>
+          <th>Datum</th>
           <th></th>
         </tr>
       </thead>
@@ -98,23 +98,21 @@
   <script>
   
 
-    // fetch('http://localhost:8080/loans/all').then(response => response.json()).then(data => {
-    //   let rows = '';
-    //   data.forEach(element => {
-
-    //     for (let i = 0; i < element.bookcopy.length; i++) {
-    //       copies += '<option value=' + i + '>' + element.bookcopy[i].bookCopyNr + "</option>";
-    //     }
+    fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
+      let rows = '';
+      data.forEach(element => {
+        console.log(element.book.title)
+        let userName = ""
+        if (element.user) {
+          userName = element.user.firstName + " " + element.user.lastName
+        }
+        rows += "<tr><td>" + element.book.title + "</td><td>" + userName + "</td><td>" + element.dateReserved + '</td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">Uitlenen</button></td></tr></tr>'
         
-    //     rows += "<tr><td>" + element.book.title +  "</td>" +
-    //       "<td>" +  element.user.firstName + element.user.lastName + "</td>" +
-    //       '<td><select>' + copies + 
-    //       '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
-    //   });
-    //   document.getElementById('book-row').innerHTML = rows;
+      });
+      document.getElementById('book-row').innerHTML = rows;
 
-    // });
-    rows = '<tr><td><div class="d-flex align-items-center"><img src="https://media.s-bol.com/YYQ5wpGYjzBK/0AlP4V/850x1200.jpg" style="width: 60px; height: 90px"/>' +
+    });
+    /* rows = '<tr><td><div class="d-flex align-items-center"><img src="https://media.s-bol.com/YYQ5wpGYjzBK/0AlP4V/850x1200.jpg" style="width: 60px; height: 90px"/>' +
           '<div class="ms-3"><p>' + "Master your mindset" + "</p></div></div>" +
           "<td>" + "Bas Doddema" + "</td>" +
           '<td><select class="form-select"><option value="1">' + "1.1" + "</option>" +
@@ -127,6 +125,7 @@
           '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
           
     document.getElementById('book-row').innerHTML = rows;
+    */
 
  </script>
 
