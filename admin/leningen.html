@@ -94,15 +94,26 @@
         fetch('http://localhost:8080/loan/all').then(response => response.json()).then(data => {
           let rows = '';
           data.forEach(element => {
+
+            let authorNames = "";
+            for(let i = 0; i < element.bookCopy.book.authors.length; i++)         
+            {
+              authorNames += element.bookCopy.book.authors[i].firstName + " " + element.bookCopy.book.authors[i].lastName;
+              if(i < element.bookCopy.book.authors.length - 1)
+              {
+                authorNames += ", ";
+              }
+            }
+
             rows +=
               "<tr><td>" + element.bookCopy.book.title + "</td>" +
-              "<td>" + element.bookcopy.bookcopyNr + "</td>" +
-              "<td>" + element.isbn + "</td>" +
-              "<td>" + element.user.firstName + " " + element.user.lastName + "</td>" +
-              "<td>" + element.bookcopy.status + "</td>" +
-              "<td>" + element.user.firstName + " " + element.user.lastName + "</td>" +
+              "<td>" + element.bookCopy.bookCopyNr + "</td>" +
+              "<td>" + element.bookCopy.book.isbn + "</td>" +
+              "<td>" + authorNames + "</td>" +
+              "<td>" + element.bookCopy.status + "</td>" +
+              "<td>" + element.user + " " + element.user + "</td>" +
               "<td>" + element.dateLoaned + "</td>" +
-              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' +  + '" onclick="returnBookCopy()">' + "Inleveren" + "</button></td></tr>";
+              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren'+ element.id + '" onclick="returnBookCopy()">' + "Inleveren" + "</button></td></tr>";
           });
           document.getElementById('book-row').innerHTML = rows;
     
