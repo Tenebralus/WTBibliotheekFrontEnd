@@ -74,6 +74,7 @@
           <th>ISBN</th>
           <th>Auteur(s)</th>
           <th>Tags</th>
+          <th>Aantal exemplaren beschikbaar</th>
         </tr>
       </thead>
       <tbody id="book-row"></tbody>
@@ -100,8 +101,15 @@
           if (i < element.tags.length - 1) {
             tagName += ", "
           }
-        } 
-        rows += "</tr><td>" + '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tagName +'</td><td><button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve'+element.id+'">Reserveer</button></td></tr>';
+        }
+        rows += "</tr><td>" +
+          '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
+          element.title + "</td><td>" +
+          element.isbn + "</td><td>" +
+          auths + "</td><td>" +
+          tagName + "</td><td>" +
+          element.bookcopies.length + "</td><td>" +
+          '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve'+element.id+'">Reserveer</button></td></tr>';
       });
       document.getElementById('book-row').innerHTML = rows;
 
