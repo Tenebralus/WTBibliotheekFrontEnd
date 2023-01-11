@@ -20,7 +20,6 @@
       position: absolute;
       right: 5%;
     }
-
   </style>
 </head>
 
@@ -43,6 +42,8 @@
               Account
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="#">Settings</a></li>
+              <li><a class="dropdown-item" href="#">Reserveringen en Leningen</a></li>
               <li><a class="dropdown-item" href="settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="leningen.html">Leningen</a></li>
             </ul>
@@ -67,54 +68,66 @@
   </nav>
 
   <div class="container">
-    <h3>Reserveringen</h3>
+    <h3>Openstaande reserveringen</h3>
     <table class="table">
       <thead>
         <tr>
           <th>Titel</th>
           <th>Gebruiker</th>
-          <th>Exemplaar</th>
+          <th>Datum</th>
+          <th>Beschikbare exemplaren</th>
           <th></th>
         </tr>
       </thead>
       <tbody id="book-row">
-        <!-- <tr>
-          <td>Jip en janneke</td>
-          <td>Auteur1</td>
-          <td>
-            <select>        
-                 <option value="1">1.1</option>
-                 <option value="2">1.2</option>
-                 <option value="3">1.3</option>
-                 <option value="4">1.4</option>
-            </select>
-          </td> 
-          <td><button class="btn btn-outline-success" type="button" id="Uitlenen">Uitlenen</button></td>
-        </tr> -->
       </tbody>
     </table>
   </div>
 
   <script>
-  
 
-    // fetch('http://localhost:8080/loans/all').then(response => response.json()).then(data => {
-    //   let rows = '';
-    //   data.forEach(element => {
 
-    //     for (let i = 0; i < element.bookcopy.length; i++) {
-    //       copies += '<option value=' + i + '>' + element.bookcopy[i].bookCopyNr + "</option>";
-    //     }
-        
-    //     rows += "<tr><td>" + element.book.title +  "</td>" +
-    //       "<td>" +  element.user.firstName + element.user.lastName + "</td>" +
-    //       '<td><select>' + copies + 
-    //       '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
-    //   });
-    //   document.getElementById('book-row').innerHTML = rows;
+    fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
+      let rows = '';
+      data.forEach(element => {
 
-    // });
-    rows = '<tr><td><div class="d-flex align-items-center"><img src="https://media.s-bol.com/YYQ5wpGYjzBK/0AlP4V/850x1200.jpg" style="width: 60px; height: 90px"/>' +
+        //Prevents errors if no user is registered to a reservation
+        let userName = ""
+        if (element.user) {
+          userName = element.user.firstName + " " + element.user.lastName
+        }
+
+        //Generates the list of available copies, or grays out if none
+        let copyDropDown = '<select class="form-select" id="reservation' + element.id + 'dropdown"><option>Selecteer exemplaar</option>';
+        let copyCounter = 0;
+        element.book.bookcopies.forEach(copy => {
+          if (copy.status == "available") {
+            copyCounter++;
+            let bookCopyString = element.book.id + "." + copy.bookCopyNr;
+            copyDropDown += '<option value="' + copy.id + '">' + bookCopyString + '</option>';
+          }
+        })
+        if (copyCounter == 0) {
+          copyDropDown = '<select class="form-select" disabled><option>Geen exemplaren beschikbaar</option>';
+        }
+
+        //Generates HTML per row
+        rows += "<tr><td>" + element.book.title + "</td><td>" + userName + "</td><td>" + element.dateReserved + '</td><td>' + copyDropDown + '</td><td><button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button></td></tr>'
+
+      });
+      document.getElementById('book-row').innerHTML = rows;
+
+    });
+
+    function createLoan(clickedId) {
+      let idstr = clickedId.split("loan");
+      let idnum = parseInt(idstr[1]);
+
+      //copy is the id of the selected bookCopy
+      let copy = document.getElementById("reservation" + idnum + "dropdown").value;
+
+    }
+    /* rows = '<tr><td><div class="d-flex align-items-center"><img src="https://media.s-bol.com/YYQ5wpGYjzBK/0AlP4V/850x1200.jpg" style="width: 60px; height: 90px"/>' +
           '<div class="ms-3"><p>' + "Master your mindset" + "</p></div></div>" +
           "<td>" + "Bas Doddema" + "</td>" +
           '<td><select class="form-select"><option value="1">' + "1.1" + "</option>" +
@@ -127,8 +140,9 @@
           '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
           
     document.getElementById('book-row').innerHTML = rows;
+    */
 
- </script>
+  </script>
 
 </body>
 
