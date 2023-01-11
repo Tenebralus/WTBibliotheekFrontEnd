@@ -77,7 +77,7 @@
               <th>Titel</th>
               <th>Exemplaar</th>
               <th>ISBN</th>
-              <th>Auteur</th>
+              <th>Auteur(s)</th>
               <th>Status</th>
               <th>Gebruiker</th>
               <th>Datum van uitlenen</th>
@@ -91,32 +91,26 @@
       <script>
   
 
-        // fetch('http://localhost:8080/loans/all').then(response => response.json()).then(data => {
-        //   let rows = '';
-        //   data.forEach(element => {
+        fetch('http://localhost:8080/loan/all').then(response => response.json()).then(data => {
+          let rows = '';
+          data.forEach(element => {
+            rows +=
+              "<tr><td>" + element.bookCopy.book.title + "</td>" +
+              "<td>" + element.bookcopy.bookcopyNr + "</td>" +
+              "<td>" + element.isbn + "</td>" +
+              "<td>" + element.user.firstName + " " + element.user.lastName + "</td>" +
+              "<td>" + element.bookcopy.status + "</td>" +
+              "<td>" + element.user.firstName + " " + element.user.lastName + "</td>" +
+              "<td>" + element.dateLoaned + "</td>" +
+              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' +  + '" onclick="returnBookCopy()">' + "Inleveren" + "</button></td></tr>";
+          });
+          document.getElementById('book-row').innerHTML = rows;
     
-        //     for (let i = 0; i < element.bookcopy.length; i++) {
-        //       copies += '<option value=' + i + '>' + element.bookcopy[i].bookCopyNr + "</option>";
-        //     }
-            
-        //     rows += "<tr><td>" + element.book.title +  "</td>" +
-        //       "<td>" +  element.user.firstName + element.user.lastName + "</td>" +
-        //       '<td><select>' + copies + 
-        //       '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
-        //   });
-        //   document.getElementById('book-row').innerHTML = rows;
-    
-        // });
-        rows = "<tr><td>" + "BoekExample" + "</td>" +
-              "<td>" + "1.1" + "</td>" +
-              "<td>" + "661511262" + "</td>" +
-              "<td>" + "Pietje" + "</td>" +
-              "<td>" + "Uitgeleend" + "</td>" +
-              "<td>" + "Bas Doddema" + "</td>" +
-              "<td>" + "Vandaag" + "</td>" +
-              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren">' + "Inleveren" + "</button></td></tr>";
-        document.getElementById('book-row').innerHTML = rows;
-    
+         });
+        function returnBookCopy()
+        {
+
+        }
      </script>
 
 </body>
