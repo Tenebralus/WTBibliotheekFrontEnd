@@ -129,42 +129,54 @@
               }
             }
 
+            let dateReserved = new Date(element.dateReserved).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
             rows += "</tr><td>" +
               element.book.title + "</td><td>" +
               auths + "</td><td>" +
-              element.dateReserved + "</td><td>" +
+              dateReserved + "</td><td>" +
               '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel'+element.id+'">Annuleer</button></td></tr>';
             });
             document.getElementById('reservations-row').innerHTML = rows;
           });
         }
 
-
-        fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
-          let rows = '';
-          data.forEach(element => {
-            let authorNames = "";
-            for(let i = 0; i < element.authors.length; i++)
-            {
-              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
-              if(i < element.authors.length - 1)
+        function createLoanTable(){
+          fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
+              let authorNames = "";
+              for(let i = 0; i < element.authors.length; i++)
               {
-                authorNames += ", ";
+                authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+                if(i < element.authors.length - 1)
+                {
+                  authorNames += ", ";
+                }
               }
+
+            //do not want to see null but empty space
+            dateReturned = "";
+            if (element.dateReturned==null){
+              dateReturned = "";
+            } else {
+              dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
             }
 
-            rows +=
-              "<tr><td>" + element.bookTitle + "</td>" +
-              "<td>" + element.bookCopyNr + "</td>" +
-              "<td>" + element.bookIsbn + "</td>" +
-              "<td>" + authorNames + "</td>" +
-              "<td>" + element.bookCopyStatus + "</td>" +
-              "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-              "<td>" + element.dateLoaned + "</td>" ;
+            let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+              rows +=
+                "<tr><td>" + element.bookTitle + "</td>" +
+                "<td>" + element.bookCopyNr + "</td>" +
+                "<td>" + element.bookIsbn + "</td>" +
+                "<td>" + authorNames + "</td>" +
+                "<td>" + element.bookCopyStatus + "</td>" +
+                "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+                "<td>" + dateLoaned + "</td>" ;
+            });
+            document.getElementById('book-row').innerHTML = rows;
           });
-          document.getElementById('book-row').innerHTML = rows;
-        });
-         
+        }
 
         function cancel(clickedId){
           console.log(clickedId);

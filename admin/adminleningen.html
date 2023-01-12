@@ -104,11 +104,12 @@
           //do not want to see null but empty space
           dateReturned = "";
           console.log(element.dateReturned);
-          if (element.dateReturned==null){
-            dateReturned = "";
-          } else {
-            dateReturned = element.dateReturned
+          dateReturned = "";
+          if (element.dateReturned!=null){
+            dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
+
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           
           let copyDropDown = '';
           if(element.dateReturned!=null){
@@ -122,7 +123,7 @@
               "<td>" + authorNames + "</td>" +
               "<td>" + element.bookCopyStatus + "</td>" +
               "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-              "<td>" + element.dateLoaned + "</td>" +
+              "<td>" + dateLoaned + "</td>" +
               "<td>" + dateReturned + "</td>" +
               copyDropDown;
           });

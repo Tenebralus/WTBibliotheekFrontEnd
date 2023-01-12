@@ -127,38 +127,42 @@
         });
       }
 
-      //these are all loans, still waiting for login-sessions until this is personalized
-      fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
-          let rows = '';
-          data.forEach(element => {
+      function createLoanTable(){
+        //these are all loans, still waiting for login-sessions until this is personalized
+        fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
 
-          let auths = "";
-          for (let i = 0; i < element.authors.length; i++) {
-            auths += element.authors[i].firstName + " " + element.authors[i].lastName
-            if (i < element.authors.length - 1) {
-              auths += ", "
+            let auths = "";
+            for (let i = 0; i < element.authors.length; i++) {
+              auths += element.authors[i].firstName + " " + element.authors[i].lastName
+              if (i < element.authors.length - 1) {
+                auths += ", "
+              }
             }
-          }
 
-          //do not want to see null but empty space
-          dateReturned = "";
-          if (element.dateReturned==null){
+            //do not want to see null but empty space
             dateReturned = "";
-          } else {
-            dateReturned = element.dateReturned
-          }
+            if (element.dateReturned==null){
+              dateReturned = "";
+            } else {
+              dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            }
 
-          rows += "</tr><td>" +
-            element.bookTitle + "</td><td>" +
-            element.bookCopyNr + "</td><td>" +
-            element.bookIsbn + "</td><td>" +
-            auths + "</td><td>" +
-            element.bookCopyStatus + "</td><td>" +
-            element.dateLoaned + "</td><td>" +
-            dateReturned + "</td><td>" ;
-          });
-          document.getElementById('loans-row').innerHTML = rows;
-      });
+            let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+            rows += "</tr><td>" +
+              element.bookTitle + "</td><td>" +
+              element.bookCopyNr + "</td><td>" +
+              element.bookIsbn + "</td><td>" +
+              auths + "</td><td>" +
+              element.bookCopyStatus + "</td><td>" +
+              dateLoaned + "</td><td>" +
+              dateReturned + "</td><td>" ;
+            });
+            document.getElementById('loans-row').innerHTML = rows;
+        });
+      }
 
         function cancel(clickedId){
           console.log(clickedId);
