@@ -91,26 +91,64 @@
       <script>
   
 
-        fetch('http://localhost:8080/loan/all').then(response => response.json()).then(data => {
+
+
+        fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
           let rows = '';
           data.forEach(element => {
+            let authorNames = "";
+            for(let i = 0; i < element.authors.length; i++)
+            {
+              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+              if(i < element.authors.length - 1)
+              {
+                authorNames += ", ";
+              }
+            }
+
             rows +=
-              "<tr><td>" + element.bookCopy.book.title + "</td>" +
-              "<td>" + element.bookcopy.bookcopyNr + "</td>" +
-              "<td>" + element.isbn + "</td>" +
-              "<td>" + element.user.firstName + " " + element.user.lastName + "</td>" +
-              "<td>" + element.bookcopy.status + "</td>" +
-              "<td>" + element.user.firstName + " " + element.user.lastName + "</td>" +
+              "<tr><td>" + element.bookTitle + "</td>" +
+              "<td>" + element.bookCopyNr + "</td>" +
+              "<td>" + element.bookIsbn + "</td>" +
+              "<td>" + authorNames + "</td>" +
+              "<td>" + element.bookCopyStatus + "</td>" +
+              "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
               "<td>" + element.dateLoaned + "</td>" +
-              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' +  + '" onclick="returnBookCopy()">' + "Inleveren" + "</button></td></tr>";
+              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(element.bookId)">' + "Inleveren" + "</button></td></tr>";
           });
           document.getElementById('book-row').innerHTML = rows;
-    
-         });
-        function returnBookCopy()
-        {
+        });
+         
 
+        function returnBookCopy(book_id)
+        {
+            let statusValue = "available";
+
+            let obj = 
+            {
+                status: statusvalue
+            }
+        
+        fetch('http://localhost:8080/bookcopy/updatestatus/' + book_id, 
+            {
+                method: 'PUT',
+                body: JSON.stringify(obj),
+                headers:
+                {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(() =>
+            {
+                alert('Exemplaar is ingeleverd');
+            })
         }
+
+        function updateLoanToDelivered()
+        {
+          // available
+        }
+
      </script>
 
 </body>
