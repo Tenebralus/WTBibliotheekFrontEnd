@@ -85,23 +85,23 @@
   <script>
 
 
-    fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
+    fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
       let rows = '';
       data.forEach(element => {
 
         //Prevents errors if no user is registered to a reservation
         let userName = ""
-        if (element.user) {
-          userName = element.user.firstName + " " + element.user.lastName
+        if (element.firstName && element.lastName) {
+          userName = element.firstName + " " + element.lastName
         }
 
         //Generates the list of available copies, or grays out if none
         let copyDropDown = '<select class="form-select" id="reservation' + element.id + 'dropdown"><option>Selecteer exemplaar</option>';
         let copyCounter = 0;
-        element.book.bookcopies.forEach(copy => {
+        element.bookcopies.forEach(copy => {
           if (copy.status == "available") {
             copyCounter++;
-            let bookCopyString = element.book.id + "." + copy.bookCopyNr;
+            let bookCopyString = element.bookId + "." + copy.bookCopyNr;
             copyDropDown += '<option value="' + copy.id + '">' + bookCopyString + '</option>';
           }
         })
@@ -110,7 +110,7 @@
         }
 
         //Generates HTML per row
-        rows += "<tr><td>" + element.book.title + "</td><td>" + userName + "</td><td>" + element.dateReserved + '</td><td>' + copyDropDown + '</td><td><button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button></td></tr>'
+        rows += "<tr><td>" + element.bookTitle + "</td><td>" + userName + "</td><td>" + element.reservationDate + '</td><td>' + copyDropDown + '</td><td><button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button></td></tr>'
 
       });
       document.getElementById('book-row').innerHTML = rows;
@@ -119,10 +119,16 @@
 
     function createLoan(clickedId) {
       let idstr = clickedId.split("loan");
+
+      //idnum is the id of the reservation
       let idnum = parseInt(idstr[1]);
 
       //copy is the id of the selected bookCopy
       let copy = document.getElementById("reservation" + idnum + "dropdown").value;
+      fetch('http://localhost:8080/loan/'+ idnum + '/' + copy + '/create', {
+        method: 'POST'
+      })
+      .then(alert("Boek uitgeleend."));
 
     }
     /* rows = '<tr><td><div class="d-flex align-items-center"><img src="https://media.s-bol.com/YYQ5wpGYjzBK/0AlP4V/850x1200.jpg" style="width: 60px; height: 90px"/>' +
