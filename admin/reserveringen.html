@@ -103,10 +103,14 @@
       data.forEach(element => {
         console.log(element.book.title)
         let userName = ""
+        let title = ""
         if (element.user) {
           userName = element.user.firstName + " " + element.user.lastName
         }
-        rows += "<tr><td>" + element.book.title + "</td><td>" + userName + "</td><td>" + element.dateReserved + '</td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">Uitlenen</button></td></tr></tr>'
+        if (element.book.title) {
+          title = element.book.title
+        }
+        rows += "<tr><td>" + title + "</td><td>" + userName + "</td><td>" + element.dateReserved + '</td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">Uitlenen</button></td></tr></tr>'
         
       });
       document.getElementById('book-row').innerHTML = rows;

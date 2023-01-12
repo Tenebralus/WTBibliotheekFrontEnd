@@ -58,14 +58,48 @@
                 <a href=# id="forgotPassword">Wachtwoord vergeten?</a>
             </div>
             <div class="col-6 text-end">
-                <button class="btn btn-success" type="button" id="loginbutton" onclick="login()">Log in</button>
+                <button class="btn btn-success" type="button" id="loginbutton">Log in</button>
             </div>
         </div>
     </div>
 </body>
 
-
 <script>
+    const emailInput = document.getElementById("inputEmail");
+    const passwordInput = document.getElementById("inputPassword");
+    const loginButton = document.getElementById("loginbutton");
+
+    loginButton.addEventListener("click", () => {
+    const email = emailInput.value;
+    const password = passwordInput.value;
+
+    // Send login request to server
+    fetch("http://localhost:8080/login", {
+        method: "POST",
+        body: JSON.stringify({ email, password }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        if (response.status === 200) {
+            // Credentials are correct, redirect to home page
+            window.location.href = "user/index.html";
+        } else {
+            // Credentials are incorrect, display error message
+            const errorMessage = document.getElementById("error-message");
+            errorMessage.textContent = "Invalid email or password";
+        }
+    });
+});
+
+
+
+
+</script>
+
+
+<!-- <script>
     function login() {
         let mail = document.getElementById('inputEmail').value;
         let pw = document.getElementById('inputPassword').value;
@@ -83,6 +117,6 @@
   });
 }
 
-</script>
+</script> -->
 
 </html>
