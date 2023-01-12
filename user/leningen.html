@@ -117,10 +117,12 @@
               }
             }
 
+            let dateReserved = new Date(element.dateReserved).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
             rows += "</tr><td>" +
               element.book.title + "</td><td>" +
               auths + "</td><td>" +
-              element.dateReserved + "</td><td>" +
+              dateReserved + "</td><td>" +
               '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel'+element.id+'">Annuleer</button></td></tr>';
             });
             document.getElementById('reservations-row').innerHTML = rows;
