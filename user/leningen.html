@@ -59,7 +59,7 @@
               <th></th>
             </tr>
           </thead>
-          <tbody id="book-row">
+          <tbody id="reservations-row">
             <tr>
               <td>Jip en janneke</td>
               <td>Auteur1</td>
@@ -96,7 +96,7 @@
               <th></th>
             </tr>
           </thead>
-          <tbody id="book-row"></tbody>
+          <tbody id="loans-row"></tbody>
         </table>
       </div>
 
@@ -117,17 +117,39 @@
 
           rows += "</tr><td>" +
             element.book.title + "</td><td>" +
-            //auths + "</td><td>" +
+            auths + "</td><td>" +
             element.dateReserved + "</td><td>" +
             '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel'+element.id+'">Annuleer</button></td></tr>';
           });
-          document.getElementById('book-row').innerHTML = rows;
+          document.getElementById('reservations-row').innerHTML = rows;
       });
 
+      fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
+          let rows = '';
+          data.forEach(element => {
 
+          let auths = "";
+          for (let i = 0; i < element.authors.length; i++) {
+            auths += element.authors[i].firstName + " " + element.authors[i].lastName
+            if (i < element.authors.length - 1) {
+              auths += ", "
+            }
+          }
+
+          rows += "</tr><td>" +
+            element.bookTitle + "</td><td>" +
+            element.bookCopyNr + "</td><td>" +
+            element.bookIsbn + "</td><td>" +
+            auths + "</td><td>" +
+            element.bookCopyStatus + "</td><td>" +
+            element.dateLoaned + "</td><td>" +
+            element.dateReturned + "</td><td>" ;
+          });
+          document.getElementById('loans-row').innerHTML = rows;
+      });
 
         function cancel(clickedId){
-          console.log(clickedId);
+          let idstr = clickedId.split("loan");
           let idnum = parseInt(idstr[1]);
           fetch('http://localhost:8080/reservation/delete/'+idnum, {
             method : "DELETE"
