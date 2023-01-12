@@ -68,7 +68,7 @@
   <div class="container">
     <div class="row">
       <div class="col-4">
-        <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+        <input class="form-control me-2" type="search" id="name2-search" placeholder="Zoek op ...">
       </div>
       <div class="col">
         <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
@@ -128,7 +128,32 @@
     });
 
     function search() {
+      /*let nameElementValue = document.getElementById('name2-search').value;
 
+      let obj = {
+      }
+      fetch('http://localhost:8080/book/'+nameElementValue).then(response => response.json())
+      .then(data => {let rows = '';
+      data.forEach(element => {
+        let admin = "Gebruiker"
+        if (element.admin == true) {
+          admin = "Admin"
+        }
+
+        let status = "Actief"
+        if (element.active == false) {
+          status = "Verwijderd"
+        }
+
+        rows += "<tr><td>" + element.title + 
+          "</td><td>" + element.isbn + 
+            "</td><td>" + element.author + 
+              "</td><td>" + element.tag + 
+              "</td><td>" + status +
+              "</td></tr>";
+      });
+      document.getElementById('book-row').innerHTML = rows;   
+      })*/
     }
 
     function createReservation(clickedId) {
