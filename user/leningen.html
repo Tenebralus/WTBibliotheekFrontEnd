@@ -105,8 +105,6 @@
           let rows = '';
           data.forEach(element => {
 
-          console.log(element);
-
           let auths = '';
           for (let i = 0; i < element.book.authors.length; i++) {
             auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
@@ -139,7 +137,6 @@
 
           //do not want to see null but empty space
           dateReturned = "";
-          console.log(element.dateReturned);
           if (element.dateReturned==null){
             dateReturned = "";
           } else {
@@ -159,7 +156,8 @@
       });
 
         function cancel(clickedId){
-          let idstr = clickedId.split("loan");
+          console.log(clickedId);
+          let idstr = clickedId.split("cancel");
           let idnum = parseInt(idstr[1]);
           fetch('http://localhost:8080/reservation/delete/'+idnum, {
             method : "DELETE"
