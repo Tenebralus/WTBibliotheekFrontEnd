@@ -137,6 +137,15 @@
             }
           }
 
+          //do not want to see null but empty space
+          dateReturned = "";
+          console.log(element.dateReturned);
+          if (element.dateReturned==null){
+            dateReturned = "";
+          } else {
+            dateReturned = element.dateReturned
+          }
+
           rows += "</tr><td>" +
             element.bookTitle + "</td><td>" +
             element.bookCopyNr + "</td><td>" +
@@ -144,7 +153,7 @@
             auths + "</td><td>" +
             element.bookCopyStatus + "</td><td>" +
             element.dateLoaned + "</td><td>" +
-            element.dateReturned + "</td><td>" ;
+            dateReturned + "</td><td>" ;
           });
           document.getElementById('loans-row').innerHTML = rows;
       });

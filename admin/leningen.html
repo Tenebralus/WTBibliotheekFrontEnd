@@ -113,8 +113,7 @@
               "<td>" + authorNames + "</td>" +
               "<td>" + element.bookCopyStatus + "</td>" +
               "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-              "<td>" + element.dateLoaned + "</td>" +
-              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(element.bookId)">' + "Inleveren" + "</button></td></tr>";
+              "<td>" + element.dateLoaned + "</td>" ;
           });
           document.getElementById('book-row').innerHTML = rows;
         });

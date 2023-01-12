@@ -79,13 +79,14 @@
               <th>Status</th>
               <th>Gebruiker</th>
               <th>Datum van uitlenen</th>
+              <th>Datum van teruggave</th>
               <th></th>
             </tr>
           </thead>
           <tbody id="book-row"></tbody>
         </table>
       </div>
-      
+
       <script>
         fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
           let rows = '';
@@ -100,6 +101,20 @@
               }
             }
 
+          //do not want to see null but empty space
+          dateReturned = "";
+          console.log(element.dateReturned);
+          if (element.dateReturned==null){
+            dateReturned = "";
+          } else {
+            dateReturned = element.dateReturned
+          }
+          
+          let copyDropDown = '';
+          if(element.dateReturned!=null){
+            copyDropDown = '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(element.bookId)">' + "Inleveren" + "</button></td></tr>";
+          }
+
             rows +=
               "<tr><td>" + element.bookTitle + "</td>" +
               "<td>" + element.bookCopyNr + "</td>" +
@@ -108,7 +123,8 @@
               "<td>" + element.bookCopyStatus + "</td>" +
               "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
               "<td>" + element.dateLoaned + "</td>" +
-              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(element.bookId)">' + "Inleveren" + "</button></td></tr>";
+              "<td>" + dateReturned + "</td>" +
+              copyDropDown;
           });
           document.getElementById('book-row').innerHTML = rows;
         });
