@@ -106,13 +106,13 @@
           console.log(element.dateReturned);
           dateReturned = "";
           if (element.dateReturned!=null){
-            dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
 
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           
           let copyDropDown = '';
-          if(element.dateReturned!=null){
+          if(element.dateReturned==null){
             copyDropDown = '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(element.bookId)">' + "Inleveren" + "</button></td></tr>";
           }
 
