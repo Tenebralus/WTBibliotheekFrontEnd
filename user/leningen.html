@@ -124,6 +124,7 @@
           document.getElementById('reservations-row').innerHTML = rows;
       });
 
+      //these are all loans, still waiting for login-sessions until this is personalized
       fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
           let rows = '';
           data.forEach(element => {
