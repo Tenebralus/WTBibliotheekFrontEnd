@@ -104,9 +104,8 @@
           //do not want to see null but empty space
           dateReturned = "";
           console.log(element.dateReturned);
-          if (element.dateReturned==null){
-            dateReturned = "";
-          } else {
+          dateReturned = "";
+          if (element.dateReturned!=null){
             dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
 
