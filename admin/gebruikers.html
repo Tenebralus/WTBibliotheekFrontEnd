@@ -79,6 +79,7 @@
           <th>Achternaam</th>
           <th>Email</th>
           <th>Datum aangemaakt</th>
+          <th>Datum verwijderd</th>
           <th>Status</th>
           <th>Rol</th>
         </tr>
@@ -101,13 +102,17 @@
           status = "Verwijderd"
         }
 
+        let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+        let dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
         rows += "<tr><td>" + element.firstName + 
           "</td><td>" + element.lastName + 
             "</td><td>" + element.emailAddress + 
-              "</td><td>" + element.dateAccountCreated + 
-              '</td><td>' + status +
-                "</td><td>" + admin +
-              "</td></tr>";
+            "</td><td>" + dateAccountCreated + 
+            "</td><td>" + dateAccountDeleted +
+            '</td><td>' + status +
+            "</td><td>" + admin +
+            "</td></tr>";
       });
       document.getElementById('book-row').innerHTML = rows;
 
@@ -135,12 +140,23 @@
           status = "Verwijderd"
         }
 
+        let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+        
+        dateAccountDeleted = "";
+          if (element.dateAccountDeleted==null){
+            dateAccountDeleted = "";
+          } else {
+            dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          }
+         
+
         rows += "<tr><td>" + element.firstName + 
           "</td><td>" + element.lastName + 
             "</td><td>" + element.emailAddress + 
-              "</td><td>" + element.dateAccountCreated + 
+              "</td><td>" + dateAccountCreated + 
+              "</td><td>" + dateAccountDeleted +
               "</td><td>" + status +
-                "</td><td>" + admin +
+              "</td><td>" + admin +
               "</td></tr>";
       });
       document.getElementById('book-row').innerHTML = rows;
