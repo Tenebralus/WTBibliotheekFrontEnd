@@ -29,15 +29,15 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Reserveren</a>
+                <a class="nav-link" aria-current="page" href="../user/index.html">Reserveren</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Account
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  <li><a class="dropdown-item active" href="#">Reserveringen en Leningen</a></li>
+                  <li><a class="dropdown-item" href="../user/settings.html">Settings</a></li>
+                  <li><a class="dropdown-item active" href="../user/leningen.html">Leningen</a></li>
                 </ul>
               
             </li>
@@ -54,17 +54,17 @@
           <thead>
             <tr>
               <th>Titel</th>
-              <th>Exemplaar</th>
+              <th>Auteur</th>
               <th>Datum gereserveerd</th>
               <th></th>
             </tr>
           </thead>
-          <tbody id="book-row">
+          <tbody id="reservations-row">
             <tr>
               <td>Jip en janneke</td>
               <td>Auteur1</td>
               <td>11-1-2023</td> 
-              <td><button class="btn btn-outline-success" type="button" id="Uitlenen">Annuleren</button></td>
+              <td><button class="btn btn-outline-success" type="button" onclick="cancel(this.id)">Annuleren</button></td>
             </tr>
           </tbody>
         </table>
@@ -96,9 +96,86 @@
               <th></th>
             </tr>
           </thead>
-          <tbody id="book-row"></tbody>
+          <tbody id="loans-row"></tbody>
         </table>
       </div>
 
+      <script>
+        window.onload = createReservationTable();
+        window.onload = createLoanTable();
+
+        function createReservationTable() {
+          fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
+
+            let auths = '';
+            for (let i = 0; i < element.book.authors.length; i++) {
+              auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
+              if (i < element.book.authors.length - 1) {
+                auths += ", "
+              }
+            }
+
+            let dateReserved = new Date(element.dateReserved).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+            rows += "</tr><td>" +
+              element.book.title + "</td><td>" +
+              auths + "</td><td>" +
+              dateReserved + "</td><td>" +
+              '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel'+element.id+'">Annuleer</button></td></tr>';
+            });
+            document.getElementById('reservations-row').innerHTML = rows;
+        });
+      }
+
+      function createLoanTable(){
+        //these are all loans, still waiting for login-sessions until this is personalized
+        fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
+
+            let auths = "";
+            for (let i = 0; i < element.authors.length; i++) {
+              auths += element.authors[i].firstName + " " + element.authors[i].lastName
+              if (i < element.authors.length - 1) {
+                auths += ", "
+              }
+            }
+
+            //do not want to see null but empty space
+            dateReturned = "";
+            if (element.dateReturned==null){
+              dateReturned = "";
+            } else {
+              dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            }
+
+            let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+            rows += "</tr><td>" +
+              element.bookTitle + "</td><td>" +
+              element.bookCopyNr + "</td><td>" +
+              element.bookIsbn + "</td><td>" +
+              auths + "</td><td>" +
+              element.bookCopyStatus + "</td><td>" +
+              dateLoaned + "</td><td>" +
+              dateReturned + "</td><td>" ;
+            });
+            document.getElementById('loans-row').innerHTML = rows;
+        });
+      }
+
+        function cancel(clickedId){
+          console.log(clickedId);
+          let idstr = clickedId.split("cancel");
+          let idnum = parseInt(idstr[1]);
+          fetch('http://localhost:8080/reservation/delete/'+idnum, {
+            method : "DELETE"
+          })
+          .then(alert("Reservering geannuleerd"));
+          createReservationTable();
+        }
+      </script>
 </body>
 </html>

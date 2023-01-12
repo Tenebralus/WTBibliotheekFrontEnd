@@ -29,15 +29,15 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Reserveren</a>
+                <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Account
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Settings</a></li>
-                  <li><a class="dropdown-item" href="#">Reserveringen en Leningen</a></li>
+                  <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+                  <li><a class="dropdown-item" href="../admin/leningen.html">Leningen</a></li>
                 </ul>
               
             </li>
@@ -46,10 +46,10 @@
                 Admin
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="#">Bibliotheek</a></li>
-                <li><a class="dropdown-item" href="#">Reserveringen</a></li>
-                <li><a class="dropdown-item" href="#">Leningen</a></li>
-                <li><a class="dropdown-item active" href="#">Gebruikers</a></li>
+                <li><a class="dropdown-item" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+                <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+                <li><a class="dropdown-item" href="../admin/adminleningen.html">Leningen</a></li>
+                <li><a class="dropdown-item active" href="../admin/gebruikers.html">Gebruikers</a></li>
               </ul>
             </li>
             <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
@@ -79,8 +79,10 @@
           <th>Achternaam</th>
           <th>Email</th>
           <th>Datum aangemaakt</th>
+          <th>Datum verwijderd</th>
           <th>Status</th>
           <th>Rol</th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="book-row"></tbody>
@@ -88,30 +90,53 @@
   </div>
 
   <script>
-    fetch('http://localhost:8080/user/all').then(response => response.json()).then(data => {
-      let rows = '';
-      data.forEach(element => {
-        let admin = "Gebruiker"
-        if (element.admin == true) {
-          admin = "Admin"
-        }
+    window.onload = createUserTable();
 
-        let status = "Actief"
-        if (element.active == false) {
-          status = "Verwijderd"
-        }
+    function createUserTable(){
+      fetch('http://localhost:8080/user/all').then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
+          let admin = "Gebruiker"
+          if (element.admin == true) {
+            admin = "Admin"
+          }
 
-        rows += "<tr><td>" + element.firstName + 
-          "</td><td>" + element.lastName + 
-            "</td><td>" + element.emailAddress + 
-              "</td><td>" + element.dateAccountCreated + 
+          let status = "Actief"
+          if (element.active == false) {
+            status = "Verwijderd"
+          }
+
+          let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          
+          dateAccountDeleted = "";
+          if (element.dateAccountDeleted!=null){
+            dateAccountDeleted = new Date(dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          }
+
+          rows += "<tr><td>" + element.firstName + 
+            "</td><td>" + element.lastName + 
+              "</td><td>" + element.emailAddress + 
+              "</td><td>" + dateAccountCreated + 
+              "</td><td>" + dateAccountDeleted +
               '</td><td>' + status +
-                "</td><td>" + admin +
-              "</td></tr>";
-      });
-      document.getElementById('book-row').innerHTML = rows;
+              "</td><td>" + admin +
+              '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></tr>';;
+        });
+        document.getElementById('book-row').innerHTML = rows;
 
-    });
+      });
+    }
+
+    function updateUser(clickedId){
+      console.log(clickedId);
+      let idstr = clickedId.split("update");
+      let idnum = parseInt(idstr[1]);
+      fetch('http://localhost:8080/user/update/'+idnum, {
+        method : "PUT"
+      })
+      .then();
+      createUserTable();
+    }
 
     function searchUser() {
 
@@ -135,12 +160,23 @@
           status = "Verwijderd"
         }
 
+        let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+        
+        dateAccountDeleted = "";
+          if (element.dateAccountDeleted==null){
+            dateAccountDeleted = "";
+          } else {
+            dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          }
+         
+
         rows += "<tr><td>" + element.firstName + 
           "</td><td>" + element.lastName + 
             "</td><td>" + element.emailAddress + 
-              "</td><td>" + element.dateAccountCreated + 
+              "</td><td>" + dateAccountCreated + 
+              "</td><td>" + dateAccountDeleted +
               "</td><td>" + status +
-                "</td><td>" + admin +
+              "</td><td>" + admin +
               "</td></tr>";
       });
       document.getElementById('book-row').innerHTML = rows;

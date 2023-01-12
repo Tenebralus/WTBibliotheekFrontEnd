@@ -34,7 +34,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" href="#">Reserveren</a>
+            <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -42,8 +42,8 @@
               Account
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Settings</a></li>
-              <li><a class="dropdown-item" href="#">Reserveringen en Leningen</a></li>
+              <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen.html">Leningen</a></li>
             </ul>
 
           </li>
@@ -53,10 +53,10 @@
               Admin
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Bibliotheek</a></li>
-              <li><a class="dropdown-item active" href="#">Reserveringen</a></li>
-              <li><a class="dropdown-item" href="#">Leningen</a></li>
-              <li><a class="dropdown-item" href="#">Gebruikers</a></li>
+              <li><a class="dropdown-item" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+              <li><a class="dropdown-item active" href="../admin/reserveringen.html">Reserveringen</a></li>
+              <li><a class="dropdown-item" href="../admin/adminleningen.html">Leningen</a></li>
+              <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
           <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
@@ -67,6 +67,17 @@
 
   <div class="container">
     <h3>Openstaande reserveringen</h3>
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+      </div>
+      <div class="col">
+        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
     <table class="table">
       <thead>
         <tr>
@@ -81,64 +92,87 @@
       </tbody>
     </table>
   </div>
+  </div>
 
   <script>
+    window.onload = createTable();
 
+    function createTable() {
+      fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
 
-    fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
-      let rows = '';
-      data.forEach(element => {
-
-        //Prevents errors if no user is registered to a reservation
-        let userName = ""
-        if (element.user) {
-          userName = element.user.firstName + " " + element.user.lastName
-        }
-
-        //Generates the list of available copies, or grays out if none
-        let copyDropDown = '<select class="form-select" id="reservation' + element.id + 'dropdown"><option>Selecteer exemplaar</option>';
-        let copyCounter = 0;
-        element.book.bookcopies.forEach(copy => {
-          if (copy.status == "available") {
-            copyCounter++;
-            let bookCopyString = element.book.id + "." + copy.bookCopyNr;
-            copyDropDown += '<option value="' + copy.id + '">' + bookCopyString + '</option>';
+          //Prevents errors if no user is registered to a reservation
+          let userName = ""
+          if (element.firstName && element.lastName) {
+            userName = element.firstName + " " + element.lastName
           }
-        })
-        if (copyCounter == 0) {
-          copyDropDown = '<select class="form-select" disabled><option>Geen exemplaren beschikbaar</option>';
-        }
 
-        //Generates HTML per row
-        rows += "<tr><td>" + element.book.title + "</td><td>" + userName + "</td><td>" + element.dateReserved + '</td><td>' + copyDropDown + '</td><td><button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button></td></tr>'
+          //Generates the list of available copies, or grays out if none
+          let copyDropDown = '<select class="form-select" id="reservation' + element.id + 'dropdown"><option value ="0">Selecteer exemplaar</option>';
+          let copyCounter = 0;
+          let buttonHtml = '<button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button>';
+
+          let dateReserved = new Date(element.reservationDate).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+
+          element.bookcopies.forEach(copy => {
+            if (copy.status == "available") {
+              copyCounter++;
+              let bookCopyString = element.bookId + "." + copy.bookCopyNr;
+              copyDropDown += '<option value="' + copy.id + '">' + bookCopyString + '</option>';
+            }
+          })
+          if (copyCounter == 0) {
+            copyDropDown = '<select class="form-select" disabled><option>Geen exemplaren beschikbaar</option>';
+            buttonHtml = '<button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)" disabled>Uitlenen</button>'
+          }
+
+
+
+          //Generates HTML per row
+          rows += "<tr><td>" + element.bookTitle + "</td><td>" + userName + "</td><td>" + dateReserved + '</td><td>' + copyDropDown + '</td><td>' + buttonHtml + '</td></tr>'
+
+        });
+        document.getElementById('book-row').innerHTML = rows;
 
       });
-      document.getElementById('book-row').innerHTML = rows;
-
-    });
+    }
 
     function createLoan(clickedId) {
       let idstr = clickedId.split("loan");
+
+      //idnum is the id of the reservation
       let idnum = parseInt(idstr[1]);
 
       //copy is the id of the selected bookCopy
       let copy = document.getElementById("reservation" + idnum + "dropdown").value;
+      console.log(copy)
+      if (copy != 0) {
+        fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
+          method: 'POST'
+        })
+          .then(alert("Boek uitgeleend."));
+        createTable();
+      } else {
+        alert("Selecteer een exemplaar");
+      }
 
     }
     /* rows = '<tr><td><div class="d-flex align-items-center"><img src="https://media.s-bol.com/YYQ5wpGYjzBK/0AlP4V/850x1200.jpg" style="width: 60px; height: 90px"/>' +
-          '<div class="ms-3"><p>' + "Master your mindset" + "</p></div></div>" +
-          "<td>" + "Bas Doddema" + "</td>" +
-          '<td><select class="form-select"><option value="1">' + "1.1" + "</option>" +
-          '<option value="2">' + "1.2" + "</option>" + 
-          '<option value="3">' + "1.3" + "</option>" + 
-          '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>" +
-          "<tr><td>" + "Boek2" + "</td>" +
-          "<td>" + "Pietje" + "</td>" +
-          '<td><select class="form-select" disabled><option value="1">' + "1.1" + "</option>" +
-          '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
-          
-    document.getElementById('book-row').innerHTML = rows;
-    */
+            '<div class="ms-3"><p>' + "Master your mindset" + "</p></div></div>" +
+            "<td>" + "Bas Doddema" + "</td>" +
+            '<td><select class="form-select"><option value="1">' + "1.1" + "</option>" +
+            '<option value="2">' + "1.2" + "</option>" + 
+            '<option value="3">' + "1.3" + "</option>" + 
+            '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>" +
+            "<tr><td>" + "Boek2" + "</td>" +
+            "<td>" + "Pietje" + "</td>" +
+            '<td><select class="form-select" disabled><option value="1">' + "1.1" + "</option>" +
+            '</select></td><td><button class="btn btn-outline-success" type="button" id="Uitlenen">' + "Uitlenen" + "</button></td></tr>";
+            
+      document.getElementById('book-row').innerHTML = rows;
+      */
 
   </script>
 
