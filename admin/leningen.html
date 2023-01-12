@@ -110,18 +110,38 @@
               "<td>" + element.bookCopy.bookCopyNr + "</td>" +
               "<td>" + element.bookCopy.book.isbn + "</td>" +
               "<td>" + authorNames + "</td>" +
-              "<td>" + element.bookCopy.status + "</td>" +
-              "<td>" + element.user + " " + element.user + "</td>" +
-              "<td>" + element.dateLoaned + "</td>" +
-              '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren'+ element.id + '" onclick="returnBookCopy()">' + "Inleveren" + "</button></td></tr>";
+              "<td>" + element.bookCopyStatus + "</td>" +
+              "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+              "<td>" + element.dateLoaned + "</td>";
+
+            if(element.bookCopyStatus == "loaned")
+            {
+              rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId +', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
+            }   
           });
           document.getElementById('book-row').innerHTML = rows;
-    
-         });
-        function returnBookCopy()
+        });
+               
+        function returnBookCopy(bookcopy_id, loan_id)
         {
+          let statusValue = "beschikbaar";
 
-        }
+          fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id, 
+            {
+              method: 'PUT',
+              body: statusValue,
+              headers:
+              {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(() =>
+            {
+              alert('Exemplaar is ingeleverd');
+            })
+
+            document.getElementById('Inleveren' + loan_id).style.visibility = 'hidden';
+        }  
      </script>
 
 </body>
