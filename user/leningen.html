@@ -101,28 +101,31 @@
       </div>
 
       <script>
-        fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
-          let rows = '';
-          data.forEach(element => {
+        window.onload = createReservationTable();
+        window.onload = createLoanTable();
 
-          console.log(element);
+        function createReservationTable() {
+          fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
 
-          let auths = '';
-          for (let i = 0; i < element.book.authors.length; i++) {
-            auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
-            if (i < element.book.authors.length - 1) {
-              auths += ", "
+            let auths = '';
+            for (let i = 0; i < element.book.authors.length; i++) {
+              auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
+              if (i < element.book.authors.length - 1) {
+                auths += ", "
+              }
             }
-          }
 
-          rows += "</tr><td>" +
-            element.book.title + "</td><td>" +
-            auths + "</td><td>" +
-            element.dateReserved + "</td><td>" +
-            '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel'+element.id+'">Annuleer</button></td></tr>';
-          });
-          document.getElementById('reservations-row').innerHTML = rows;
-      });
+            rows += "</tr><td>" +
+              element.book.title + "</td><td>" +
+              auths + "</td><td>" +
+              element.dateReserved + "</td><td>" +
+              '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel'+element.id+'">Annuleer</button></td></tr>';
+            });
+            document.getElementById('reservations-row').innerHTML = rows;
+        });
+      }
 
       //these are all loans, still waiting for login-sessions until this is personalized
       fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
@@ -139,7 +142,6 @@
 
           //do not want to see null but empty space
           dateReturned = "";
-          console.log(element.dateReturned);
           if (element.dateReturned==null){
             dateReturned = "";
           } else {
@@ -159,12 +161,14 @@
       });
 
         function cancel(clickedId){
-          let idstr = clickedId.split("loan");
+          console.log(clickedId);
+          let idstr = clickedId.split("cancel");
           let idnum = parseInt(idstr[1]);
           fetch('http://localhost:8080/reservation/delete/'+idnum, {
             method : "DELETE"
           })
           .then(alert("Reservering geannuleerd"));
+          createReservationTable();
         }
       </script>
 </body>
