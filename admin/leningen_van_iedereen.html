@@ -116,7 +116,7 @@
           if (element.dateReturned == null) {
             dateReturned = "";
           } else {
-            dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
 
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
@@ -130,10 +130,10 @@
             "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
             "<td>" + dateLoaned + "</td>";
 
-          if (element.bookCopyStatus == "loaned") {
-            rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
+          if (element.dateReturned) {
+            rows += '<td>' + dateReturned + '</td></tr>';
           } else {
-            rows += '<td></td></tr>';
+            rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
           }
         });
         document.getElementById('book-row').innerHTML = rows;
