@@ -116,7 +116,7 @@
           if (element.dateReturned == null) {
             dateReturned = "";
           } else {
-            dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
 
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
@@ -128,7 +128,8 @@
             "<td>" + authorNames + "</td>" +
             "<td>" + element.bookCopyStatus + "</td>" +
             "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-            "<td>" + dateLoaned + "</td>";
+            "<td>" + dateLoaned + "</td>" + 
+            "<td>" + dateReturned + "</td>";
 
           if (element.bookCopyStatus == "loaned") {
             rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
