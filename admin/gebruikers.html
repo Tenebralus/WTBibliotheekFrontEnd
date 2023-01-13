@@ -102,15 +102,17 @@
           }
 
           let status = "Actief"
+          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></tr>';
           if (element.active == false) {
             status = "Verwijderd"
+            copyButton = '</td><td></td></tr>';
           }
 
           let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           
           dateAccountDeleted = "";
           if (element.dateAccountDeleted!=null){
-            dateAccountDeleted = new Date(dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
 
           rows += "<tr><td>" + element.firstName + 
@@ -120,7 +122,7 @@
               "</td><td>" + dateAccountDeleted +
               '</td><td>' + status +
               "</td><td>" + admin +
-              '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></tr>';;
+              copyButton;
         });
         document.getElementById('book-row').innerHTML = rows;
 
