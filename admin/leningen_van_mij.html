@@ -6,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leningen</title>
     <link rel="icon" href="../images/favicon.ico">
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="../style.css" rel="stylesheet">
-
+    
     <style>
         #logout {
             position: absolute;
@@ -31,7 +32,7 @@
                 <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
               </li>
               <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Account
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -41,7 +42,7 @@
               
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Admin
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -56,6 +57,28 @@
           </div>
         </div>
       </nav>
+
+      <div class="container">
+        <h3>Reserveringen</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>Auteur</th>
+              <th>Datum gereserveerd</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="reservations-row">
+            <tr>
+              <td>Jip en janneke</td>
+              <td>Auteur1</td>
+              <td>11-1-2023</td> 
+              <td><button class="btn btn-outline-success" type="button" onclick="cancel(this.id)">Annuleren</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <div class="container">
         <h3>Leningen</h3>
@@ -80,7 +103,6 @@
               <th>Status</th>
               <th>Gebruiker</th>
               <th>Datum van uitlenen</th>
-              <th>Datum van teruggave</th>
               <th></th>
             </tr>
           </thead>
@@ -89,49 +111,111 @@
       </div>
 
       <script>
-        fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
-          let rows = '';
-          data.forEach(element => {
-            let authorNames = "";
-            for(let i = 0; i < element.authors.length; i++)
-            {
-              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
-              if(i < element.authors.length - 1)
-              {
-                authorNames += ", ";
+        window.onload = createReservationTable();
+        window.onload = createLoanTable();
+
+        function createReservationTable() {
+          fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
+
+            console.log(element);
+
+            let auths = '';
+            for (let i = 0; i < element.book.authors.length; i++) {
+              auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
+              if (i < element.book.authors.length - 1) {
+                auths += ", "
               }
             }
 
-          //do not want to see null but empty space
-          dateReturned = "";
-          console.log(element.dateReturned);
-          dateReturned = "";
-          if (element.dateReturned!=null){
-            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          }
+            let dateReserved = new Date(element.dateReserved).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
 
-          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          
-          let copyDropDown = '';
-          if(element.dateReturned==null){
-            copyDropDown = '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(element.bookId)">' + "Inleveren" + "</button></td></tr>";
-          } else {
-            copyDropDown = '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + ' disabled>' + "</button></td></tr>";
-          }
-
-            rows +=
-              "<tr><td>" + element.bookTitle + "</td>" +
-              "<td>" + element.bookCopyNr + "</td>" +
-              "<td>" + element.bookIsbn + "</td>" +
-              "<td>" + authorNames + "</td>" +
-              "<td>" + element.bookCopyStatus + "</td>" +
-              "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-              "<td>" + dateLoaned + "</td>" +
-              "<td>" + dateReturned + "</td>" +
-              copyDropDown;
+            rows += "</tr><td>" +
+              element.book.title + "</td><td>" +
+              auths + "</td><td>" +
+              dateReserved + "</td><td>" +
+              '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel'+element.id+'">Annuleer</button></td></tr>';
+            });
+            document.getElementById('reservations-row').innerHTML = rows;
           });
-          document.getElementById('book-row').innerHTML = rows;
-        });
-      </script>
+        }
+
+        function createLoanTable(){
+          fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
+              let authorNames = "";
+              for(let i = 0; i < element.authors.length; i++)
+              {
+                authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+                if(i < element.authors.length - 1)
+                {
+                  authorNames += ", ";
+                }
+              }
+
+            //do not want to see null but empty space
+            dateReturned = "";
+            if (element.dateReturned==null){
+              dateReturned = "";
+            } else {
+              dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            }
+
+            let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+              rows +=
+                "<tr><td>" + element.bookTitle + "</td>" +
+                "<td>" + element.bookCopyNr + "</td>" +
+                "<td>" + element.bookIsbn + "</td>" +
+                "<td>" + authorNames + "</td>" +
+                "<td>" + element.bookCopyStatus + "</td>" +
+                "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+                "<td>" + dateLoaned + "</td>" ;
+
+                if(element.bookCopyStatus == "loaned")
+                {
+                  rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId +', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
+                }  
+            });
+            document.getElementById('book-row').innerHTML = rows;
+          });
+        }
+
+        function cancel(clickedId){
+          console.log(clickedId);
+          let idstr = clickedId.split("cancel");
+          let idnum = parseInt(idstr[1]);
+          fetch('http://localhost:8080/reservation/delete/'+idnum, {
+            method : "DELETE"
+          })
+          .then(alert("Reservering geannuleerd"));
+          createReservationTable();
+        }
+
+
+        function returnBookCopy(bookcopy_id, loan_id)
+        {
+          let statusValue = "available";
+
+          fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id, 
+            {
+              method: 'PUT',
+              body: statusValue,
+              headers:
+              {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(() =>
+            {
+              alert('Exemplaar is ingeleverd');
+            })
+
+            document.getElementById('Inleveren' + loan_id).style.visibility = 'hidden';
+        }
+     </script>
+
 </body>
 </html>
