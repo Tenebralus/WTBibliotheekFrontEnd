@@ -197,7 +197,7 @@
 
         function returnBookCopy(bookcopy_id, loan_id)
         {
-          let statusValue = "beschikbaar";
+          let statusValue = "available";
 
           fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id, 
             {
