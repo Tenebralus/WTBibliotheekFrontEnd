@@ -132,6 +132,8 @@
 
           if (element.bookCopyStatus == "loaned") {
             rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
+          } else {
+            rows += '<td></td></tr>';
           }
         });
         document.getElementById('book-row').innerHTML = rows;
