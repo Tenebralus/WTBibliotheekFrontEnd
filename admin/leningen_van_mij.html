@@ -174,10 +174,6 @@
                 "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
                 "<td>" + dateLoaned + "</td>" ;
 
-                if(element.bookCopyStatus == "loaned")
-                {
-                  rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId +', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
-                }  
             });
             document.getElementById('book-row').innerHTML = rows;
           });
@@ -194,27 +190,6 @@
           createReservationTable();
         }
 
-
-        function returnBookCopy(bookcopy_id, loan_id)
-        {
-          let statusValue = "available";
-
-          fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id, 
-            {
-              method: 'PUT',
-              body: statusValue,
-              headers:
-              {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(() =>
-            {
-              alert('Exemplaar is ingeleverd');
-            })
-
-            document.getElementById('Inleveren' + loan_id).style.visibility = 'hidden';
-        }
      </script>
 
 </body>
