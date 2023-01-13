@@ -115,6 +115,8 @@
           let copyDropDown = '';
           if(element.dateReturned==null){
             copyDropDown = '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(element.bookId)">' + "Inleveren" + "</button></td></tr>";
+          } else {
+            copyDropDown = '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + ' disabled>' + "</button></td></tr>";
           }
 
             rows +=
