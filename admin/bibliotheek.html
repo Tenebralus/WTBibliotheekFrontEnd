@@ -58,6 +58,7 @@
       </nav>
 
       <div class="container">
+        <h3>Alle boeken in de bibliotheek</h3>
         <div class="row">
           <div class="col-4">
             <input class="form-control me-2" type="search" placeholder="Zoek op ...">
@@ -78,6 +79,8 @@
               <th>Titel</th>
               <th>ISBN</th>
               <th>Auteur</th>
+              <th>Aantal exemplaren</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="book-row"></tbody>
@@ -86,21 +89,42 @@
     
     
       <script>
-        fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
-          let rows = '';
-          data.forEach(element => {
-            let auths = '';
-            for (let i = 0; i < element.authors.length; i++) {
-              auths += element.authors[i].firstName + " " + element.authors[i].lastName
-              if (i < element.authors.length - 1) {
-                auths += ", "
+        window.onload = createLibraryTable();
+        function createLibraryTable(){
+          fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
+              let auths = '';
+              for (let i = 0; i < element.authors.length; i++) {
+                auths += element.authors[i].firstName + " " + element.authors[i].lastName
+                if (i < element.authors.length - 1) {
+                  auths += ", "
+                }
               }
-            }
-            rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td></tr>";
+
+              let copiesAvailable = 0;
+              element.bookcopies.forEach(copy => {
+                copiesAvailable++
+              })
+
+              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesAvailable  +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
+            });
+            document.getElementById('book-row').innerHTML = rows;
+      
           });
-          document.getElementById('book-row').innerHTML = rows;
-    
-        });
+        }
+
+        //still edit into getting all the variables
+        function updateLibrary(clickedId){
+          let idstr = clickedId.split("update");
+          let idnum = parseInt(idstr[1]);
+          fetch('http://localhost:8080/book/update/'+idnum, {
+            method : "PUT"
+          })
+          .then();
+          createLibraryTable();
+        }
     
         function search() {
           
