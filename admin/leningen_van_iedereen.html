@@ -85,11 +85,9 @@
           <th>Exemplaar</th>
           <th>ISBN</th>
           <th>Auteur(s)</th>
-          <th>Status</th>
           <th>Gebruiker</th>
           <th>Datum van uitlenen</th>
           <th>Datum van teruggave</th>
-          <th></th>
         </tr>
       </thead>
       <tbody id="book-row"></tbody>
@@ -112,29 +110,31 @@
           }
 
           //do not want to see null but empty space
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+          let extra = ''
+          if (element.bookCopyStatus == "loaned") {
+            extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
+          } else {
+            extra = '';
+          }
+
           dateReturned = "";
           if (element.dateReturned == null) {
-            dateReturned = "";
+            dateReturned = extra;
           } else {
             dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
-
-          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
 
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
             "<td>" + element.bookIsbn + "</td>" +
             "<td>" + authorNames + "</td>" +
-            "<td>" + element.bookCopyStatus + "</td>" +
+            //"<td>" + element.bookCopyStatus + "</td>" +
             "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-            "<td>" + dateLoaned + "</td>";
-
-          if (element.dateReturned) {
-            rows += '<td>' + dateReturned + '</td></tr>';
-          } else {
-            rows += '</select></td><td><button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button></td></tr>";
-          }
+            "<td>" + dateLoaned + "</td>" + 
+            "<td>" + dateReturned + "</td></tr>" ;
         });
         document.getElementById('book-row').innerHTML = rows;
       });
@@ -156,6 +156,7 @@
           alert('Exemplaar is ingeleverd');
           createLoanTable();
         })
+        
     }
   </script>
 
