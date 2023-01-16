@@ -115,16 +115,98 @@
           });
         }
 
-        //still edit into getting all the variables
+        // //still edit into getting all the variables
+        // function updateLibrary(clickedId){
+        //   let idstr = clickedId.split("update");
+        //   let idnum = parseInt(idstr[1]);
+        //   fetch('http://localhost:8080/book/update/'+idnum, {
+        //     method : "PUT"
+        //   })
+        //   .then();
+        //   createLibraryTable();
+        // }
+
         function updateLibrary(clickedId){
-          let idstr = clickedId.split("update");
+          let idstr = clickedId.split("updateLibrary");
           let idnum = parseInt(idstr[1]);
+          fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+            let rows = '';
+            data.forEach(element => {
+              let auths = '';
+              for (let i = 0; i < element.authors.length; i++) {
+                auths += element.authors[i].firstName + " " + element.authors[i].lastName
+                if (i < element.authors.length - 1) {
+                  auths += ", "
+                }
+              }
+
+              let copiesAvailable = 0;
+              element.bookcopies.forEach(copy => {
+                copiesAvailable++
+              })
+
+              
+              if (element.id == idnum) {
+                rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" + 
+                  "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" + 
+                    auths + "</td><td>" +  copiesAvailable  + 
+                ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy'+element.id+'">Exemplaar toevoegen</button></td>' +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook'+element.id+'">Opslaan</button></td>' +
+                '</tr>';
+              } else {
+                rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesAvailable  +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';  
+              }
+            
+              });
+            document.getElementById('book-row').innerHTML = rows;
+      
+          });
+      }
+
+      function updateBook(clickedId){
+          // let idstr = clickedId.split("updateLibrary");
+          // let idnum = parseInt(idstr[1]);
+          let newTitle = document.getElementById('inputBookTitle').value;
+          let newIsbn = document.getElementById('inputIsbn').value;
+
+          let idstr = clickedId.split("updateBook");
+          let idnum = parseInt(idstr[1]);
+
           fetch('http://localhost:8080/book/update/'+idnum, {
-            method : "PUT"
-          })
-          .then();
-          createLibraryTable();
+            method : "PUT",
+            body: JSON.stringify(
+                        {
+                            title: newTitle,
+                            isbn: newIsbn
+                        }
+                        ),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+            })
+            .then(() => {
+                        alert('Boek is aangepast');
+                        location.reload()
+                    });
         }
+
+        function addCopy(clickedId){
+
+          let idstr = clickedId.split("addCopy");
+          let idnum = parseInt(idstr[1]);
+
+          fetch('http://localhost:8080/book/'+idnum + '/createbookcopy', {
+            method : "POST"
+            })
+            .then(() => {
+                        alert('Exemplaar toegevoegd');
+                        location.reload()
+                    });
+        }
+
+
+    
     
         function search() {
           
