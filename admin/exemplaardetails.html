@@ -74,6 +74,10 @@
     <div class="container" id="currentLoan">
     </div>
 
+    <div class="container" id="loanHistory">
+        <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
+    </div>
+
     <script>
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -81,7 +85,7 @@
 
         window.onload = populatePage();
         function populatePage() {
-            fetch('http://localhost:8080/bookcopy/details/'+ bookCopyId).then(response => response.json()).then(data => {
+            fetch('http://localhost:8080/bookcopy/details/' + bookCopyId).then(response => response.json()).then(data => {
                 let title = data.bookTitle;
                 let bookId = data.bookId;
                 let bookCopyNr = data.bookCopyNr;
@@ -97,16 +101,45 @@
                 let currentLoan = data.currentLoan
 
                 if (data.currentLoan == null) {
-                    document.getElementById("currentLoan").innerHTML = 
-                    '<p>Geen huidige lening</p>';
+                    document.getElementById("currentLoan").innerHTML =
+                        '<p>Geen huidige lening</p>';
                 } else {
+                    let dateLoaned = new Date(data.currentLoan.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
                     let tableTitle = '<div class="row"><h3>Huidige lening</h3></div>'
-                    let table = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th></tr></thead><tbody><tr><td>' + currentLoan.user.firstName + ' ' + currentLoan.user.lastName + '</td><td>' + currentLoan.dateLoaned + '</td></tr></tbody></table>';
-                    
+                    let table = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th></tr></thead><tbody><tr><td>' + currentLoan.user.firstName + ' ' + currentLoan.user.lastName + '</td><td>' + dateLoaned + '</td></tr></tbody></table>';
+
                     document.getElementById("currentLoan").innerHTML = tableTitle + table;
                 }
             })
+        }
 
+        function getLoanHistory() {
+            fetch('http://localhost:8080/loan/dto/bookcopy/'+bookCopyId).then(response => response.json()).then(data => {
+                data = data.reverse();
+                let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
+                let tableHead = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
+
+                let rows = '';
+
+                data.forEach(element => {
+
+                    //do not want to see null but empty space
+                    let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+                    dateReturned = "";
+                    if (element.dateReturned == null) {
+                        dateReturned = "";
+                    } else {
+                        dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+                    }
+
+                    rows +=
+                        "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+                        "<td>" + dateLoaned + "</td>" +
+                        "<td>" + dateReturned + "</td></tr>";
+                });
+                document.getElementById('loanHistory').innerHTML = tableTitle + tableHead + rows;
+            });
         }
 
     </script>
