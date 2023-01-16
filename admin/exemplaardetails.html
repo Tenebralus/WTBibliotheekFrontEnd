@@ -97,9 +97,10 @@
                     document.getElementById("currentLoan").innerHTML = 
                     '<p>Geen huidige lening</p>';
                 } else {
+                    let tableTitle = '<div class="row"><h3>Huidige lening</h3></div>'
                     let table = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th></tr></thead><tbody><tr><td>' + currentLoan.user.firstName + ' ' + currentLoan.user.lastName + '</td><td>' + currentLoan.dateLoaned + '</td></tr></tbody></table>';
                     
-                    document.getElementById("currentLoan").innerHTML = table;
+                    document.getElementById("currentLoan").innerHTML = tableTitle + table;
                 }
             })
 
