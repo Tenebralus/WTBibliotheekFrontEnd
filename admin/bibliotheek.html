@@ -79,7 +79,8 @@
               <th>Titel</th>
               <th>ISBN</th>
               <th>Auteur</th>
-              <th>Aantal exemplaren</th>
+              <th>Aantal exemplaren totaal</th>
+              <th>Aantal exemplaren beschikbaar</th>
               <th></th>
             </tr>
           </thead>
@@ -102,12 +103,16 @@
                 }
               }
 
+              let copiesTotal = 0;
               let copiesAvailable = 0;
               element.bookcopies.forEach(copy => {
-                copiesAvailable++
+                if (copy.status == "available") {
+                  copiesAvailable++
+                }
+                copiesTotal++
               })
 
-              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesAvailable  +
+              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesTotal  + "</td><td>" +  copiesAvailable  +
                 '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
             });
             document.getElementById('book-row').innerHTML = rows;
