@@ -126,8 +126,9 @@
               method : "PUT"
               })
               .then(() => {
-              alert('Exemplaar is gearchiveerd');});
+              alert('Exemplaar is gearchiveerd');
               updateBookcopyTable();
+            });
             } else {
               alert('Exemplaar ongewijzigd');
             }
@@ -136,15 +137,17 @@
               method : "PUT"
               })
               .then(() => {
-              alert('Exemplaar is on-gearchiveerd');});
+              alert('Exemplaar is on-gearchiveerd');
               updateBookcopyTable();
+            });
           } else {
             fetch('http://localhost:8080/bookcopy/archive/'+bookCopyId, {
               method : "PUT"
               })
               .then(() => {
-              alert('Exemplaar is gearchiveerd');});
+              alert('Exemplaar is gearchiveerd');
               updateBookcopyTable();
+            });
           }
         }
     
