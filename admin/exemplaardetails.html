@@ -72,13 +72,16 @@
     </div>
 
     <div class="container" id="currentLoan">
-        
     </div>
 
     <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const bookCopyId = urlParams.get('bookcopy');
+
         window.onload = populatePage();
         function populatePage() {
-            fetch('http://localhost:8080/bookcopy/details/2').then(response => response.json()).then(data => {
+            fetch('http://localhost:8080/bookcopy/details/'+ bookCopyId).then(response => response.json()).then(data => {
                 let title = data.bookTitle;
                 let bookId = data.bookId;
                 let bookCopyNr = data.bookCopyNr;
