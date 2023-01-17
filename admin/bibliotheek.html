@@ -107,14 +107,18 @@
             }
           }
 
-          let copiesAvailable = 0;
-          element.bookcopies.forEach(copy => {
-            copiesAvailable++
-          })
+              let copiesTotal = 0;
+              let copiesAvailable = 0;
+              element.bookcopies.forEach(copy => {
+                if (copy.status == "available") {
+                  copiesAvailable++
+                }
+                copiesTotal++
+              })
 
-          rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + copiesAvailable +
-            '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
-        });
+              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesTotal  + "</td><td>" +  copiesAvailable  +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
+              });
         document.getElementById('book-row').innerHTML = rows;
 
       });
@@ -138,10 +142,15 @@
         let rows = '';
         data.forEach(element => {
 
-          let copiesAvailable = 0;
-          element.bookcopies.forEach(copy => {
-            copiesAvailable++
-          })
+          let copiesTotal = 0;
+              let copiesAvailable = 0;
+              element.bookcopies.forEach(copy => {
+                if (copy.status == "available") {
+                  copiesAvailable++
+                }
+                copiesTotal++
+              })
+
 
 
           let auths = '';
@@ -153,9 +162,8 @@
             }
             rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
               "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" +
-              inputs + "</td><td>" + copiesAvailable +
-              ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' +
-              '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
+              inputs + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' + 
+              "<td>" + copiesAvailable + '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
           } else {
             for (let i = 0; i < element.authors.length; i++) {
               auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -163,7 +171,7 @@
                 auths += ", "
               }
             }
-            rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + copiesAvailable +
+            rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
               '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
           }
 
