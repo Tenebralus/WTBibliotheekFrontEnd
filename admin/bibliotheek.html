@@ -71,8 +71,20 @@
       <div class="col-4">
         <input class="form-control me-2" type="search" placeholder="Zoek op ...">
       </div>
-      <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+      <div class="container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Titel</th>
+              <th>ISBN</th>
+              <th>Auteur</th>
+              <th>Aantal exemplaren totaal</th>
+              <th>Aantal exemplaren beschikbaar</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="book-row"></tbody>
+        </table>
       </div>
       <div class="col text-end">
         <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek
@@ -80,22 +92,6 @@
       </div>
     </div>
   </div>
-
-  <div class="container">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Titel</th>
-          <th>ISBN</th>
-          <th>Auteur</th>
-          <th>Aantal exemplaren</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody id="book-row"></tbody>
-    </table>
-  </div>
-
 
   <script>
     window.onload = createLibraryTable();
