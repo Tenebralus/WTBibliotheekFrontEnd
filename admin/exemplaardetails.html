@@ -59,12 +59,21 @@
         </div>
     </nav>
     <div class="container">
-        <h3 id="bookTitle"></h3>
+        <div class="row">
+            <div class="col">
+                <h3 id="bookTitle"></h3>
+            </div>
+        </div>
     </div>
 
     <div class="container">
         <div class="row">
-            <p id="status"></p>
+            <div class="col">
+                <p id="status"></p>
+            </div>
+            <div class="col text-end"><button class="btn btn-outline-success" type="button" id="archiveButton"
+                    onclick="updateBookCopy()"></button>
+            </div>
         </div>
         <div class="row">
             <p id="timesLoaned"></p>
@@ -74,14 +83,6 @@
     <div class="container" id="currentLoan">
     </div>
 
-    <div class="container">
-        <div class="row">
-            <div class="col text-end">
-                <button class="btn btn-outline-success" type="button" id="updateBookcopy"
-                    onclick="updateBookCopy()">(On) Archiveren</button>
-            </div>
-        </div>
-    </div>
 
     <div class="container" id="loanHistory">
         <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
@@ -136,6 +137,13 @@
                         + '</td></tr></tbody></table>';
 
                     document.getElementById("currentLoan").innerHTML = tableTitle + table;
+
+
+                }
+                if (status == "archived") {
+                    document.getElementById("archiveButton").innerText = "Activeer exemplaar";
+                } else {
+                    document.getElementById("archiveButton").innerText = "Archiveer exemplaar";
                 }
             })
         }
@@ -172,7 +180,6 @@
 
         function updateBookCopy() {
             let currentStatus = (status)
-            console.log(currentStatus);
             if (currentStatus == "loaned") {
                 const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
                 if (response) {
@@ -205,6 +212,7 @@
             }
 
         }
+
 
         function returnBookCopy() {
             fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookCopyId + '/' + loanId,
