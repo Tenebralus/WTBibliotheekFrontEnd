@@ -105,6 +105,7 @@
         const urlParams = new URLSearchParams(queryString);
 
         const bookId = urlParams.get('book');
+        const bookCopyId = urlParams.get('bookcopy');
 
         window.onload = createBookCopiesTable();
         function createBookCopiesTable(){
@@ -114,6 +115,12 @@
 
           fetch('http://localhost:8080/book/details/'+ bookId).then(response => response.json()).then(data => {
             let rows = '';
+            let title = data.title;
+            let isbn = data.isbn;
+
+            for (let i = 0; i < data.authors.length; i++) {
+              auths = data.authors[i].firstName + " " + data.authors[i].lastName;
+            }
 
             let bookAuthors = '';
             for(let i = 0; i < data.bookAuthors.length; i++)
@@ -150,16 +157,37 @@
               {
                 returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
               }
+              
+              let tags = '';
+                for (let i = 0; i < data.tags.length; i++) {
+                    tags += data.tags[i].name 
+                    if (i < data.tags.length - 1) {
+                        tags += ", "
+                    }
+                }
+
+                text=''; 
+                if (element.bookCopyStatus == "archived") {
+                    text = "Activeer exemplaar";
+                } else {
+                    text = "Archiveer exemplaar";
+                }
+                let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookCopyStatus+'\')" >'+text+' </button>';
             
               rows += "<tr><td>" +
                       '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
                       data.bookCopyDetailsDTOs[i].status + "</td><td>" +
                       usernameCurrentLoan + "</td><td>" +
                       dateLoaned + "</td><td>" +
-                      returnButtonHTML + "</td><td>" +  
+                      returnButtonHTML + "</td><td>" +
+                      updateButtonHTML + "</td>" +
                       "</tr>";
               }
-      
+                
+                document.getElementById("Titel").innerText = "Titel: " + title ;
+                document.getElementById("ISBN").innerText = "ISBN: " + isbn ;
+                document.getElementById("Auteur").innerText = "Auteur(s): " + auths;
+                document.getElementById("Tags").innerText = "Tag(s): " + tags ;
             document.getElementById('table-bookcopies').innerHTML = rows;
           });
         }
@@ -183,6 +211,55 @@
         
     }
     
+        function addCopy() {
+            if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
+                fetch('http://localhost:8080/book/' + bookId + '/createbookcopy', {
+                    method: "POST"
+                })
+                .then(() => {
+                    alert('Exemplaar toegevoegd');
+                    populatePage();
+                });
+            } else {
+                return false;
+            }
+        }
+
+        function updateBookCopy(bookCopyId, status) {
+            let currentStatus = (status)
+            if (currentStatus == "loaned") {
+                const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
+                if (response) {
+                    fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+                        method: "PUT"
+                    })
+                        .then(() => {
+                            alert('Exemplaar is gearchiveerd');
+                            populatePage();
+                        });
+                } else {
+                    alert('Exemplaar ongewijzigd');
+                }
+            } else if (currentStatus == "archived") {
+                fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+                    method: "PUT"
+                })
+                    .then(() => {
+                        alert('Exemplaar is geactiveerd');
+                        populatePage();
+                    });
+            } else {
+                fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+                    method: "PUT"
+                })
+                    .then(() => {
+                        alert('Exemplaar is gearchiveerd');
+                        populatePage();
+                    });
+            }
+
+        }
+
         function search() {
           
         }
