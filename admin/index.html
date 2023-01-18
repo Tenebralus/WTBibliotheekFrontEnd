@@ -68,7 +68,7 @@
   <div class="container">
     <div class="row">
       <div class="col-4">
-        <input class="form-control me-2" type="search" id="name2-search" placeholder="Zoek op ...">
+        <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op ...">
       </div>
       <div class="col">
         <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
@@ -97,7 +97,7 @@
       let rows = '';
       let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
       data.forEach(element => {
-        
+
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {
           auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -128,48 +128,64 @@
           auths + "</td><td>" +
           tagName + "</td><td>" +
           copiesAvailable + "</td><td>" +
-          '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve'+element.id+'">Reserveer</button></td></tr>';
+          '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve' + element.id + '">Reserveer</button></td></tr>';
       });
       document.getElementById('book-row').innerHTML = rows;
 
     });
 
     function search() {
-      /*let nameElementValue = document.getElementById('name2-search').value;
+      let keyword = document.getElementById('searchField').value;
 
-      let obj = {
-      }
-      fetch('http://localhost:8080/book/'+nameElementValue).then(response => response.json())
-      .then(data => {let rows = '';
-      data.forEach(element => {
-        let admin = "Gebruiker"
-        if (element.admin == true) {
-          admin = "Admin"
-        }
+      fetch('http://localhost:8080/book/search/'+ keyword).then(response => response.json()).then(data => {
+        let rows = '';
+        let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
+        data.forEach(element => {
 
-        let status = "Actief"
-        if (element.active == false) {
-          status = "Verwijderd"
-        }
+          let auths = '';
+          for (let i = 0; i < element.authors.length; i++) {
+            auths += element.authors[i].firstName + " " + element.authors[i].lastName
+            if (i < element.authors.length - 1) {
+              auths += ", "
+            }
+          }
 
-        rows += "<tr><td>" + element.title + 
-          "</td><td>" + element.isbn + 
-            "</td><td>" + element.author + 
-              "</td><td>" + element.tag + 
-              "</td><td>" + status +
-              "</td></tr>";
+          let tagName = '';
+          for (let i = 0; i < element.tags.length; i++) {
+            tagName += element.tags[i].name
+            if (i < element.tags.length - 1) {
+              tagName += ", "
+            }
+          }
+
+          let copiesAvailable = 0;
+          element.bookcopies.forEach(copy => {
+            if (copy.status == "available") {
+              copiesAvailable++
+            }
+          })
+
+          rows += "</tr><td>" +
+            '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
+            element.title + "</td><td>" +
+            element.isbn + "</td><td>" +
+            auths + "</td><td>" +
+            tagName + "</td><td>" +
+            copiesAvailable + "</td><td>" +
+            '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve' + element.id + '">Reserveer</button></td></tr>';
+        });
+        document.getElementById('book-row').innerHTML = rows;
+
       });
-      document.getElementById('book-row').innerHTML = rows;   
-      })*/
     }
 
     function createReservation(clickedId) {
       let idstr = clickedId.split("reserve");
       let idnum = parseInt(idstr[1]);
-      fetch('http://localhost:8080/book/'+idnum+'/createreservation', {
-        method : "POST"
+      fetch('http://localhost:8080/book/' + idnum + '/createreservation', {
+        method: "POST"
       })
-      .then(alert("Reservering gemaakt"));
+        .then(alert("Reservering gemaakt"));
     }
   </script>
 </body>
