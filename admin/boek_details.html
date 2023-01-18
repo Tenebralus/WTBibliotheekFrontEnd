@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boek Details</title>
+    <link rel="icon" href="../images/favicon.ico">
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../style.css" rel="stylesheet">
+    
+    <style>
+        #logout {
+            position: absolute;
+            right: 5%;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+              </li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Account
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+                  <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+                </ul>
+                
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Admin
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+                <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+                <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+                <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
+              </ul>
+            </li>
+            <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
+            
+          </div>
+        </div>
+      </nav>
+
+      <div class="container">
+        <div class="container text-left">
+          <div class="row align-items-start">
+
+            <div class="col-3" id="col11">
+              <img src="https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg" style="width: 50%; height: 50%"/>
+            </div>
+
+            <div class="col" id="col12">
+
+              <div class="container">
+                <div class="container text-left">
+                  <div class="row align-items-start">
+                    <div class="row" id="col2">
+                      <h3>Boek Titel: Schaduw van de illusie</h3>
+                      <h3>Auteur: Hans Kazan</h3>
+                      <h3>ISBN: 123456-7</h3>
+                    </div>
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>Exemplaar</th>
+                          <th>Status</th>
+                          <th>Gebruiker</th>
+                          <th></th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody id="table-bookcopies">
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+    
+      <script>
+        const queryString = window.location.search;
+
+        const urlParams = new URLSearchParams(queryString);
+
+        const bookId = urlParams.get('book');
+
+        window.onload = createBookCopiesTable();
+
+        function createBookCopiesTable(){
+          //<a href=boek_details.html?bookcopy={bookcopyid}>Exemplaar 1</a>
+
+          let link = 'adminleningen.html?book=' + bookId;
+
+          fetch('http://localhost:8080/book/details/'+ bookId).then(response => response.json()).then(data => {
+            let rows = '';
+
+              for(let i = 0; i < data.bookCopyDetailsDTOs.length; i++)
+              {
+                let usernameCurrentLoan = '';
+                if(data.bookCopyDetailsDTOs[i].currentLoan != null && 
+                   data.bookCopyDetailsDTOs[i].currentLoan.user != null)
+                {
+                  let userFirstNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.firstName;
+                  let userLastNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.lastName;
+                  usernameCurrentLoan = userFirstNameCurrentLoan + " " + userLastNameCurrentLoan;
+                }
+
+                let returnButtonHTML = '';
+                if(data.bookCopyDetailsDTOs[i].status == "loaned")
+                {
+                  returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
+                }
+              
+                rows += "<tr><td>" +
+                        '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+                        data.bookCopyDetailsDTOs[i].status + "</td><td>" +
+                        usernameCurrentLoan + "</td><td>" +
+                        returnButtonHTML + "</td><td>" +  
+                        "</tr>";
+                }
+      
+            document.getElementById('table-bookcopies').innerHTML = rows;
+          });
+        }
+    
+        function search() {
+          
+        }
+      </script>
+</body>
+</html>
