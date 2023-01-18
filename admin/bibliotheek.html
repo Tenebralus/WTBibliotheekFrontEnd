@@ -1,77 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bibliotheek</title>
-    <link rel="icon" href="../images/favicon.ico">
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="../style.css" rel="stylesheet">
-    
-    <style>
-        #logout {
-            position: absolute;
-            right: 5%;
-        }
-    </style>
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Account
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
-                  <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
-                </ul>
-                
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Admin
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
-                <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
-                <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
-                <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
-              </ul>
-            </li>
-            <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-            
-          </div>
-        </div>
-      </nav>
 
-      <div class="container">
-        <h3>Alle boeken in de bibliotheek</h3>
-        <div class="row">
-          <div class="col-4">
-            <input class="form-control me-2" type="search" placeholder="Zoek op ...">
-          </div>
-          <div class="col">
-            <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
-          </div>
-          <div class="col text-end">
-            <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek toevoegen</button></a>
-          </div>
-        </div>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bibliotheek</title>
+  <link rel="icon" href="../images/favicon.ico">
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="../style.css" rel="stylesheet">
+
+  <style>
+    #logout {
+      position: absolute;
+      right: 5%;
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+            </ul>
+
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+              <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+              <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
+            </ul>
+          </li>
+          <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
+
       </div>
-    
+    </div>
+  </nav>
+
+  <div class="container">
+    <h3>Alle boeken in de bibliotheek</h3>
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+      </div>
       <div class="container">
         <table class="table">
           <thead>
@@ -79,56 +78,164 @@
               <th>Titel</th>
               <th>ISBN</th>
               <th>Auteur</th>
-              <th>Aantal exemplaren</th>
+              <th>Aantal exemplaren totaal</th>
+              <th>Aantal exemplaren beschikbaar</th>
               <th></th>
             </tr>
           </thead>
           <tbody id="book-row"></tbody>
         </table>
       </div>
-    
-    
-      <script>
-        window.onload = createLibraryTable();
-        function createLibraryTable(){
-          fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
-            let rows = '';
-            data.forEach(element => {
-              let auths = '';
-              for (let i = 0; i < element.authors.length; i++) {
-                auths += element.authors[i].firstName + " " + element.authors[i].lastName
-                if (i < element.authors.length - 1) {
-                  auths += ", "
-                }
-              }
+      <div class="col text-end">
+        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek
+            toevoegen</button></a>
+      </div>
+    </div>
+  </div>
 
+  <script>
+    window.onload = createLibraryTable();
+    function createLibraryTable() {
+      fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
+          let auths = '';
+          for (let i = 0; i < element.authors.length; i++) {
+            auths += element.authors[i].firstName + " " + element.authors[i].lastName
+            if (i < element.authors.length - 1) {
+              auths += ", "
+            }
+          }
+
+              let copiesTotal = 0;
               let copiesAvailable = 0;
               element.bookcopies.forEach(copy => {
-                copiesAvailable++
+                if (copy.status == "available") {
+                  copiesAvailable++
+                }
+                copiesTotal++
               })
 
-              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesAvailable  +
+              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesTotal  + "</td><td>" +  copiesAvailable  +
                 '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
-            });
-            document.getElementById('book-row').innerHTML = rows;
-      
-          });
-        }
+              });
+        document.getElementById('book-row').innerHTML = rows;
 
-        //still edit into getting all the variables
-        function updateLibrary(clickedId){
-          let idstr = clickedId.split("update");
-          let idnum = parseInt(idstr[1]);
-          fetch('http://localhost:8080/book/update/'+idnum, {
-            method : "PUT"
-          })
-          .then();
-          createLibraryTable();
+      });
+    }
+
+    // //still edit into getting all the variables
+    // function updateLibrary(clickedId){
+    //   let idstr = clickedId.split("update");
+    //   let idnum = parseInt(idstr[1]);
+    //   fetch('http://localhost:8080/book/update/'+idnum, {
+    //     method : "PUT"
+    //   })
+    //   .then();
+    //   createLibraryTable();
+    // }
+
+    function updateLibrary(clickedId) {
+      let idstr = clickedId.split("updateLibrary");
+      let idnum = parseInt(idstr[1]);
+      fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
+
+          let copiesTotal = 0;
+              let copiesAvailable = 0;
+              element.bookcopies.forEach(copy => {
+                if (copy.status == "available") {
+                  copiesAvailable++
+                }
+                copiesTotal++
+              })
+
+
+
+          let auths = '';
+          let inputs = '';
+          if (element.id == idnum) {
+            for (let i = 0; i < element.authors.length; i++) {
+              // Create input fields for all authors
+              auths = element.authors[i].firstName + " " + element.authors[i].lastName
+              inputs += "<input class='form-control me-2' id='inputAuthor " + i + "' form='form1' type='text' name='isbn' value='" + auths + "'/>"
+            }
+            // Create rows of the table with inputs
+            rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
+              "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" +
+              inputs + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' + 
+              "<td>" + copiesAvailable + '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
+          } else {
+            for (let i = 0; i < element.authors.length; i++) {
+              auths += element.authors[i].firstName + " " + element.authors[i].lastName
+              if (i < element.authors.length - 1) {
+                auths += ", "
+              }
+            }
+            rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+              '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
+          }
+
+        });
+        document.getElementById('book-row').innerHTML = rows;
+
+      });
+    }
+
+    function updateBook(clickedId) {
+      // let idstr = clickedId.split("updateLibrary");
+      // let idnum = parseInt(idstr[1]);
+      let newTitle = document.getElementById('inputBookTitle').value;
+      let newIsbn = document.getElementById('inputIsbn').value;
+
+      let idstr = clickedId.split("updateBook");
+      let idnum = parseInt(idstr[1]);
+
+      fetch('http://localhost:8080/book/update/' + idnum, {
+        method: "PUT",
+        body: JSON.stringify(
+          {
+            title: newTitle,
+            isbn: newIsbn
+          }
+        ),
+        headers: {
+          'Content-Type': 'application/json'
         }
-    
-        function search() {
-          
-        }
-      </script>
+      })
+        .then(() => {
+          alert('Boek is aangepast');
+          location.reload()
+        });
+    }
+
+    function addCopy(clickedId) {
+
+      if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
+
+        let idstr = clickedId.split("addCopy");
+        let idnum = parseInt(idstr[1]);
+
+        fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
+          method: "POST"
+        })
+          .then(() => {
+            alert('Exemplaar toegevoegd');
+            location.reload()
+          });
+      } else {
+        return false;
+      }
+    }
+
+
+
+
+    function search() {
+
+    }
+  </script>
 </body>
+
 </html>

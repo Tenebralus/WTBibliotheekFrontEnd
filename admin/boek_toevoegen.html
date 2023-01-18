@@ -85,45 +85,74 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <label for="inputAuthor" class="form-label">Auteur</label>
-                    <input type="text" class="form-control" id="inputAuthor" placeholder="Auteur">
+                    <fieldset class="inputs-set" id="author-list" class="input-field">
+                        <!-- <label for="inputAuthor" class="form-label">Auteur</label> -->
+                        <!-- <input type="text" class="form-control" id="inputAuthor0" placeholder="Auteur"> -->
+                        <body onLoad="addAuthorField();"></body>
+                    </fieldset>
                 </div>
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <label for="inputTag" class="form-label">Tag</label>
-                    <input type="text" class="form-control" id="inputTag" placeholder="Bijv. Programmeren">
+                    <fieldset class="inputs-set" id="tag-list" class="input-field">
+                        <!-- <label for="inputTag" class="form-label">Tag</label> -->
+                        <!-- <input type="text" class="form-control" id="inputTag" placeholder="Bijv. Programmeren"> -->
+                        <body onLoad="addTagField();"></body>
+                    </fieldset>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <button class="btn btn-secondary" type="button">+ Extra auteur</button>
+                    <button class="btn btn-secondary" type="button" id="extraAuthor" onclick="addAuthorField()">+ Extra auteur</button>
                 </div>
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <button class="btn btn-secondary" type="button">+ Extra tag</button>
+                    <button class="btn btn-secondary" type="button" id="extraTag" onclick="addTagField()">+ Extra tag</button>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-outline-success" type="button" id="addBook" onclick="createBookAndDone()">Toevoegen</button>
-                <button class="btn btn-outline-success" type="button" id="addBookAndNext" onclick="createBookAndNext()">Toevoegen en volgende</button>
+                <button class="btn btn-outline-success" type="button" id="addBook" onclick="createBookAndNext()">Toevoegen</button>
+                <!-- <button class="btn btn-outline-success" type="button" id="addBookAndNext" onclick="createBookAndNext()">Toevoegen en volgende</button> -->
             </div>
         </div>
     </div>
 
     <script>
+        
+        let authorNumber = 0;
+        let tagNumber = 0;
+
         function createBook() {
+
+            let authorsArr = [];
+            for(let i = 0; i < authorNumber; i++){
+                
+                authorsArr.push({"id":document.getElementById('inputAuthor'+i).value});
+
+            }
+            console.log(authorsArr);
+
+            let tagsArr = [];
+            for(let i = 0; i < tagNumber; i++){
+                
+                tagsArr.push({"id":document.getElementById('inputTag'+i).value});
+
+            }
+            console.log(tagsArr);
+
             fetch('http://localhost:8080/book/create', {
                 method: 'POST',
                 body: JSON.stringify(
                     {
                         title: document.getElementById('inputBookTitle').value,
-                        isbn: document.getElementById('inputIsbn').value
+                        isbn: document.getElementById('inputIsbn').value,
+                        authors: authorsArr,
+                        tags: tagsArr
                     }
                 ),
                 headers: {
@@ -144,6 +173,47 @@
             document.getElementById('inputBookTitle').value = "";
             document.getElementById('inputIsbn').value = "";
         }
+
+        function addAuthorField() {
+            const myAuthorForm = document.getElementById("author-list");
+
+            const newAuthorField = document.createElement("select");
+            newAuthorField.setAttribute("id", "inputAuthor"+authorNumber);
+            newAuthorField.classList.add("col-4");
+            newAuthorField.classList.add("mb-3");
+            
+            fetch('http://localhost:8080/author/all').then(response => response.json()).then(data => {
+
+                data.forEach(element => {
+                    var option = new Option(element.firstName + " " + element.lastName, element.id, false, false);
+                    newAuthorField.appendChild(option);
+                });
+            });
+
+            myAuthorForm.appendChild(newAuthorField);
+            authorNumber++;
+        }
+
+        function addTagField() {
+            const myTagForm = document.getElementById("tag-list");
+
+            const newTagField = document.createElement("select");
+            newTagField.setAttribute("id", "inputTag"+tagNumber);
+            newTagField.classList.add("col-4");
+            newTagField.classList.add("mb-3");
+            
+            fetch('http://localhost:8080/tag/all').then(response => response.json()).then(data => {
+
+                data.forEach(element => {
+                    var option = new Option(element.name, element.id, false, false);
+                    newTagField.appendChild(option);
+                });
+            });
+
+            myTagForm.appendChild(newTagField);
+            tagNumber++;
+        }
+
     </script>
 </body>
 
