@@ -78,78 +78,70 @@
             <tr>
               <th>Titel</th>
               <th>ISBN</th>
+              <th>Exemplaar nummer</th>
               <th>Auteur</th>
-              <th>Aantal exemplaren totaal</th>
-              <th>Aantal exemplaren beschikbaar</th>
               <th></th>
             </tr>
           </thead>
           <tbody id="bookcopy-row"></tbody>
         </table>
       </div>
-    
-    
-      <script>
-        window.onload = createLibraryTable();
-        function createLibraryTable(){
-          fetch('http://localhost:8080/bookcopyDetailsDTO').then(response => response.json()).then(data => {
-            let rows = '';
-            data.forEach(element => {
-              let auths = '';
-              for (let i = 0; i < element.authors.length; i++) {
-                auths += element.authors[i].firstName + " " + element.authors[i].lastName
-                if (i < element.authors.length - 1) {
-                  auths += ", "
-                }
-              }
+      <div class="col text-end">
+        
+      </div>
+    </div>
+  </div>
 
-              let copiesTotal = 0;
-              let copiesAvailable = 0;
-              element.bookcopies.forEach(copy => {
-                if (copy.status == "available") {
-                  copiesAvailable++
-                }
-                copiesTotal++
-              })
-
-              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesTotal  + "</td><td>" +  copiesAvailable  +
-                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
-            });
-            document.getElementById('book-row').innerHTML = rows;
-      
-          });
-        }
+  <script>
+    window.onload = createLibraryTable();
+    function createLibraryTable() {
+      fetch('http://localhost:8080/bookcopy/details/all').then(response => response.json()).then(data => {
+        //http://localhost:8080/bookcopyDetailsDTO
+        let rows = '';
+        data.forEach(element => {
+          let auths = '';
+          for (let i = 0; i < element.authors.length; i++) {
+            auths += element.authors[i].firstName + " " + element.authors[i].lastName
+            if (i < element.authors.length - 1) {
+              auths += ", "
+            }
+          }
+          rows += "<tr><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + element.bookCopyNr + "</td><td>" + auths + "</td><td>" +
+          '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
+        });
+        document.getElementById('bookcopy-row').innerHTML = rows;
+      });
+    }
 
         function updateLibrary(clickedId){
           let idstr = clickedId.split("updateLibrary");
           let idnum = parseInt(idstr[1]);
-          fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+          fetch('http://localhost:8080/bookcopy/all').then(response => response.json()).then(data => {
             let rows = '';
             data.forEach(element => {
               let auths = '';
+              let inputs = '';
               for (let i = 0; i < element.authors.length; i++) {
                 auths += element.authors[i].firstName + " " + element.authors[i].lastName
                 if (i < element.authors.length - 1) {
                   auths += ", "
                 }
               }
-
-              let copiesAvailable = 0;
-              element.bookcopies.forEach(copy => {
-                copiesAvailable++
-              })
-
-              
+     
               if (element.id == idnum) {
-                rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" + 
-                  "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" + 
-                    auths + "</td><td>" +  copiesAvailable  + 
+                for (let i = 0; i < element.authors.length; i++) {
+                  inputs += "<input class='form-control me-2' id='inputAuthor " + i + "' form='form1' type='text' name='isbn' value='" + auths + "'/>"
+                }
+                rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.bookTitle + "'/>" + "</td><td>" + 
+                  "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.bookIsbn + "'/>" + "</td><td>" + 
+                    inputs + "</td><td>" + 
                 ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy'+element.id+'">Exemplaar toevoegen</button></td>' +
                 '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook'+element.id+'">Opslaan</button></td>' +
                 '</tr>';
               } else {
-                rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" +  copiesAvailable  +
-                '</td><td><button class="btn btn-outline-success" type="button" onclick="archiveBookCopy(this.id)" id="archoveBookCopy'+element.id+'">Pas aan</button></td></tr>';  
+                rows += "<tr><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + inputs + "</td><td>" + 
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="archiveBookCopy(this.id)" id="archiveBookCopy'+element.id+'">Pas aan</button></td></tr>';  
+                //'</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>' ;
               }
             
               });
@@ -171,24 +163,29 @@
             location.reload()
         });
       }
-        
-        //see bibliotheek, does this create a new one coorectly?
-        function addCopy(clickedId){
-          let idstr = clickedId.split("addCopy");
-          let idnum = parseInt(idstr[1]);
 
-          fetch('http://localhost:8080/book/'+idnum +'/createbookcopy', {
-            method : "POST"
-            })
-            .then(() => {
-                alert('Exemplaar toegevoegd');
-                location.reload()
-            });
-        }
-    
-        function search() {
-          
-        }
-      </script>
+    function addCopy(clickedId) {
+
+      if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
+
+        let idstr = clickedId.split("addCopy");
+        let idnum = parseInt(idstr[1]);
+
+        fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
+          method: "POST"
+        })
+          .then(() => {
+            alert('Exemplaar toegevoegd');
+            location.reload()
+          });
+      } else {
+        return false;
+      }
+    }
+
+    function search() {
+
+    }
+  </script>
 </body>
 </html>
