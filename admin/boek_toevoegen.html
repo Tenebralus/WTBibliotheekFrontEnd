@@ -86,9 +86,12 @@
             <div class="col-4">
                 <div class="mb-3">
                     <fieldset class="inputs-set" id="author-list" class="input-field">
+                    <!-- <input id="author-list" list="newAuthorField"/> -->
                         <!-- <label for="inputAuthor" class="form-label">Auteur</label> -->
                         <!-- <input type="text" class="form-control" id="inputAuthor0" placeholder="Auteur"> -->
-                        <body onLoad="addAuthorField();"></body>
+                        <!-- <body onLoad="addAuthorField();"></body> -->
+                        <body onLoad="loadFields();"></body> 
+                    <!-- </input> -->
                     </fieldset>
                 </div>
             </div>
@@ -97,7 +100,7 @@
                     <fieldset class="inputs-set" id="tag-list" class="input-field">
                         <!-- <label for="inputTag" class="form-label">Tag</label> -->
                         <!-- <input type="text" class="form-control" id="inputTag" placeholder="Bijv. Programmeren"> -->
-                        <body onLoad="addTagField();"></body>
+                        <!-- <body onLoad="addTagField();"></body> -->
                     </fieldset>
                 </div>
             </div>
@@ -127,30 +130,72 @@
         let authorNumber = 0;
         let tagNumber = 0;
 
-        function createBook() {
+        function loadFields(){
+            addAuthorField();
+            addTagField();
+        }
+
+        async function createBook() {
+            let newBookTitle = document.getElementById('inputBookTitle').value;
+            let newIsbn = document.getElementById('inputIsbn').value;
+
+            if(newBookTitle.length == 0 || newIsbn.length == 0){
+                alert("Voer een titel en isbn in")
+                return;
+            }
 
             let authorsArr = [];
             for(let i = 0; i < authorNumber; i++){
+
+                await searchAuthorId().then(data => {
+
+                    data.forEach(element => {
+                        compareString = element.firstName + " " + element.lastName;
+                        if(compareString.localeCompare(document.getElementById('inputAuthor'+i).value) == 0){
+
+                            authorId = element.id;
+                        }
+                    });
+                });
                 
-                authorsArr.push({"id":document.getElementById('inputAuthor'+i).value});
+                if(document.getElementById('inputAuthor'+i).value.length != 0 && typeof authorId !== 'undefined'){
+                    if(!authorsArr.find(element => {if (element.id == authorId){return true}})){
+                        authorsArr.push({"id":authorId});
+                    }
+                }
 
             }
             console.log(authorsArr);
 
             let tagsArr = [];
             for(let i = 0; i < tagNumber; i++){
-                
-                tagsArr.push({"id":document.getElementById('inputTag'+i).value});
+                if(document.getElementById('inputTag'+i).value.length != 0){
+                    await searchTagId(document.getElementById('inputTag'+i).value).then(data => {
+                        if(typeof data[0] !== 'undefined'){
+                            tagId = data[0].id;
 
+                            if(!tagsArr.find(element => {if (element.id == tagId){return true}})){
+                                tagsArr.push({"id":tagId});
+                            }
+                        }
+                    });
+
+                    /*
+                    if(!tagsArr.find(element => {if (element.id == tagId){return true}})){
+                        tagsArr.push({"id":tagId});
+                    }
+                    */
+                }
             }
+
             console.log(tagsArr);
 
             fetch('http://localhost:8080/book/create', {
                 method: 'POST',
                 body: JSON.stringify(
                     {
-                        title: document.getElementById('inputBookTitle').value,
-                        isbn: document.getElementById('inputIsbn').value,
+                        title: newBookTitle,
+                        isbn: newIsbn,
                         authors: authorsArr,
                         tags: tagsArr
                     }
@@ -174,43 +219,76 @@
             document.getElementById('inputIsbn').value = "";
         }
 
+
+        async function searchAuthorId() {
+            const response = await fetch('http://localhost:8080/author/all');
+            const authorIdResponse = await response.json();
+            return authorIdResponse;
+        }
+
+        async function searchTagId(searchName) {
+            const response = await fetch('http://localhost:8080/tag/name/'+searchName);
+            const TagIdResponse = await response.json();
+            return TagIdResponse;
+        }
+
+        
+
         function addAuthorField() {
             const myAuthorForm = document.getElementById("author-list");
 
-            const newAuthorField = document.createElement("select");
-            newAuthorField.setAttribute("id", "inputAuthor"+authorNumber);
+            var x = document.createElement("INPUT");
+            x.setAttribute("list", "inputAuthorList"+authorNumber);
+            x.setAttribute("id", "inputAuthor"+authorNumber);
+            x.setAttribute("placeholder", "Auteur");
+            
+            const newAuthorField = document.createElement("datalist");
+            newAuthorField.setAttribute("id", "inputAuthorList"+authorNumber);
             newAuthorField.classList.add("col-4");
             newAuthorField.classList.add("mb-3");
+            
             
             fetch('http://localhost:8080/author/all').then(response => response.json()).then(data => {
 
                 data.forEach(element => {
-                    var option = new Option(element.firstName + " " + element.lastName, element.id, false, false);
+                    var option = document.createElement('option');
+                    option.setAttribute("value", element.firstName + " " + element.lastName);
+                    option.setAttribute("id", element.id);
                     newAuthorField.appendChild(option);
                 });
             });
 
-            myAuthorForm.appendChild(newAuthorField);
+            x.appendChild(newAuthorField);
+            myAuthorForm.appendChild(x);
             authorNumber++;
         }
 
         function addTagField() {
             const myTagForm = document.getElementById("tag-list");
 
-            const newTagField = document.createElement("select");
-            newTagField.setAttribute("id", "inputTag"+tagNumber);
+            var x = document.createElement("INPUT");
+            x.setAttribute("list", "inputTagList"+tagNumber);
+            x.setAttribute("id", "inputTag"+tagNumber);
+            x.setAttribute("placeholder", "Tag");
+            
+
+            const newTagField = document.createElement("datalist");
+            newTagField.setAttribute("id", "inputTagList"+tagNumber);
             newTagField.classList.add("col-4");
             newTagField.classList.add("mb-3");
             
             fetch('http://localhost:8080/tag/all').then(response => response.json()).then(data => {
 
                 data.forEach(element => {
-                    var option = new Option(element.name, element.id, false, false);
+                    var option = document.createElement('option');
+                    option.setAttribute("value", element.name);
+                    option.setAttribute("id", element.id);
                     newTagField.appendChild(option);
                 });
             });
 
-            myTagForm.appendChild(newTagField);
+            x.appendChild(newTagField);
+            myTagForm.appendChild(x);
             tagNumber++;
         }
 

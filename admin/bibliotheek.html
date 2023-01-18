@@ -71,6 +71,13 @@
       <div class="col-4">
         <input class="form-control me-2" type="search" placeholder="Zoek op ...">
       </div>
+      <div class="col">
+        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+      </div>
+      <div class="col text-end">
+        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek
+            toevoegen</button></a>
+      </div>
       <div class="container">
         <table class="table">
           <thead>
@@ -87,10 +94,7 @@
           <tbody id="book-row"></tbody>
         </table>
       </div>
-      <div class="col text-end">
-        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek
-            toevoegen</button></a>
-      </div>
+      
     </div>
   </div>
 
@@ -115,6 +119,14 @@
             }}
           
 
+          let tags = '';
+          for (let i = 0; i < element.tags.length; i++) {
+            tags += element.tags[i].name 
+            if (i < element.tags.length - 1) {
+              tags += ", "
+            }
+          }
+
               let copiesTotal = 0;
               let copiesAvailable = 0;
               element.bookcopies.forEach(copy => {
@@ -124,7 +136,8 @@
                 copiesTotal++
               })
 
-              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" +  copiesTotal  + "</td><td>" +  copiesAvailable  +
+
+              rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
                 '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
               });
         document.getElementById('book-row').innerHTML = rows;
@@ -147,9 +160,6 @@
                 }
                 copiesTotal++
               })
-
-
-
           let auths = '';
           let inputs = '';
           let tags = '';
