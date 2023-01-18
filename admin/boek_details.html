@@ -61,8 +61,8 @@
         <div class="container text-left">
           <div class="row align-items-start">
 
-            <div class="col-3" id="col11">
-              <img src="https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg" style="width: 50%; height: 50%"/>
+            <div class="col-3" id="image">
+              <!--<img id=image src="https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg" style="width: 50%; height: 50%"/>-->
             </div>
 
             <div class="col" id="col12">
@@ -120,7 +120,7 @@
 
           fetch('http://localhost:8080/book/details/'+ bookId).then(response => response.json()).then(data => {
             let rows = '';
-
+            let urlImage = "https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
             let bookAuthors = '';
             for(let i = 0; i < data.bookAuthors.length; i++)
             {
@@ -131,7 +131,7 @@
                 bookAuthors += ", ";
               }
             }
-
+            document.getElementById('image').innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
             document.getElementById('book-title').innerHTML = data.bookTitle;
             document.getElementById('book-author').innerHTML = bookAuthors;
             document.getElementById('book-isbn').innerHTML = data.bookIsbn;
@@ -153,7 +153,7 @@
 
               text=''; 
               if (data.bookCopyDetailsDTOs[i].status == "archived") {
-                  text = "Activeer exemplaar";
+                  text = "Beschikbaar stellen";
               } else {
                   text = "Archiveer exemplaar";
               }
