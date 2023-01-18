@@ -118,11 +118,17 @@
                 let bookCopyNr = data.bookCopyNr;
                 status = data.status;
                 let timesLoaned = data.timesLoaned;
-                let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
+
+                
                 let bookQueryString = '?book='+bookId;
 
-                document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
+                
                 document.getElementById("backButton").innerHTML = '<a href="boek_details.html' + bookQueryString + '"" class="btn btn-success">Terug naar boek</a>';
+
+                let urlImage = "https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
+
+                document.getElementById("image").innerHTML = '<img src=' + urlImage  + ' style="width: 45px; height: 60px"/>';
+
                 document.getElementById("bookTitle").innerText = title + ' (' + bookId + '.' + bookCopyNr + ')';
                 document.getElementById("status").innerText = "Huidige status: " + status;
                 document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;
@@ -155,7 +161,7 @@
 
                 }
                 if (status == "archived") {
-                    document.getElementById("archiveButton").innerText = "Activeer exemplaar";
+                    document.getElementById("archiveButton").innerText = "Beschikbaar stellen";
                 } else {
                     document.getElementById("archiveButton").innerText = "Archiveer exemplaar";
                 }

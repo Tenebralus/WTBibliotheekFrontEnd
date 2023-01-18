@@ -90,6 +90,8 @@
                         <!-- <label for="inputAuthor" class="form-label">Auteur</label> -->
                         <!-- <input type="text" class="form-control" id="inputAuthor0" placeholder="Auteur"> -->
                         <!-- <body onLoad="addAuthorField();"></body> -->
+                        <label for="inputBookTitle" class="form-label">Auteur(s)</label>
+                        <br>
                         <body onLoad="loadFields();"></body> 
                     <!-- </input> -->
                     </fieldset>
@@ -101,6 +103,8 @@
                         <!-- <label for="inputTag" class="form-label">Tag</label> -->
                         <!-- <input type="text" class="form-control" id="inputTag" placeholder="Bijv. Programmeren"> -->
                         <!-- <body onLoad="addTagField();"></body> -->
+                        <label for="inputBookTitle" class="form-label">Tag(s)</label>
+                        <br>
                     </fieldset>
                 </div>
             </div>
@@ -241,6 +245,7 @@
             x.setAttribute("list", "inputAuthorList"+authorNumber);
             x.setAttribute("id", "inputAuthor"+authorNumber);
             x.setAttribute("placeholder", "Auteur");
+            x.setAttribute("class", "form-control");
             
             const newAuthorField = document.createElement("datalist");
             newAuthorField.setAttribute("id", "inputAuthorList"+authorNumber);
