@@ -105,12 +105,19 @@
         let rows = '';
         data.forEach(element => {
           let auths = '';
+          let tags = '';
           for (let i = 0; i < element.authors.length; i++) {
             auths += element.authors[i].firstName + " " + element.authors[i].lastName
             if (i < element.authors.length - 1) {
               auths += ", "
             }
           }
+          for (let i = 0; i < element.tags.length; i++) {
+            tags += element.tags[i].name
+            if (i < element.tags.length - 1) {
+              tags += ", "
+            }}
+          
 
           let tags = '';
           for (let i = 0; i < element.tags.length; i++) {
@@ -128,6 +135,7 @@
                 }
                 copiesTotal++
               })
+
 
               rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
                 '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
@@ -154,16 +162,23 @@
               })
           let auths = '';
           let inputs = '';
+          let tags = '';
           if (element.id == idnum) {
             for (let i = 0; i < element.authors.length; i++) {
               // Create input fields for all authors
-              auths = element.authors[i].firstName + " " + element.authors[i].lastName
-              inputs += "<input class='form-control me-2' id='inputAuthor " + i + "' form='form1' type='text' name='isbn' value='" + auths + "'/>"
+              // auth = element.authors[i].firstName + " " + element.authors[i].lastName
+              // auths += "<p>" + auths + "</p>";
+              auths += ' <button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="' + element.authors[i].id + " " + element.id + '">' + element.authors[i].firstName + " " + element.authors[i].lastName + ' x</button>'
             }
+            for (let i = 0; i < element.tags.length; i++) {
+              tags += ' <button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="' + element.tags[i].id + " " + element.id + '">' + element.tags[i].name + ' x</button>'
+            }
+            // add button to add tag
+            tags += '<button class="btn btn-outline-success" type="button" onclick="deleteTag(this.id)" id="' + element.id + '">Voeg tag toe</button>';
             // Create rows of the table with inputs
             rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
               "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" +
-              inputs + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' + 
+              auths + "</td><td>" +  tags + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' + 
               "<td>" + copiesAvailable + '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
           } else {
             for (let i = 0; i < element.authors.length; i++) {
@@ -172,7 +187,12 @@
                 auths += ", "
               }
             }
-            rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+            for (let i = 0; i < element.tags.length; i++) {
+            tags += element.tags[i].name
+            if (i < element.tags.length - 1) {
+              tags += ", "
+            }}
+            rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
               '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
           }
 
@@ -183,8 +203,6 @@
     }
 
     function updateBook(clickedId) {
-      // let idstr = clickedId.split("updateLibrary");
-      // let idnum = parseInt(idstr[1]);
       let newTitle = document.getElementById('inputBookTitle').value;
       let newIsbn = document.getElementById('inputIsbn').value;
 
@@ -196,7 +214,7 @@
         body: JSON.stringify(
           {
             title: newTitle,
-            isbn: newIsbn
+            isbn: newIsbn     
           }
         ),
         headers: {
@@ -227,6 +245,50 @@
         return false;
       }
     }
+
+    function deleteAuthor(clickedId) {
+
+
+      if (confirm('Weet je zeker dat je deze auteur wil verwijderen?')) {
+
+        let idstr = clickedId.split(" ");
+        let authorId = parseInt(idstr[0]);
+        let bookId = parseInt(idstr[1]);
+
+
+        fetch('http://localhost:8080/book/delete/author/' + bookId + '/' + authorId, {
+          method: "PUT"
+        })
+          .then(() => {
+            alert('Auteur verwijderd');
+            location.reload()
+          });
+      } else {
+        return false;
+      }
+      }
+
+      function deleteTag(clickedId) {
+
+
+        if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
+
+          let idstr = clickedId.split(" ");
+          let tagId = parseInt(idstr[0]);
+          let bookId = parseInt(idstr[1]);
+
+
+          fetch('http://localhost:8080/book/delete/tag/' + bookId + '/' + tagId, {
+            method: "PUT"
+          })
+            .then(() => {
+              alert('Tag verwijderd');
+              location.reload()
+            });
+        } else {
+          return false;
+        }
+        }
 
 
 
