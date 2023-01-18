@@ -81,6 +81,8 @@
                           <th>Exemplaar</th>
                           <th>Status</th>
                           <th>Gebruiker</th>
+                          <th></th>
+                          <th></th>
                         </tr>
                       </thead>
                       <tbody id="table-bookcopies">
@@ -116,15 +118,27 @@
               for(let i = 0; i < data.bookCopyDetailsDTOs.length; i++)
               {
                 let usernameCurrentLoan = '';
-                if(data.bookCopyDetailsDTOs[i].currentLoan!= null && 
+                if(data.bookCopyDetailsDTOs[i].currentLoan != null && 
                    data.bookCopyDetailsDTOs[i].currentLoan.user != null)
                 {
                   let userFirstNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.firstName;
                   let userLastNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.lastName;
                   usernameCurrentLoan = userFirstNameCurrentLoan + " " + userLastNameCurrentLoan;
                 }
-                rows += "<tr><td>" + '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" + data.bookCopyDetailsDTOs[i].status + "</td><td>" + usernameCurrentLoan + "</td><td></tr>";
-              }
+
+                let returnButtonHTML = '';
+                if(data.bookCopyDetailsDTOs[i].status == "loaned")
+                {
+                  returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
+                }
+              
+                rows += "<tr><td>" +
+                        '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+                        data.bookCopyDetailsDTOs[i].status + "</td><td>" +
+                        usernameCurrentLoan + "</td><td>" +
+                        returnButtonHTML + "</td><td>" +  
+                        "</tr>";
+                }
       
             document.getElementById('table-bookcopies').innerHTML = rows;
           });
