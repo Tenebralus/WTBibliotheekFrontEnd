@@ -101,20 +101,22 @@
           </div>
         </div>
       </div>
+
+
+      <div class="container" id="loanHistory">
+        <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
+    </div>
     
       <script>
         const queryString = window.location.search;
-
         const urlParams = new URLSearchParams(queryString);
-
         const bookId = urlParams.get('book');
         const bookCopyId = urlParams.get('bookcopy');
 
         window.onload = createBookCopiesTable();
         function createBookCopiesTable(){
           //<a href=boek_details.html?bookcopy={bookcopyid}>Exemplaar 1</a>
-
-          let link = 'adminleningen.html?book=' + bookId;
+          //let link = 'adminleningen.html?book=' + bookId;
 
           fetch('http://localhost:8080/book/details/'+ bookId).then(response => response.json()).then(data => {
             let rows = '';
@@ -191,24 +193,54 @@
           });
         }
 
-        function returnBookCopy(bookcopy_id, loan_id) {
-        let statusValue = "available";
+        function returnBookCopy(bookcopy_id, loan_id)
+        {
+          let statusValue = "available";
 
-        fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id,
-          {
-            method: 'PUT',
-            body: statusValue,
-            headers:
+          fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id,
             {
-              'Content-Type': 'application/json'
-            }
+              method: 'PUT',
+              body: statusValue,
+              headers:
+              {
+                'Content-Type': 'application/json'
+              }
+            })
+            .then(() => {
+              alert('Exemplaar is ingeleverd');
+              createLoanTable();
           })
-          .then(() => {
-            alert('Exemplaar is ingeleverd');
-            createLoanTable();
-        })
-        
-    }
+        }
+
+        function getLoanHistory()
+        {
+          fetch('http://localhost:8080/loan/dto/book/' + bookId).then(response => response.json()).then(data => {
+              data = data.reverse();
+              let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
+              let tableHead = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
+
+              let rows = '';
+
+              data.forEach(element => {
+
+                  //do not want to see null but empty space
+                  let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+                  dateReturned = "";
+                  if (element.dateReturned == null) {
+                      dateReturned = "";
+                  } else {
+                      dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+                  }
+
+                  rows +=
+                      "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+                      "<td>" + dateLoaned + "</td>" +
+                      "<td>" + dateReturned + "</td></tr>";
+              });
+              document.getElementById('loanHistory').innerHTML = tableTitle + tableHead + rows;
+          });
+        }
     
         function addCopy() {
             if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
