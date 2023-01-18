@@ -71,9 +71,9 @@
                 <div class="container text-left">
                   <div class="row align-items-start">
                     <div class="row" id="col2">
-                      <h3 id="Titel"></h3>
-                      <h3 id="Auteur"></h3>
-                      <h3 id="ISBN"></h3>
+                      <h3 id="book-title">Boek Titel</h3>
+                      <h3 id="book-author">Auteur</h3>
+                      <h3 id="book-isbn">ISBN</h3>
                     </div>
                     <table class="table">
                       <thead>
@@ -81,6 +81,7 @@
                           <th>Exemplaar</th>
                           <th>Status</th>
                           <th>Gebruiker</th>
+                          <th>Datum van uitlenen</th>
                           <th></th>
                           <th></th>
                         </tr>
@@ -107,7 +108,6 @@
         const bookCopyId = urlParams.get('bookcopy');
 
         window.onload = createBookCopiesTable();
-
         function createBookCopiesTable(){
           //<a href=boek_details.html?bookcopy={bookcopyid}>Exemplaar 1</a>
 
@@ -122,29 +122,48 @@
               auths = data.authors[i].firstName + " " + data.authors[i].lastName;
             }
 
-              for(let i = 0; i < data.bookCopyDetailsDTOs.length; i++)
+            let bookAuthors = '';
+            for(let i = 0; i < data.bookAuthors.length; i++)
+            {
+              bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
+
+              if(i < data.bookAuthors.length - 1)
               {
-                let usernameCurrentLoan = '';
-                if(data.bookCopyDetailsDTOs[i].currentLoan != null && 
-                   data.bookCopyDetailsDTOs[i].currentLoan.user != null)
+                bookAuthors += ", ";
+              }
+            }
+
+            document.getElementById('book-title').innerHTML = data.bookTitle;
+            document.getElementById('book-author').innerHTML = data.bookAuthors;
+            document.getElementById('book-isbn').innerHTML = data.bookIsbn;
+
+            for(let i = 0; i < data.bookCopyDetailsDTOs.length; i++)
+            {
+              let usernameCurrentLoan = '';
+              let dateLoaned = '';
+              if(data.bookCopyDetailsDTOs[i].currentLoan != null)
+              {
+                dateLoaned = new Date(data.bookCopyDetailsDTOs[i].currentLoan.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+                if(data.bookCopyDetailsDTOs[i].currentLoan.user != null)
                 {
                   let userFirstNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.firstName;
                   let userLastNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.lastName;
                   usernameCurrentLoan = userFirstNameCurrentLoan + " " + userLastNameCurrentLoan;
                 }
+            }
 
-                let tags = '';
+              let returnButtonHTML = '';
+              if(data.bookCopyDetailsDTOs[i].status == "loaned")
+              {
+                returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
+              }
+              
+              let tags = '';
                 for (let i = 0; i < data.tags.length; i++) {
                     tags += data.tags[i].name 
                     if (i < data.tags.length - 1) {
                         tags += ", "
                     }
-                }
-
-                let returnButtonHTML = '';
-                if(data.bookCopyDetailsDTOs[i].status == "loaned")
-                {
-                  returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
                 }
 
                 text=''; 
@@ -154,22 +173,17 @@
                     text = "Archiveer exemplaar";
                 }
                 let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookCopyStatus+'\')" >'+text+' </button>';
+            
+              rows += "<tr><td>" +
+                      '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+                      data.bookCopyDetailsDTOs[i].status + "</td><td>" +
+                      usernameCurrentLoan + "</td><td>" +
+                      dateLoaned + "</td><td>" +
+                      returnButtonHTML + "</td><td>" +
+                      updateButtonHTML + "</td>" +
+                      "</tr>";
+              }
                 
-                text='';  
-                if (data.bookCopyStatus == "archived") {
-                    text = "Activeer exemplaar";
-                } else {
-                    text = "Archiveer exemplaar";
-                }
-
-                rows += "<tr><td>" +
-                        '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
-                        data.bookCopyDetailsDTOs[i].status + "</td><td>" +
-                        usernameCurrentLoan + "</td><td>" +
-                        returnButtonHTML + "</td><td>" +  
-                        updateButtonHTML + "</td>" +
-                        "</tr>";
-                }
                 document.getElementById("Titel").innerText = "Titel: " + title ;
                 document.getElementById("ISBN").innerText = "ISBN: " + isbn ;
                 document.getElementById("Auteur").innerText = "Auteur(s): " + auths;
@@ -177,6 +191,25 @@
             document.getElementById('table-bookcopies').innerHTML = rows;
           });
         }
+
+        function returnBookCopy(bookcopy_id, loan_id) {
+        let statusValue = "available";
+
+        fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id,
+          {
+            method: 'PUT',
+            body: statusValue,
+            headers:
+            {
+              'Content-Type': 'application/json'
+            }
+          })
+          .then(() => {
+            alert('Exemplaar is ingeleverd');
+            createLoanTable();
+        })
+        
+    }
     
         function addCopy() {
             if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
