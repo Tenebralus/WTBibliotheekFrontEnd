@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplaardetails</title>
+    <link rel="icon" href="../images/favicon.ico">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+                            <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+                        </ul>
+
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+                            <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+                            <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+                            <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
+                        </ul>
+                    </li>
+                    <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
+            </div>
+        </div>
+    </nav>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col" id="image">
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="bookTitle"></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Isbn"></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Authors"></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Tags"></h3>
+            </div>
+        </div>
+    </div>
+
+    <div></div>
+    <!--<div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Reserv"></h3>
+            </div>
+        </div>
+    </div>-->
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Bookcop"></h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col text-end"><button class="btn btn-outline-success" type="button" id="Button"
+                    onclick="addCopy()">Exemplaar toevoegen</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const queryString = window.location.search;
+        const urlParams = new URLSearchParams(queryString);
+        const bookId = urlParams.get('book');
+
+        window.onload = populatePage();
+        function populatePage() {
+            fetch('http://localhost:8080/book/id/'+bookId).then(response => response.json()).then(data => {
+                let title = data.title;
+                let isbn = data.isbn;
+                let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
+
+                for (let i = 0; i < data.authors.length; i++) {
+                    auths = data.authors[i].firstName + " " + data.authors[i].lastName;
+                }
+
+                let tags = '';
+                for (let i = 0; i < data.tags.length; i++) {
+                    tags += data.tags[i].name 
+                    if (i < data.tags.length - 1) {
+                        tags += ", "
+                    }
+                }
+
+                /*let reserv = '';
+                for (let i = 0; i < data.reservations.length; i++) {
+                    reserv += data.reservations[i].dateReserved + " " + data.reservations[i].user
+                    if (i < data.reservations.length - 1) {
+                        reserv += ", "
+                    }
+                }*/
+
+                let bookcop = '';
+                for (let i = 0; i < data.bookcopies.length; i++) {
+                    bookcop += data.id + "." + data.bookcopies[i].bookCopyNr + ": " + data.bookcopies[i].status
+                    if (i < data.bookcopies.length - 1) {
+                        bookcop += ",\n "
+                    }
+                }
+                document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
+                document.getElementById("bookTitle").innerText = "Titel: " + title ;
+                document.getElementById("Isbn").innerText = "ISBN: " + isbn ;
+                document.getElementById("Authors").innerText = "Auteur(s): " + auths;
+                document.getElementById("Tags").innerText = "Tag(s): " + tags ;
+                //document.getElementById("Reserv").innerText = "Reservations: " + reserv;
+                document.getElementById("Bookcop").innerText = "BookCopies: \n" + bookcop;
+            })
+        }
+
+        function addCopy() {
+            if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
+                fetch('http://localhost:8080/book/' + bookId + '/createbookcopy', {
+                    method: "POST"
+                })
+                .then(() => {
+                    alert('Exemplaar toegevoegd');
+                    populatePage();
+                });
+            } else {
+                return false;
+            }
+        }
+
+
+
+
+    </script>
+
+</body>
+
+</html>

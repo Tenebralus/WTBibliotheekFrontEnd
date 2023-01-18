@@ -58,6 +58,14 @@
             </div>
         </div>
     </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col" id="image">
+            </div>
+        </div>
+    </div>
+
     <div class="container">
         <div class="row">
             <div class="col">
@@ -108,7 +116,9 @@
                 let bookCopyNr = data.bookCopyNr;
                 status = data.status;
                 let timesLoaned = data.timesLoaned;
+                let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
 
+                document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
                 document.getElementById("bookTitle").innerText = title + ' (' + bookId + '.' + bookCopyNr + ')';
                 document.getElementById("status").innerText = "Huidige status: " + status;
                 document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;
