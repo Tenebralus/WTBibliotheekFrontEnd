@@ -67,7 +67,8 @@
             <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
           </div>
           <div class="col text-end">
-            <a href="../admin/exemplaar_toevoegen.html"><button class="btn btn-outline-success" type="button">Exemplaar toevoegen</button></a>
+            <!-- <a href="../admin/exemplaar_toevoegen.html"><button class="btn btn-outline-success" type="button">Exemplaar toevoegen</button></a>  -->
+            <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Exemplaar toevoegen</button></a>
           </div>
         </div>
       </div>
@@ -78,16 +79,18 @@
             <tr>
               <th>Titel</th>
               <th>ISBN</th>
-              <th>Exemplaar nummer</th>
               <th>Auteur</th>
+              <th>Exemplaar nummer</th>
+              <th>Status</th>
               <th></th>
             </tr>
           </thead>
           <tbody id="bookcopy-row"></tbody>
         </table>
       </div>
-      <div class="col text-end">
-        
+      <div class="col text-end" id="test">
+        <!--<button class="btn btn-outline-success" type="button" id="archiveButton" onclick="updateBookcopy()"></button>-->
+       <!-- <button class="btn btn-outline-success" type="button"  onclick="updateBookcopy(1,'archived')"   >  Buttoonnn </button></td></tr>-->
       </div>
     </div>
   </div>
@@ -106,82 +109,56 @@
               auths += ", "
             }
           }
-          rows += "<tr><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + element.bookCopyNr + "</td><td>" + auths + "</td><td>" +
-          '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
+          text='';
+          if (element.bookCopyStatus == "archived") {
+            text = "Activeer exemplaar";
+          } else {
+            text = "Archiveer exemplaar";
+          }
+          rows += "<tr><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + auths + "</td><td>" + element.bookCopyNr + "</td><td>" + element.bookCopyStatus + "</td><td>" +
+          '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookCopyStatus+'\')"   >   '+text+' </button></td></tr>';
         });
         document.getElementById('bookcopy-row').innerHTML = rows;
       });
     }
 
-        function updateLibrary(clickedId){
-          let idstr = clickedId.split("updateLibrary");
-          let idnum = parseInt(idstr[1]);
-          fetch('http://localhost:8080/bookcopy/all').then(response => response.json()).then(data => {
-            let rows = '';
-            data.forEach(element => {
-              let auths = '';
-              let inputs = '';
-              for (let i = 0; i < element.authors.length; i++) {
-                auths += element.authors[i].firstName + " " + element.authors[i].lastName
-                if (i < element.authors.length - 1) {
-                  auths += ", "
+      function updateBookcopy(bookCopyId, status) {
+        //let idstr = clickedId.split("BookCopyId");
+        //let idnum = parseInt(idstr[1]);
+        console.log(bookCopyId);
+        console.log(status);
+        let currentStatus = status;
+            if (currentStatus == "loaned") {
+                const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
+                if (response) {
+                    fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+                        method: "PUT"
+                    })
+                        .then(() => {
+                            alert('Exemplaar is gearchiveerd');
+                            createLibraryTable();
+                        });
+                } else {
+                    alert('Exemplaar ongewijzigd');
                 }
-              }
-     
-              if (element.id == idnum) {
-                for (let i = 0; i < element.authors.length; i++) {
-                  inputs += "<input class='form-control me-2' id='inputAuthor " + i + "' form='form1' type='text' name='isbn' value='" + auths + "'/>"
-                }
-                rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.bookTitle + "'/>" + "</td><td>" + 
-                  "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.bookIsbn + "'/>" + "</td><td>" + 
-                    inputs + "</td><td>" + 
-                ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy'+element.id+'">Exemplaar toevoegen</button></td>' +
-                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook'+element.id+'">Opslaan</button></td>' +
-                '</tr>';
-              } else {
-                rows += "<tr><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + inputs + "</td><td>" + 
-                '</td><td><button class="btn btn-outline-success" type="button" onclick="archiveBookCopy(this.id)" id="archiveBookCopy'+element.id+'">Pas aan</button></td></tr>';  
-                //'</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>' ;
-              }
-            
-              });
-            document.getElementById('book-row').innerHTML = rows;
-      
-          });
-      }
-
-      function archiveBookCopy(clickedId){
-        let newStatus = '';
-        let idstr = clickedId.split("updateBookCopy");
-        let idnum = parseInt(idstr[1]);
-        
-        fetch('http://localhost:8080/bookcopy/archive/'+bookCopyId, {
-            method : "PUT"
-        })
-        .then(() => {
-            alert('Exemplaar is gearchiveerd');
-            location.reload()
-        });
-      }
-
-    function addCopy(clickedId) {
-
-      if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
-
-        let idstr = clickedId.split("addCopy");
-        let idnum = parseInt(idstr[1]);
-
-        fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
-          method: "POST"
-        })
-          .then(() => {
-            alert('Exemplaar toegevoegd');
-            location.reload()
-          });
-      } else {
-        return false;
-      }
-    }
+            } else if (currentStatus == "archived") {
+                fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+                    method: "PUT"
+                })
+                    .then(() => {
+                        alert('Exemplaar is geactiveerd');
+                        createLibraryTable();
+                    });
+            } else {
+                fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+                    method: "PUT"
+                })
+                    .then(() => {
+                        alert('Exemplaar is gearchiveerd');
+                        createLibraryTable();
+                    });
+            }
+        }
 
     function search() {
 
