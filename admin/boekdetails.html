@@ -59,10 +59,12 @@
         </div>
     </nav>
 
+
     <div class="container">
         <div class="row">
             <div class="col" id="image">
             </div>
+            
         </div>
     </div>
 
@@ -71,31 +73,63 @@
             <div class="col">
                 <h3 id="bookTitle"></h3>
             </div>
+            <div class="col text-end"><button class="btn btn-outline-success" type="button" id="Button"
+                onclick="addCopy()">Exemplaar toevoegen</button>
+        </div>
         </div>
     </div>
 
     <div class="container">
         <div class="row">
             <div class="col">
-                <p id="status"></p>
-            </div>
-            <div class="col text-end"><button class="btn btn-outline-success" type="button" id="archiveButton"
-                    onclick="updateBookCopy()"></button>
+                <h3 id="Isbn"></h3>
             </div>
         </div>
+    </div>
+
+    <div class="container">
         <div class="row">
-            <p id="timesLoaned"></p>
+            <div class="col">
+                <h3 id="Authors"></h3>
+            </div>
         </div>
     </div>
 
-    <div class="container" id="currentLoan">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Tags"></h3>
+            </div>
+        </div>
     </div>
 
+    <div></div>
+    <!--<div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Reserv"></h3>
+            </div>
+        </div>
+    </div>-->
 
-    <div class="container" id="loanHistory">
-        <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
-    </div>
+    <!--<div class="container">
+        <div class="row">
+            <div class="col">
+                <h3 id="Bookcop"></h3>
+            </div>
+        </div>
+    </div>-->
 
+    <div class="container">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Exemplaren</th>
+            </tr>
+          </thead>
+          <tbody id="bookcopy-row"></tbody>
+        </table>
+      </div>
 
 
 
@@ -103,89 +137,79 @@
     <script>
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
-        const bookCopyId = urlParams.get('bookcopy');
-
-        let status;
-        let loanId;
+        const bookId = urlParams.get('book');
 
         window.onload = populatePage();
         function populatePage() {
-            fetch('http://localhost:8080/bookcopy/details/' + bookCopyId).then(response => response.json()).then(data => {
-                let title = data.bookTitle;
-                let bookId = data.bookId;
-                let bookCopyNr = data.bookCopyNr;
-                status = data.status;
-                let timesLoaned = data.timesLoaned;
-                let urlImage = "https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
+            fetch('http://localhost:8080/book/id/'+bookId).then(response => response.json()).then(data => {
+                let title = data.title;
+                let isbn = data.isbn;
+                let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
 
-                document.getElementById("image").innerHTML = '<img src=' + urlImage  + ' style="width: 45px; height: 60px"/>';
-                document.getElementById("bookTitle").innerText = title + ' (' + bookId + '.' + bookCopyNr + ')';
-                document.getElementById("status").innerText = "Huidige status: " + status;
-                document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;
+                for (let i = 0; i < data.authors.length; i++) {
+                    auths = data.authors[i].firstName + " " + data.authors[i].lastName;
+                }
 
-                let currentLoan = data.currentLoan
-
-                if (data.currentLoan == null) {
-                    document.getElementById("currentLoan").innerHTML =
-                        '<p>Geen huidige lening</p>';
-                } else {
-                    loanId = data.currentLoan.id;
-
-                    let userFirstName = "";
-                    let userLastName = "";
-                    if (currentLoan.user) {
-                        userFirstName = currentLoan.user.firstName;
-                        userLastName = currentLoan.user.lastName;
+                let tags = '';
+                for (let i = 0; i < data.tags.length; i++) {
+                    tags += data.tags[i].name 
+                    if (i < data.tags.length - 1) {
+                        tags += ", "
                     }
-
-                    let dateLoaned = new Date(data.currentLoan.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-                    let tableTitle = '<div class="row"><h3>Huidige lening</h3></div>'
-                    let table = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th><th></th></tr></thead><tbody><tr><td>'
-                        + userFirstName + ' ' + userLastName
-                        + '</td><td>' + dateLoaned
-                        + '</td><td><button class="btn btn-outline-success" onclick="returnBookCopy()">Inleveren</button>'
-                        + '</td></tr></tbody></table>';
-
-                    document.getElementById("currentLoan").innerHTML = tableTitle + table;
-
-
                 }
-                if (status == "archived") {
-                    document.getElementById("archiveButton").innerText = "Beschikbaar stellen";
+
+                /*let reserv = '';
+                for (let i = 0; i < data.reservations.length; i++) {
+                    reserv += data.reservations[i].dateReserved + " " + data.reservations[i].user
+                    if (i < data.reservations.length - 1) {
+                        reserv += ", "
+                    }
+                }*/
+
+                /*
+                text='';  //////////////////////////////////////moetboekstohebbenombijstatustekomen
+                if (element.bookCopyStatus == "archived") {
+                    text = "Activeer exemplaar";
                 } else {
-                    document.getElementById("archiveButton").innerText = "Archiveer exemplaar";
+                    text = "Archiveer exemplaar";
                 }
+                */
+
+                let bookcop = '';
+                rows = '';
+                for (let i = 0; i < data.bookcopies.length; i++) {
+                    bookcop += data.id + "." + data.bookcopies[i].bookCopyNr + ": " + data.bookcopies[i].status;
+                    rows += "<tr><td>" + data.id + "." + data.bookcopies[i].bookCopyNr + ": " + data.bookcopies[i].status + "</td><td>"
+                        //+ '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookCopyStatus+'\')"   >   '+text+' </button>
+                        + "</td></tr>";
+                    if (i < data.bookcopies.length - 1) {
+                        bookcop += ",\n "
+                    }
+                }
+                
+                document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
+                document.getElementById("bookTitle").innerText = "Titel: " + title ;
+                document.getElementById("Isbn").innerText = "ISBN: " + isbn ;
+                document.getElementById("Authors").innerText = "Auteur(s): " + auths;
+                document.getElementById("Tags").innerText = "Tag(s): " + tags ;
+                //document.getElementById("Reserv").innerText = "Reservations: " + reserv;
+                //document.getElementById("Bookcop").innerText = "BookCopies: \n" + bookcop;
+                document.getElementById('bookcopy-row').innerHTML = rows;
             })
         }
 
-
-        function getLoanHistory() {
-            fetch('http://localhost:8080/loan/dto/bookcopy/' + bookCopyId).then(response => response.json()).then(data => {
-                data = data.reverse();
-                let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
-                let tableHead = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
-
-                let rows = '';
-
-                data.forEach(element => {
-
-                    //do not want to see null but empty space
-                    let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
-                    dateReturned = "";
-                    if (element.dateReturned == null) {
-                        dateReturned = "";
-                    } else {
-                        dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-                    }
-
-                    rows +=
-                        "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-                        "<td>" + dateLoaned + "</td>" +
-                        "<td>" + dateReturned + "</td></tr>";
+        function addCopy() {
+            if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
+                fetch('http://localhost:8080/book/' + bookId + '/createbookcopy', {
+                    method: "POST"
+                })
+                .then(() => {
+                    alert('Exemplaar toegevoegd');
+                    populatePage();
                 });
-                document.getElementById('loanHistory').innerHTML = tableTitle + tableHead + rows;
-            });
+            } else {
+                return false;
+            }
         }
 
         function updateBookCopy() {
@@ -224,21 +248,7 @@
         }
 
 
-        function returnBookCopy() {
-            fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookCopyId + '/' + loanId,
-                {
-                    method: 'PUT',
-                    body: "available",
-                    headers:
-                    {
-                        'Content-Type': 'application/json'
-                    }
-                })
-                .then(() => {
-                    alert('Exemplaar is ingeleverd');
-                    populatePage();
-                })
-        }
+
 
     </script>
 

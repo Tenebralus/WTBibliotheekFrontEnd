@@ -60,7 +60,7 @@
       <div class="container">
     <div class="row">
       <div class="col-4">
-        <input class="form-control me-2" type="search" id="name-search" placeholder="Zoek op ...">
+        <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op naam of emailadres">
       </div>
       <div class="col">
         <button class="btn btn-outline-success" type="button" onclick="searchUser()">Zoek</button>
@@ -141,50 +141,43 @@
     }
 
     function searchUser() {
+      let keyword = document.getElementById('searchField').value;
+      fetch('http://localhost:8080/user/search/'+keyword).then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
+          let admin = "Gebruiker"
+          if (element.admin == true) {
+            admin = "Admin"
+          }
 
-      let nameElementValue = document.getElementById('name-search').value;
+          let status = "Actief"
+          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></tr>';
+          if (element.active == false) {
+            status = "Verwijderd"
+            copyButton = '</td><td></td></tr>';
+          }
 
-      let obj = {
-      }
-      
-      // Promise.all([fetch('http://localhost:8080/user/firstname/'+nameElementValue).then(response => response.json()),
-      // fetch('http://localhost:8080/user/lastname/'+nameElementValue).then(response => response.json())])
-      fetch('http://localhost:8080/user/firstname/'+nameElementValue).then(response => response.json())
-      .then(data => {let rows = '';
-      data.forEach(element => {
-        let admin = "Gebruiker"
-        if (element.admin == true) {
-          admin = "Admin"
-        }
-
-        let status = "Actief"
-        if (element.active == false) {
-          status = "Verwijderd"
-        }
-
-        let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-        
-        dateAccountDeleted = "";
-          if (element.dateAccountDeleted==null){
-            dateAccountDeleted = "";
-          } else {
+          let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          
+          dateAccountDeleted = "";
+          if (element.dateAccountDeleted!=null){
             dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
-         
 
-        rows += "<tr><td>" + element.firstName + 
-          "</td><td>" + element.lastName + 
-            "</td><td>" + element.emailAddress + 
+          rows += "<tr><td>" + element.firstName + 
+            "</td><td>" + element.lastName + 
+              "</td><td>" + element.emailAddress + 
               "</td><td>" + dateAccountCreated + 
               "</td><td>" + dateAccountDeleted +
-              "</td><td>" + status +
+              '</td><td>' + status +
               "</td><td>" + admin +
-              "</td></tr>";
+              copyButton;
+        });
+        document.getElementById('book-row').innerHTML = rows;
+
       });
-      document.getElementById('book-row').innerHTML = rows;
-      
-       
-      })}
+
+    }
   </script>
 </body>
 </html>
