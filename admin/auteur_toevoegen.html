@@ -77,9 +77,9 @@
             </div>
         </div>
         <div class="row">
-            <div class="col text-end">
-                <button class="btn btn-outline-success" type="button" id="addAuthor" onclick="createAuthorAndDone()">Toevoegen</button>
-                <button class="btn btn-outline-success" type="button" id="addAuthorAndNext" onclick="createAuthorAndNext()">Toevoegen en volgende</button>
+            <div class="col">
+                <button class="btn btn-outline-success" type="button" id="addAuthor"
+                    onclick="createAuthor()">Toevoegen</button>
             </div>
         </div>
     </div>
@@ -98,19 +98,11 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(() => {
+                .then(() => {
                     alert('Auteur is opgeslagen');
+                    document.getElementById('inputFirstName').value = "";
+                    document.getElementById('inputLastName').value = "";
                 })
-        }
-
-        function createAuthorAndDone() {
-            createAuthor();
-            window.location = 'boek_toevoegen.html';
-        }
-        function createAuthorAndNext() {
-            createAuthor();
-            document.getElementById('inputFirstName').value = "";
-            document.getElementById('inputLastName').value = "";
         }
     </script>
 </body>

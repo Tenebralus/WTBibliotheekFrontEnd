@@ -161,9 +161,11 @@
           let inputs = '';
           if (element.id == idnum) {
             for (let i = 0; i < element.authors.length; i++) {
+              // Create input fields for all authors
               auths = element.authors[i].firstName + " " + element.authors[i].lastName
               inputs += "<input class='form-control me-2' id='inputAuthor " + i + "' form='form1' type='text' name='isbn' value='" + auths + "'/>"
             }
+            // Create rows of the table with inputs
             rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
               "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" +
               inputs + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' + 
