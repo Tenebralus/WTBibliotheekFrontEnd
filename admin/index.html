@@ -80,6 +80,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th id="image"></th>
           <th>Titel</th>
           <th>ISBN</th>
           <th>Auteur(s)</th>
@@ -95,11 +96,11 @@
   <script>
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
-      let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
       data.forEach(element => {
         //let urlImage = "https://covers.openlibrary.org/b/isbn/"+element.isbn+"-S.jpg";
         //let urlImage = "https://covers.openlibrary.org/b/isbn/"+9788417390617+"-S.jpg";
-
+        let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
+        console.log(element);
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {
           auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -124,7 +125,7 @@
         })
 
         rows += "</tr><td>" +
-          '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
+           urlImage + "</td><td>" +
           element.title + "</td><td>" +
           element.isbn + "</td><td>" +
           auths + "</td><td>" +
