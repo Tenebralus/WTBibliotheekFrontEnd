@@ -121,7 +121,10 @@
 
           fetch('http://localhost:8080/book/details/'+ bookId).then(response => response.json()).then(data => {
             let rows = '';
-            let urlImage = "https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
+            let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
+            console.log(data);
+            console.log(data.urlImage);
+
             let bookAuthors = '';
             for(let i = 0; i < data.bookAuthors.length; i++){
               bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
@@ -129,7 +132,7 @@
                 bookAuthors += ", ";
               }
             }
-            console.log(data); //////BEZIG
+
             let bookTags = '';
             if (!!data.bookTag){
               for (let i = 0; i < data.bookTag.length; i++) {
