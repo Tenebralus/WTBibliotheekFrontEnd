@@ -74,14 +74,30 @@
                     <label for="inputTag" class="form-label">Tag</label>
                     <input type="text" class="form-control" id="inputTag" placeholder="Tag">
                 </div>
+                <div class="col-4">
+                    <button class="btn btn-outline-success" type="button" id="addTag" onclick="createTag()">Toevoegen</button>
+                </div>
+            </div>
+            <div class="col">
+                <h3>Tags</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Naam</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="tag-row"></tbody>
+                </table>
             </div>
         </div>
-        <div class="col-4">
-            <button class="btn btn-outline-success" type="button" id="addTag" onclick="createTag()">Toevoegen</button>
-        </div>
+    </div>
     </div>
 
+
     <script>
+        window.onload = createTagTable();
         function createTag() {
             fetch('http://localhost:8080/tag/create', {
                 method: 'POST',
@@ -94,8 +110,9 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(() => {
+                .then(() => {
                     alert('Tag is opgeslagen');
+                    location.reload()
                 })
         }
 
@@ -107,6 +124,79 @@
             createBook();
             document.getElementById('inputBookTitle').value = "";
             document.getElementById('inputIsbn').value = "";
+        }
+
+        function createTagTable() {
+            fetch('http://localhost:8080/tag/all').then(response => response.json()).then(data => {
+                let rows = '';
+                data.forEach(element => {
+                    rows += "<tr><td>" + element.name +
+                        '<td><button class="btn btn-outline-success" type="button" onclick="updateTagTable(this.id)" id="updateTagTable' + element.id + '">Pas aan</button></td>' +
+                        "</tr>";
+                });
+                document.getElementById('tag-row').innerHTML = rows;
+
+            });
+        }
+
+        function updateTagTable(clickedId) {
+            let idstr = clickedId.split("updateTagTable");
+            let idnum = parseInt(idstr[1]);
+            fetch('http://localhost:8080/tag/all').then(response => response.json()).then(data => {
+                let rows = '';
+                data.forEach(element => {
+                    if (element.id == idnum) {
+                        rows += "<tr><td>" + "<input class='form-control me-2' id='newInputTag' form='form1' type='text' name='title' value='" + element.name + "'/>" + "</td>" +
+                            '<td><button class="btn btn-outline-success" type="button" onclick="updateTag(this.id)" id="updateTag' + element.id + '">Opslaan</button></td>' +
+                            '<td><button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="deleteTag' + element.id + '">Verwijder</button></td>' +
+                            "</tr>";
+                    }
+
+                    else {
+                        rows += "<tr><td>" + element.name +
+                            '<td><button class="btn btn-outline-success" type="button" onclick="updateTagTable(this.id)" id="updateTagTable' + element.id + '">Pas aan</button></td>' +
+                            "</tr>";
+
+                    }
+                });
+                document.getElementById('tag-row').innerHTML = rows;
+            });
+        }
+
+        function updateTag(clickedId) {
+            let newTag = document.getElementById('newInputTag').value;
+
+
+            let idstr = clickedId.split("updateTag");
+            let idnum = parseInt(idstr[1]);
+
+            fetch('http://localhost:8080/tag/update/' + idnum, {
+                method: "PUT",
+                body: JSON.stringify(
+                    {
+                        name: newTag
+                    }
+                ),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => {
+                    alert('Tag is aangepast');
+                    location.reload()
+                });
+        }
+        function deleteTag(clickedId) {
+            let idstr = clickedId.split("deleteTag");
+            let idnum = parseInt(idstr[1]);
+
+            fetch('http://localhost:8080/tag/delete/' + idnum, {
+                method: "DELETE"
+            })
+                .then(() => {
+                    alert('Tag verwijderd');
+                    location.reload()
+                })
         }
     </script>
 </body>
