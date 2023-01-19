@@ -116,9 +116,6 @@
 
         window.onload = createBookCopiesTable();
         function createBookCopiesTable(){
-          //<a href=boek_details.html?bookcopy={bookcopyid}>Exemplaar 1</a>
-          //let link = 'adminleningen.html?book=' + bookId;
-
           fetch('http://localhost:8080/book/details/'+ bookId).then(response => response.json()).then(data => {
             let rows = '';
             let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
@@ -179,7 +176,7 @@
               let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId'+data.bookCopyDetailsDTOs[i].id+'"  onclick="updateBookcopy('+data.bookCopyDetailsDTOs[i].id+',\''+data.bookCopyDetailsDTOs[i].status+'\')" >'+text+' </button>';
             
               rows += "<tr><td>" +
-                      '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+                      '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
                       data.bookCopyDetailsDTOs[i].status + "</td><td>" +
                       usernameCurrentLoan + "</td><td>" +
                       dateLoaned + "</td><td>" +
@@ -218,9 +215,12 @@
         function getLoanHistory()
         {
           fetch('http://localhost:8080/loan/dto/book/' + bookId).then(response => response.json()).then(data => {
-              data = data.reverse();
+              data = data.sort((a, b) => {
+                  return new Date(b.dateLoaned) - new Date(a.dateLoaned);
+              });
+
               let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
-              let tableHead = '<table class="table"><thead><tr><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
+              let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
 
               let rows = '';
 
@@ -237,6 +237,7 @@
                   }
 
                   rows +=
+                      "<td>" + "Exemplaar " + element.bookCopyNr + "</td>" +
                       "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
                       "<td>" + dateLoaned + "</td>" +
                       "<td>" + dateReturned + "</td></tr>";
