@@ -72,8 +72,9 @@
                   <div class="row align-items-start">
                     <div class="row" id="col2">
                       <h3 id="book-title">Boek Titel</h3>
-                      <h3 id="book-author">Auteur</h3>
+                      <h3 id="book-author">Auteur(s)</h3>
                       <h3 id="book-isbn">ISBN</h3>
+                      <h3 id="book-tags">Tag(s)</h3>
                     </div>
                     <div class="col text-end"><button class="btn btn-outline-success" type="button" id="addCopy"
                       onclick="addCopy()">Exemplaar toevoegen</button>
@@ -120,19 +121,27 @@
             let rows = '';
             let urlImage = "https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
             let bookAuthors = '';
-            for(let i = 0; i < data.bookAuthors.length; i++)
-            {
+            for(let i = 0; i < data.bookAuthors.length; i++){
               bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
-
-              if(i < data.bookAuthors.length - 1)
-              {
+              if(i < data.bookAuthors.length - 1){
                 bookAuthors += ", ";
               }
             }
+            console.log(data); //////BEZIG
+            let bookTags = '';
+            if (!!data.bookTag){
+              for (let i = 0; i < data.bookTag.length; i++) {
+                bookTags += data.bookTag[i].name
+                if (i < data.bookTag.length - 1) {
+                  bookTags += ", "
+                }
+              }
+            }
             document.getElementById('image').innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
-            document.getElementById('book-title').innerHTML = data.bookTitle;
-            document.getElementById('book-author').innerHTML = bookAuthors;
-            document.getElementById('book-isbn').innerHTML = data.bookIsbn;
+            document.getElementById('book-title').innerHTML = "Titel: "+data.bookTitle;
+            document.getElementById('book-author').innerHTML = "Auteur(s): "+bookAuthors;
+            document.getElementById('book-isbn').innerHTML = "ISBN: "+data.bookIsbn;
+            document.getElementById('book-tags').innerHTML = "Tag(s): "+bookTags;
 
             for(let i = 0; i < data.bookCopyDetailsDTOs.length; i++)
             {
@@ -161,15 +170,6 @@
               {
                 returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
               }
-              
-              /*let tags = '';
-                for (let i = 0; i < data.tags.length; i++) {
-                    tags += data.tags[i].name 
-                    if (i < data.tags.length - 1) {
-                        tags += ", "
-                    }
-                }*/
-
               
               let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId'+data.bookCopyDetailsDTOs[i].id+'"  onclick="updateBookcopy('+data.bookCopyDetailsDTOs[i].id+',\''+data.bookCopyDetailsDTOs[i].status+'\')" >'+text+' </button>';
             

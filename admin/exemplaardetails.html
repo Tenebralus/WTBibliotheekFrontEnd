@@ -77,14 +77,33 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <p id="status"></p>
-            </div>
-            <div class="col text-end"><button class="btn btn-outline-success" type="button" id="archiveButton"
-                    onclick="updateBookCopy()"></button>
+                <p id="book-tags"></p>
             </div>
         </div>
+    </div>
+
+    <div class="container">
         <div class="row">
-            <p id="timesLoaned"></p>
+            <div class="col">
+                <p id="book-authors"></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <p id="status"></p>
+            </div>
+            
+        </div>
+        <div class="row">
+            <div class="col">
+                <p id="timesLoaned"></p>
+            </div>
+            <div class="col text-end"><button class="btn btn-outline-success" type="button" id="archiveButton"
+                onclick="updateBookCopy()"></button>
+            </div>
         </div>
     </div>
 
@@ -118,11 +137,34 @@
                 let timesLoaned = data.timesLoaned;
                 let urlImage = "https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
 
+                let bookAuthors = '';
+                if (!!data.bookAuthors){
+                    for(let i = 0; i < data.bookAuthors.length; i++){
+                        bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
+                        if(i < data.bookAuthors.length - 1){
+                            bookAuthors += ", ";
+                        }
+                    }
+                }
+
+                let bookTags = '';
+                if (!!data.bookTags){
+                    for (let i = 0; i < data.bookTags.length; i++) {
+                        bookTags += data.bookTags[i].name
+                        if (i < data.bookTags.length - 1) {
+                            bookTags += ", "
+                        }
+                    }
+                }  
+
                 document.getElementById("image").innerHTML = '<img src=' + urlImage  + ' style="width: 45px; height: 60px"/>';
-                document.getElementById("bookTitle").innerText = title + ' (' + bookId + '.' + bookCopyNr + ')';
+                document.getElementById("bookTitle").innerText = "Titel: " + title + ' (' + bookId + '.' + bookCopyNr + ')';
+                document.getElementById("book-authors").innerText = "Auteur(s): " + bookAuthors;
+                document.getElementById("book-tags").innerText = "Tag(s): " + bookTags;
                 document.getElementById("status").innerText = "Huidige status: " + status;
                 document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;
-
+                /////BEZIG auteren en tags eerbij
+                
                 let currentLoan = data.currentLoan
 
                 if (data.currentLoan == null) {
