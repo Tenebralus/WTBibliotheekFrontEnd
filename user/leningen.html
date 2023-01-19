@@ -148,7 +148,7 @@
             if (element.dateReturned==null){
               dateReturned = "";
             } else {
-              dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+              dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
             }
 
             let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
@@ -183,6 +183,7 @@
       fetch('http://localhost:8080/loan/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
+          console.log(element);
           let authorNames = "";
           if (element.authors) {
             for (let i = 0; i < element.authors.length; i++) {
@@ -203,7 +204,7 @@
             extra = '';
           }
 
-          dateReturned = "";
+          let dateReturned = "";
           if (element.dateReturned == null) {
             dateReturned = extra;
           } else {
@@ -219,7 +220,7 @@
             "<td>" + dateLoaned + "</td>" +
             "<td>" + dateReturned + "</td></tr>";
         });
-        document.getElementById('book-row').innerHTML = rows;
+        document.getElementById('loans-row').innerHTML = rows;
       });
     }
       </script>

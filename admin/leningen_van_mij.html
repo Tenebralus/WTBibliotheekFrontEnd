@@ -106,7 +106,7 @@
               <th></th>
             </tr>
           </thead>
-          <tbody id="book-row"></tbody>
+          <tbody id="loans-row"></tbody>
         </table>
       </div>
 
@@ -156,11 +156,11 @@
               }
 
             //do not want to see null but empty space
-            dateReturned = "";
+            let dateReturned = "";
             if (element.dateReturned==null){
-              dateReturned = "";
+              dateReturned = '';
             } else {
-              dateReturned = new Date(dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+              dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
             }
 
             let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
@@ -175,7 +175,7 @@
                 "<td>" + dateReturned + "</td>" ;
 
             });
-            document.getElementById('book-row').innerHTML = rows;
+            document.getElementById('loans-row').innerHTML = rows;
           });
         }
 
@@ -233,7 +233,7 @@
             "<td>" + dateLoaned + "</td>" +
             "<td>" + dateReturned + "</td></tr>";
         });
-        document.getElementById('book-row').innerHTML = rows;
+        document.getElementById('loans-row').innerHTML = rows;
       });
     }
 
