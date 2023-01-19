@@ -94,7 +94,7 @@
           <tbody id="book-row"></tbody>
         </table>
       </div>
-      
+
     </div>
   </div>
 
@@ -116,7 +116,8 @@
             tags += element.tags[i].name
             if (i < element.tags.length - 1) {
               tags += ", "
-            }}
+            }
+          }
 
           let copiesTotal = 0;
           let copiesAvailable = 0;
@@ -127,13 +128,13 @@
             copiesTotal++
           })
           let bookId = element.id;
-          let bookQueryString = '?book='+bookId;
-          let linkToBookDetails = '<a href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
+          let bookQueryString = '?book=' + bookId;
+          let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
 
 
-          rows += "<tr><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
-            '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
-          });
+          rows += "<tr><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+            '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
+        });
         document.getElementById('book-row').innerHTML = rows;
 
       });
@@ -147,13 +148,13 @@
         data.forEach(element => {
 
           let copiesTotal = 0;
-              let copiesAvailable = 0;
-              element.bookcopies.forEach(copy => {
-                if (copy.status == "available") {
-                  copiesAvailable++
-                }
-                copiesTotal++
-              })
+          let copiesAvailable = 0;
+          element.bookcopies.forEach(copy => {
+            if (copy.status == "available") {
+              copiesAvailable++
+            }
+            copiesTotal++
+          })
           let auths = '';
           let inputs = '';
           let tags = '';
@@ -172,7 +173,7 @@
             // Create rows of the table with auths
             rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
               "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" +
-              auths + "</td><td>" +  tags + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' + 
+              auths + "</td><td>" + tags + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' +
               "<td>" + copiesAvailable + '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
           } else {
             for (let i = 0; i < element.authors.length; i++) {
@@ -182,10 +183,11 @@
               }
             }
             for (let i = 0; i < element.tags.length; i++) {
-            tags += element.tags[i].name
-            if (i < element.tags.length - 1) {
-              tags += ", "
-            }}
+              tags += element.tags[i].name
+              if (i < element.tags.length - 1) {
+                tags += ", "
+              }
+            }
             rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
               '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
           }
@@ -208,7 +210,7 @@
         body: JSON.stringify(
           {
             title: newTitle,
-            isbn: newIsbn     
+            isbn: newIsbn
           }
         ),
         headers: {
@@ -260,51 +262,51 @@
       } else {
         return false;
       }
+    }
+
+    function deleteTag(clickedId) {
+
+
+      if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
+
+        let idstr = clickedId.split(" ");
+        let tagId = parseInt(idstr[0]);
+        let bookId = parseInt(idstr[1]);
+
+
+        fetch('http://localhost:8080/book/delete/tag/' + bookId + '/' + tagId, {
+          method: "PUT"
+        })
+          .then(() => {
+            alert('Tag verwijderd');
+            location.reload()
+          });
+      } else {
+        return false;
       }
+    }
 
-      function deleteTag(clickedId) {
-
-
-        if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
-
-          let idstr = clickedId.split(" ");
-          let tagId = parseInt(idstr[0]);
-          let bookId = parseInt(idstr[1]);
+    function addTagField(clickedId) {
 
 
-          fetch('http://localhost:8080/book/delete/tag/' + bookId + '/' + tagId, {
-            method: "PUT"
-          })
-            .then(() => {
-              alert('Tag verwijderd');
-              location.reload()
-            });
-        } else {
-          return false;
-        }
-        }
+      if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
 
-        function addTagField(clickedId) {
+        let idstr = clickedId.split(" ");
+        let tagId = parseInt(idstr[0]);
+        let bookId = parseInt(idstr[1]);
 
 
-          if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
-
-            let idstr = clickedId.split(" ");
-            let tagId = parseInt(idstr[0]);
-            let bookId = parseInt(idstr[1]);
-
-
-            fetch('http://localhost:8080/book/delete/tag/' + bookId + '/' + tagId, {
-              method: "PUT"
-            })
-              .then(() => {
-                alert('Tag verwijderd');
-                location.reload()
-              });
-          } else {
-            return false;
-          }
-          }
+        fetch('http://localhost:8080/book/delete/tag/' + bookId + '/' + tagId, {
+          method: "PUT"
+        })
+          .then(() => {
+            alert('Tag verwijderd');
+            location.reload()
+          });
+      } else {
+        return false;
+      }
+    }
 
 
 
