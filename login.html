@@ -78,6 +78,12 @@
             }
         }).then(response => response.json()).then(data => {
             if (data.success) {
+                if (data.firstLogin) {
+                    localStorage.setItem('Email', document.getElementById('inputEmail').value);
+                    alert("Dit is je eerste login, pas je wachtwoord aan.");
+                    return window.location.href = 'eerstelogin.html';
+                }
+
                 localStorage.setItem('Authentication', data.token);
 
                 if (data.admin) {
@@ -88,7 +94,7 @@
                 }
             }
             else {
-                alert("wrong email and/or password input");
+                alert("Combinatie van email en wachtwoord niet gevonden");
             }
 
 
