@@ -74,7 +74,7 @@
         <h3>Leningen</h3>
         <div class="row">
           <div class="col-4">
-            <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+            <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of auteur">
           </div>
           <div class="col">
             <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
@@ -176,6 +176,52 @@
           .then(alert("Reservering geannuleerd"));
           createReservationTable();
         }
+
+
+    function search() {
+      let keyword = document.getElementById('searchField').value;
+      fetch('http://localhost:8080/loan/search/' + keyword).then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
+          let authorNames = "";
+          if (element.authors) {
+            for (let i = 0; i < element.authors.length; i++) {
+              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+              if (i < element.authors.length - 1) {
+                authorNames += ", ";
+              }
+            }
+          }
+
+          //do not want to see null but empty space
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+          let extra = ''
+          if (element.bookCopyStatus == "loaned") {
+            extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
+          } else {
+            extra = '';
+          }
+
+          dateReturned = "";
+          if (element.dateReturned == null) {
+            dateReturned = extra;
+          } else {
+            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          }
+
+          rows +=
+            "<tr><td>" + element.bookTitle + "</td>" +
+            "<td>" + element.bookCopyNr + "</td>" +
+            "<td>" + element.bookIsbn + "</td>" +
+            "<td>" + authorNames + "</td>" +
+            "<td>" + element.bookCopyStatus + "</td>" +
+            "<td>" + dateLoaned + "</td>" +
+            "<td>" + dateReturned + "</td></tr>";
+        });
+        document.getElementById('book-row').innerHTML = rows;
+      });
+    }
       </script>
 </body>
 </html>

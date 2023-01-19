@@ -61,7 +61,7 @@
         <h3>Alle exemplaren in de bibliotheek</h3>
         <div class="row">
           <div class="col-4">
-            <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+            <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op titel, auteur, of tags">
           </div>
           <div class="col">
             <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
@@ -120,8 +120,7 @@
                             bookTags += ", "
                         }
                     }
-                }  
-console.log(bookTags);
+                } 
 
           text='';
           if (element.bookCopyStatus == "archived") {
@@ -133,7 +132,7 @@ console.log(bookTags);
           '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookCopyStatus+'\')"   >   '+text+' </button></td></tr>';
         });
         document.getElementById('bookcopy-row').innerHTML = rows;
-        document.getElementById('image').innerHTML = urlImage;
+        
       });
     }
 
@@ -176,7 +175,41 @@ console.log(bookTags);
         }
 
     function search() {
-
+      let keyword = document.getElementById('searchField').value;
+      fetch('http://localhost:8080/bookcopy/search/'+ keyword).then(response => response.json()).then(data => {
+        let rows = '';
+        console.log(data);
+        data.forEach(element => {
+          let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
+          let auths = '';
+          console.log(element);
+          for (let i = 0; i < element.authors.length; i++) {
+            auths += element.authors[i].firstName + " " + element.authors[i].lastName
+            if (i < element.authors.length - 1) {
+              auths += ", "
+            }
+          }
+          let bookTags = '';
+                if (!!element.tags){
+                    for (let i = 0; i < element.tags.length; i++) {
+                        bookTags += element.tags[i].name
+                        if (i < element.tags.length - 1) {
+                            bookTags += ", "
+                        }
+                    }
+                }  
+          text='';
+          if (element.bookCopyStatus == "archived") {
+            text = "Beschikbaar stellen";
+          } else {
+            text = "Archiveer exemplaar";
+          }
+          rows += "<tr><td>" + urlImage + "</td><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + bookTags + "</td><td>" + element.bookcopies.bookCopyNr + "</td><td>" + element.bookCopyStatus + "</td><td>" +
+          '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookcopies.bookCopyStatus+'\')"   >   '+text+' </button></td></tr>';
+        });
+        document.getElementById('bookcopy-row').innerHTML = rows;
+        
+    })
     }
   </script>
 </body>
