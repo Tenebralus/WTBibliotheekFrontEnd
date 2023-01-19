@@ -135,7 +135,9 @@
                 let bookCopyNr = data.bookCopyNr;
                 status = data.status;
                 let timesLoaned = data.timesLoaned;
-                let urlImage = "https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
+                let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
+                console.log(data);
+                console.log(data.urlImage);
 
                 let bookAuthors = '';
                 if (!!data.bookAuthors){

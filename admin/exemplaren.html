@@ -77,6 +77,7 @@
         <table class="table">
           <thead>
             <tr>
+              <th id="image"></th>
               <th>Titel</th>
               <th>ISBN</th>
               <th>Auteur</th>
@@ -103,6 +104,7 @@
         //http://localhost:8080/bookcopyDetailsDTO
         let rows = '';
         data.forEach(element => {
+          let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
           let auths = '';
           for (let i = 0; i < element.bookAuthors.length; i++) {
             auths += element.bookAuthors[i].firstName + " " + element.bookAuthors[i].lastName
@@ -127,10 +129,11 @@ console.log(bookTags);
           } else {
             text = "Archiveer exemplaar";
           }
-          rows += "<tr><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + auths + "</td><td>" + bookTags + "</td><td>" + element.bookCopyNr + "</td><td>" + element.bookCopyStatus + "</td><td>" +
+          rows += "<tr><td>" + urlImage + "</td><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + auths + "</td><td>" + bookTags + "</td><td>" + element.bookCopyNr + "</td><td>" + element.bookCopyStatus + "</td><td>" +
           '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookCopyStatus+'\')"   >   '+text+' </button></td></tr>';
         });
         document.getElementById('bookcopy-row').innerHTML = rows;
+        document.getElementById('image').innerHTML = urlImage;
       });
     }
 
