@@ -14,7 +14,6 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
-
         #forgotPassword {
             font-size: small;
         }
@@ -43,8 +42,7 @@
             <div class="col-12">
                 <div class="mb-3">
                     <label for="inputEmail" class="form-label">Emailadres</label>
-                    <input type="email" class="form-control" id="inputEmail"
-                        placeholder="naam@workingtalent.nl">
+                    <input type="email" class="form-control" id="inputEmail" placeholder="naam@workingtalent.nl">
                 </div>
             </div>
             <div class="col-12">
@@ -67,21 +65,36 @@
 
 <script>
     function login() {
-        let mail = document.getElementById('inputEmail').value;
-        let pw = document.getElementById('inputPassword').value;
+        fetch('http://localhost:8080/user/login', {
+            method: 'POST',
+            body: JSON.stringify(
+                {
+                    email: document.getElementById('inputEmail').value,
+                    password: document.getElementById('inputPassword').value
+                }
+            ),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                localStorage.setItem('Authentication', data.token);
 
-        //Very very buggy.
-        fetch('http://localhost:8080/user/userpass/'+mail+":"+pw)
-  .then((response) => response.json()) 
-  .then((data) => {
-        console.log(data)
-      // Do something with the non-empty JSON object
-      console.log("gelukt");
-    })
-  .catch((error) => {
-    alert('kon niet inloggen');
-  });
-}
+                if (data.admin) {
+                    window.location.href = 'admin/index.html';
+                }
+                else {
+                    window.location.href = 'user/index.html';
+                }
+            }
+            else {
+                alert("wrong email and/or password input");
+            }
+
+
+
+        });
+    }
 
 </script>
 

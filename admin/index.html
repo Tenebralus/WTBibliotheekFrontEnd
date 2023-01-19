@@ -59,7 +59,7 @@
               <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
+          <button class="btn btn-outline-success" type="button" id='logout' onclick="logout()">Log uit</button>
 
       </div>
     </div>
@@ -186,6 +186,11 @@
         method: "POST"
       })
         .then(alert("Reservering gemaakt"));
+    }
+
+    function logout()
+    {
+      localStorage.clear();
     }
   </script>
 </body>

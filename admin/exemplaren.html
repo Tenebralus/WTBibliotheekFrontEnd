@@ -116,7 +116,7 @@
             text = "Archiveer exemplaar";
           }
           rows += "<tr><td>" + element.bookTitle + "</td><td>" + element.bookIsbn + "</td><td>" + auths + "</td><td>" + element.bookCopyNr + "</td><td>" + element.bookCopyStatus + "</td><td>" +
-          '<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy('+element.id+',\''+element.bookCopyStatus+'\')"   >   '+text+' </button></td></tr>';
+          `<button class="btn btn-outline-success" type="button" id="BookCopyId'+element.id+'"  onclick="updateBookcopy(${element.id},'${element.bookCopyStatus}')">` +text+' </button></td></tr>';
         });
         document.getElementById('bookcopy-row').innerHTML = rows;
       });
