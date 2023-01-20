@@ -84,6 +84,7 @@
           <th>Status</th>
           <th>Rol</th>
           <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody id="book-row"></tbody>
@@ -113,10 +114,12 @@
           }
 
           let status = "Actief"
-          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></tr>';
+          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="update'+element.id+'">Pas aan</button></td></td>';
+          let delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon'+element.id+'">Anonimiseren</button></td></tr>';
           if (element.active == false) {
             status = "Verwijderd"
-            copyButton = '</td><td></td></tr>';
+            copyButton = '</td><td></td></td>';
+            delButton = '</td><td></td></tr>';
           }
 
           let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
@@ -133,7 +136,7 @@
               "</td><td>" + dateAccountDeleted +
               '</td><td>' + status +
               "</td><td>" + admin +
-              copyButton;
+              copyButton + delButton;
         });
         document.getElementById('book-row').innerHTML = rows;
 
@@ -145,6 +148,17 @@
       let idstr = clickedId.split("update");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/user/update/'+idnum, {
+        method : "PUT"
+      })
+      .then();
+      createUserTable();
+    }
+
+    function anonUser(clickedId){
+      console.log(clickedId);
+      let idstr = clickedId.split("anon");
+      let idnum = parseInt(idstr[1]);
+      fetch('http://localhost:8080/user/anonymize/'+idnum, {
         method : "PUT"
       })
       .then();
