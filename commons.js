@@ -1,12 +1,21 @@
 function logOut(){
-    //document.cookie= "Authentication" + ";max-age=0" ;  
-    console.log("sd")
-    document.cookie = "Authentication= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
-    console.log(getCookie("Authentication"));
+    document.cookie = "Authentication= ; path=/; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+    window.location.href = '/login.html';
+}
+
+function logIn(){
+  window.location.href = '../login.html';
+}
+
+function logInOutButton(btn){
+  if(getCookie("Authentication") == null){
+    btn.innerHTML = "Login";
+    btn.setAttribute('onclick','logIn()');
+  }
 }
 
 function setCookie(name, value) {
-        document.cookie = name + "=" + encodeURIComponent(value);
+        document.cookie = name + "=" + encodeURIComponent(value) + "path=/;";
 }
 
 function getCookie(name) {
