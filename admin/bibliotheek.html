@@ -145,56 +145,73 @@
       let idstr = clickedId.split("updateLibrary");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
-        let rows = '';
-        data.forEach(element => {
-          let copiesTotal = 0;
-          let copiesAvailable = 0;
-          element.bookcopies.forEach(copy => {
-            if (copy.status == "available") {
-              copiesAvailable++
-            }
-            copiesTotal++
-          })
-          let auths = '';
-          let inputs = '';
-          let tags = '';
-          if (element.id == idnum) {
-            for (let i = 0; i < element.authors.length; i++) {
-              // Create input fields for all authors
-              // auth = element.authors[i].firstName + " " + element.authors[i].lastName
-              // auths += "<p>" + auths + "</p>";
-              auths += ' <button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="' + element.authors[i].id + " " + element.id + '">' + element.authors[i].firstName + " " + element.authors[i].lastName + ' x</button>'
-            }
-            for (let i = 0; i < element.tags.length; i++) {
-              tags += ' <button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="' + element.tags[i].id + " " + element.id + '">' + element.tags[i].name + ' x</button>'
-            }
-            // add button to add tag
-            // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
-            // Create rows of the table with auths
-            rows += "<tr><td>" + "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
-              "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/>" + "</td><td>" +
-              auths + "</td><td>" + tags + "</td><td>" + copiesTotal + ' <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy' + element.id + '">Exemplaar toevoegen</button></td>' +
-              "<td>" + copiesAvailable + '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
-          } else {
-            for (let i = 0; i < element.authors.length; i++) {
-              auths += element.authors[i].firstName + " " + element.authors[i].lastName
-              if (i < element.authors.length - 1) {
-                auths += ", "
-              }
-            }
-            for (let i = 0; i < element.tags.length; i++) {
-              tags += element.tags[i].name
-              if (i < element.tags.length - 1) {
-                tags += ", "
-              }
-            }
-            rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
-              '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
-          }
+        fetch('http://localhost:8080/tag/all').then(response => response.json()).then(tagsData => {
+          fetch('http://localhost:8080/author/all').then(response => response.json()).then(authorData => {
+            let rows = '';
+            let tagOptions = '';
+            let authorOptions = '';
+            tagsData.forEach(element => {
+              tagOptions += `<option value="${element.name}">`
+            });
+            authorData.forEach(element => {
+              authorOptions += `<option value="${element.firstName} ${element.lastName}">`
+            });
+            data.forEach(element => {
 
+              let copiesTotal = 0;
+              let copiesAvailable = 0;
+              element.bookcopies.forEach(copy => {
+                if (copy.status == "available") {
+                  copiesAvailable++
+                }
+                copiesTotal++
+              })
+              let auths = '';
+              let inputs = '';
+              let tags = '';
+              if (element.id == idnum) {
+                for (let i = 0; i < element.authors.length; i++) {
+                  // Create buttons to remove authors
+                  auths += ' <button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="' + element.authors[i].id + " " + element.id + '">' + element.authors[i].firstName + " " + element.authors[i].lastName + ' x</button><br><br>'
+                }
+                for (let i = 0; i < element.tags.length; i++) {
+                  tags += ' <button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="' + element.tags[i].id + " " + element.id + '">' + element.tags[i].name + ' x</button><br><br>'
+                }
+                // add button to add tag
+                // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
+                // Create rows of the table with auths
+                rows += "<tr><td>" +
+                  "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
+                  "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/></td><td>" +
+                  auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList' class='form-control' placeholder='Extra auteur toevoegen'>` +
+                  `<datalist id='inputAuthorsList${element.id}'>` + authorOptions + "</datalist></td><td>" +
+                  tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList' class='form-control' placeholder='Extra tag toevoegen'>` +
+                  `<datalist id='inputTagsList${element.id}'>` + tagOptions + "</datalist></td><td>" +
+                  copiesTotal + ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
+                  copiesAvailable +
+                  '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
+              } else {
+                for (let i = 0; i < element.authors.length; i++) {
+                  auths += element.authors[i].firstName + " " + element.authors[i].lastName
+                  if (i < element.authors.length - 1) {
+                    auths += ", "
+                  }
+                }
+                for (let i = 0; i < element.tags.length; i++) {
+                  tags += element.tags[i].name
+                  if (i < element.tags.length - 1) {
+                    tags += ", "
+                  }
+                }
+                rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+                  '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
+              }
+
+            });
+            document.getElementById('book-row').innerHTML = rows;
+
+          });
         });
-        document.getElementById('book-row').innerHTML = rows;
-
       });
     }
 
@@ -204,6 +221,10 @@
 
       let idstr = clickedId.split("updateBook");
       let idnum = parseInt(idstr[1]);
+
+      // add optional tags and authors to book
+      addTag(idnum);
+      addAuthor(idnum);
 
       fetch('http://localhost:8080/book/update/' + idnum, {
         method: "PUT",
@@ -242,6 +263,48 @@
       }
     }
 
+    function addTag(bookId) {
+      let tagName = document.getElementById("inputTagsList").value;
+
+      if (!!tagName) {
+        fetch('http://localhost:8080/book/add/tag/' + bookId, {
+          method: "POST",
+          body: JSON.stringify(
+            {
+              name: tagName
+            }
+          ),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+
+
+    }
+
+    function addAuthor(bookId) {
+      let name = document.getElementById("inputAuthorsList").value;
+
+      if (!!name) {
+        let newFirstName = name.split(" ")[0];
+        let newLastName = name.split(" ")[1];
+
+        fetch('http://localhost:8080/book/add/author/' + bookId, {
+          method: "POST",
+          body: JSON.stringify(
+            {
+              firstName: newFirstName,
+              lastName: newLastName
+            }
+          ),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+      }
+    }
+
     function deleteAuthor(clickedId) {
 
 
@@ -265,28 +328,6 @@
     }
 
     function deleteTag(clickedId) {
-
-
-      if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
-
-        let idstr = clickedId.split(" ");
-        let tagId = parseInt(idstr[0]);
-        let bookId = parseInt(idstr[1]);
-
-
-        fetch('http://localhost:8080/book/delete/tag/' + bookId + '/' + tagId, {
-          method: "PUT"
-        })
-          .then(() => {
-            alert('Tag verwijderd');
-            location.reload()
-          });
-      } else {
-        return false;
-      }
-    }
-
-    function addTagField(clickedId) {
 
 
       if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
