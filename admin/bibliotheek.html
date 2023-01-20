@@ -69,21 +69,21 @@
     <h3>Alle boeken in de bibliotheek</h3>
     <div class="row">
       <div class="col-4">
-        <input class="form-control me-2" type="search" placeholder="Zoek op ...">
+        <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op titel, auteur, of tags">
       </div>
       <div class="col">
         <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
       </div>
-      <div class="col text-end">
-        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag
-          toevoegen</button></a>
-        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek
-            toevoegen</button></a>
+      <div class="col-6">
+        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur toevoegen</button></a>
+        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag toevoegen</button></a>
+        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek toevoegen</button></a>
       </div>
       <div class="container">
         <table class="table">
           <thead>
             <tr>
+              <th id="image"></th>
               <th>Titel</th>
               <th>ISBN</th>
               <th>Auteur</th>
@@ -106,6 +106,7 @@
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
+          let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
           let auths = '';
           let tags = '';
           for (let i = 0; i < element.authors.length; i++) {
@@ -132,11 +133,9 @@
           let bookId = element.id;
           let bookQueryString = '?book=' + bookId;
           let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
-
-
-          rows += "<tr><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
-            '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
-        });
+              rows += "<tr><td>"+ urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
+              });
         document.getElementById('book-row').innerHTML = rows;
 
       });
@@ -354,7 +353,45 @@
 
 
     function search() {
+      let keyword = document.getElementById('searchField').value;
 
+      fetch('http://localhost:8080/book/search/'+ keyword).then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
+          let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
+          let auths = '';
+          for (let i = 0; i < element.authors.length; i++) {
+            auths += element.authors[i].firstName + " " + element.authors[i].lastName
+            if (i < element.authors.length - 1) {
+              auths += ", "
+            }
+          }
+          let tagName = '';
+          for (let i = 0; i < element.tags.length; i++) {
+            tagName += element.tags[i].name
+            if (i < element.tags.length - 1) {
+              tagName += ", "
+            }
+          }
+
+          let copiesTotal = 0;
+          let copiesAvailable = 0;
+          element.bookcopies.forEach(copy => {
+            if (copy.status == "available") {
+              copiesAvailable++
+            }
+            copiesTotal++
+          })
+          let bookId = element.id;
+          let bookQueryString = '?book=' + bookId;
+
+          let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
+
+          rows += "<tr><td>"+ urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tagName + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
+        });
+        document.getElementById('book-row').innerHTML = rows;
+      });
     }
   </script>
 </body>

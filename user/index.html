@@ -49,7 +49,7 @@
 
           </li>
 
-          <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
+          <button class="btn btn-outline-success" type="button" id='logout' onclick="logout()">Log uit</button>
 
       </div>
     </div>
@@ -70,6 +70,7 @@
     <table class="table">
       <thead>
         <tr>
+          <th id="image"></th>
           <th>Titel</th>
           <th>ISBN</th>
           <th>Auteur(s)</th>
@@ -84,9 +85,9 @@
   <script>
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
-      let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
       data.forEach(element => {
-        
+        console.log(element);
+        let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {
           auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -111,7 +112,7 @@
         })
 
         rows += "</tr><td>" +
-          '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
+           urlImage +  "</td><td>" +
           element.title + "</td><td>" +
           element.isbn + "</td><td>" +
           auths + "</td><td>" +
@@ -175,6 +176,12 @@
         method: "POST"
       })
         .then(alert("Reservering gemaakt"));
+    }
+
+    function logout()
+    {
+      localStorage.clear();
+      window.location.href = '../login.html';
     }
   </script>
 </body>
