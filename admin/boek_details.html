@@ -219,6 +219,7 @@
                   return new Date(b.dateLoaned) - new Date(a.dateLoaned);
               });
 
+              let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button></div></div></div>'
               let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
               let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
 
@@ -242,7 +243,7 @@
                       "<td>" + dateLoaned + "</td>" +
                       "<td>" + dateReturned + "</td></tr>";
               });
-              document.getElementById('loanHistory').innerHTML = tableTitle + tableHead + rows;
+              document.getElementById('loanHistory').innerHTML = tableTitle + searchBar + tableHead + rows;
           });
         }
     
@@ -296,7 +297,53 @@
         }
 
         function search() {
-          
+          let keyword = document.getElementById('searchField').value;
+            if (!keyword) {
+                return getLoanHistory();
+            }
+            fetch('http://localhost:8080/loan/search/bookdetails', {
+              method: 'POST',
+            body: JSON.stringify(
+                {
+                    keyword: keyword,
+                    bookId: bookId
+                }
+            ),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+            }).then(response => response.json()).then(data => {
+              data = data.sort((a, b) => {
+                  return new Date(b.dateLoaned) - new Date(a.dateLoaned);
+              });
+
+              let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button></div></div></div>'
+              let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
+              let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
+
+              let rows = '';
+
+              data.forEach(element => {
+
+                  //do not want to see null but empty space
+                  let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
+                  dateReturned = "";
+                  if (element.dateReturned == null) {
+                      dateReturned = "";
+                  } else {
+                      dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+                  }
+
+                  rows +=
+                      "<td>" + "Exemplaar " + element.bookCopyNr + "</td>" +
+                      "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+                      "<td>" + dateLoaned + "</td>" +
+                      "<td>" + dateReturned + "</td></tr>";
+              });
+              document.getElementById('loanHistory').innerHTML = tableTitle + searchBar + tableHead + rows;
+          });
+            
         }
       </script>
 </body>
