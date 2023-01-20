@@ -100,7 +100,7 @@
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                //'Authentication': getCookie('Authentication')
+                'Authentication': getCookie('Authentication')
             }
         })
       
@@ -289,7 +289,7 @@
       })
         .then(() => {
           alert('User is aangepast');
-          //location.reload()
+          location.reload()
         });
     }
   </script>
