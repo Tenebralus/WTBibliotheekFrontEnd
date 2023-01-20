@@ -83,7 +83,7 @@
         <table class="table">
           <thead>
             <tr>
-              <th id="image"></th>
+              <!-- <th id="image"></th> -->
               <th>Titel</th>
               <th>ISBN</th>
               <th>Auteur</th>
@@ -133,7 +133,7 @@
           let bookId = element.id;
           let bookQueryString = '?book=' + bookId;
           let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
-              rows += "<tr><td>"+ urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
+              rows += "<tr><td>"+ urlImage + "<br>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
                 '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
               });
         document.getElementById('book-row').innerHTML = rows;
@@ -180,7 +180,7 @@
                 // add button to add tag
                 // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
                 // Create rows of the table with auths
-                rows += "<tr><td>" +
+                rows += "<tr><td>" + 
                   "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
                   "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/></td><td>" +
                   auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList' class='form-control' placeholder='Extra auteur toevoegen'>` +

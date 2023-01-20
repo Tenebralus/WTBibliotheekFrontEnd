@@ -68,23 +68,34 @@
                     <label for="inputFirstName" class="form-label">Voornaam</label>
                     <input type="text" class="form-control" id="inputFirstName" placeholder="Voornaam">
                 </div>
-            </div>
-            <div class="col-4">
                 <div class="mb-3">
                     <label for="inputLastName" class="form-label">Achternaam</label>
                     <input type="text" class="form-control" id="inputLastName" placeholder="Achternaam">
                 </div>
+                <div class="col">
+                    <button class="btn btn-outline-success" type="button" id="addAuthor"
+                        onclick="createAuthor()">Toevoegen</button>
+                </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col">
-                <button class="btn btn-outline-success" type="button" id="addAuthor"
-                    onclick="createAuthor()">Toevoegen</button>
+                <h3>Auteurs</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Voornaam</th>
+                            <th>Achternaam</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="author-row"></tbody>
+                </table>
             </div>
         </div>
     </div>
 
     <script>
+        window.onload = createAuthorTable();
         function createAuthor() {
             fetch('http://localhost:8080/author/create', {
                 method: 'POST',
@@ -104,6 +115,86 @@
                     document.getElementById('inputLastName').value = "";
                 })
         }
+
+        function createAuthorTable() {
+            fetch('http://localhost:8080/author/all').then(response => response.json()).then(data => {
+                let rows = '';
+                data.forEach(element => {
+                    rows += "<tr><td>" + element.firstName + "</td><td>" + element.lastName + 
+                        '<td><button class="btn btn-outline-success" type="button" onclick="updateAuthorTable(this.id)" id="updateAuthorTable' + element.id + '">Pas aan</button></td>' +
+                        "</tr>";
+                });
+                document.getElementById('author-row').innerHTML = rows;
+
+            });
+        }
+
+        function updateAuthorTable(clickedId) {
+            let idstr = clickedId.split("updateAuthorTable");
+            let idnum = parseInt(idstr[1]);
+            fetch('http://localhost:8080/author/all').then(response => response.json()).then(data => {
+                let rows = '';
+                data.forEach(element => {
+                    if (element.id == idnum) {
+                        rows += "<tr><td>" + "<input class='form-control me-2' id='newInputFirstName' form='form1' type='text' name='title' value='" + element.firstName + "'/>" + 
+                            "</td><td>" + "<input class='form-control me-2' id='newInputLastName' form='form1' type='text' name='title' value='" + element.lastName + "'/>" + "</td>" +
+                            '<td><button class="btn btn-outline-success" type="button" onclick="updateAuthor(this.id)" id="updateAuthor' + element.id + '">Opslaan</button></td>' +
+                            '<td><button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="deleteAuthor' + element.id + '">Verwijder</button></td>' +
+                            "</tr>";
+                    }
+
+                    else {
+                        rows += "<tr><td>" + element.firstName + "</td><td>" + element.lastName + 
+                        '<td><button class="btn btn-outline-success" type="button" onclick="updateAuthorTable(this.id)" id="updateAuthorTable' + element.id + '">Pas aan</button></td>' +
+                        "</tr>";
+
+                    }
+                });
+                document.getElementById('author-row').innerHTML = rows;
+            });
+        }
+
+        function updateAuthor(clickedId) {
+            let newFirstName = document.getElementById('newInputFirstName').value;
+            let newLastName = document.getElementById('newInputLastName').value;
+
+
+
+            let idstr = clickedId.split("updateAuthor");
+            let idnum = parseInt(idstr[1]);
+
+            fetch('http://localhost:8080/author/update/' + idnum, {
+                method: "PUT",
+                body: JSON.stringify(
+                    {
+                        firstName: newFirstName,
+                        lastName: newLastName
+                    }
+                ),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => {
+                    alert('Auteur is aangepast');
+                    location.reload()
+                });
+        }
+
+        function deleteAuthor(clickedId) {
+            let idstr = clickedId.split("deleteAuthor");
+            let idnum = parseInt(idstr[1]);
+
+            fetch('http://localhost:8080/author/delete/' + idnum, {
+                method: "DELETE"
+            })
+                .then(() => {
+                    alert('Auteur verwijderd');
+                    location.reload()
+                })
+        }
+
+
     </script>
 </body>
 
