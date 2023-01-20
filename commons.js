@@ -1,5 +1,8 @@
 function logOut(){
-    localStorage.clear();
+    //document.cookie= "Authentication" + ";max-age=0" ;  
+    console.log("sd")
+    document.cookie = "Authentication= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+    console.log(getCookie("Authentication"));
 }
 
 function setCookie(name, value) {
