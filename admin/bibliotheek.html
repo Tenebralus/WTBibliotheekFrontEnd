@@ -173,10 +173,10 @@
               if (element.id == idnum) {
                 for (let i = 0; i < element.authors.length; i++) {
                   // Create buttons to remove authors
-                  auths += ' <button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="' + element.authors[i].id + " " + element.id + '">' + element.authors[i].firstName + " " + element.authors[i].lastName + ' x</button>'
+                  auths += ' <button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="' + element.authors[i].id + " " + element.id + '">' + element.authors[i].firstName + " " + element.authors[i].lastName + ' x</button><br><br>'
                 }
                 for (let i = 0; i < element.tags.length; i++) {
-                  tags += ' <button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="' + element.tags[i].id + " " + element.id + '">' + element.tags[i].name + ' x</button>'
+                  tags += ' <button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="' + element.tags[i].id + " " + element.id + '">' + element.tags[i].name + ' x</button><br><br>'
                 }
                 // add button to add tag
                 // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
@@ -184,9 +184,9 @@
                 rows += "<tr><td>" +
                   "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
                   "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/></td><td>" +
-                  auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList'>` +
+                  auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList' class='form-control' placeholder='Extra auteur toevoegen'>` +
                   `<datalist id='inputAuthorsList${element.id}'>` + authorOptions + "</datalist></td><td>" +
-                  tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList'>` +
+                  tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList' class='form-control' placeholder='Extra tag toevoegen'>` +
                   `<datalist id='inputTagsList${element.id}'>` + tagOptions + "</datalist></td><td>" +
                   copiesTotal + ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
                   copiesAvailable +
