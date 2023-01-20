@@ -156,6 +156,10 @@
       fetch('http://localhost:8080/user/search/'+keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
+          console.log(element);
+          console.log(element.active);
+          console.log(element.admin);
+
           let admin = "Gebruiker"
           if (element.admin == true) {
             admin = "Admin"
