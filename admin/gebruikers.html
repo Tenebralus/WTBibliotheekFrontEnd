@@ -269,15 +269,15 @@
 
       let idstr = clickedId.split("saveUser");
       let idnum = parseInt(idstr[1]);
-      
+      console.log(newFirstName);
       fetch('http://localhost:8080/user/update/' + idnum, {
         method: "PUT",
         body: JSON.stringify(
           {
-            firstname: newFirstName,
-            lastName: newLastName,
-            emailAddress: newEmailAdress,
-            admin: newAdminValue
+            "firstName": newFirstName,
+            "lastName": newLastName,
+            "emailAddress": newEmailAdress,
+            "admin": newAdminValue
           }
         ),
         headers: {
