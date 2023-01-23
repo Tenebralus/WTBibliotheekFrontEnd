@@ -8,7 +8,6 @@
   <title>Leningen</title>
   <link rel="icon" href="../images/favicon.ico">
 
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
@@ -46,11 +45,8 @@
               <li><a class="dropdown-item" href="../user/settings.html">Settings</a></li>
               <li><a class="dropdown-item active" href="../user/leningen.html">Leningen</a></li>
             </ul>
-
           </li>
-
           <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-
       </div>
     </div>
   </nav>
@@ -84,7 +80,6 @@
       </tbody>
     </table>
   </div>
-
   <div class="container">
     <h3>Leningen</h3>
     <div class="row">
@@ -96,7 +91,6 @@
       </div>
     </div>
   </div>
-
   <div class="container">
     <table class="table">
       <thead>
@@ -118,12 +112,10 @@
   <script>
     window.onload = createReservationTable();
     window.onload = createLoanTable();
-
     function createReservationTable() {
       fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-
           let auths = '';
           for (let i = 0; i < element.book.authors.length; i++) {
             auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
@@ -131,9 +123,7 @@
               auths += ", "
             }
           }
-
           let dateReserved = new Date(element.dateReserved).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           rows += "</tr><td>" +
             element.book.title + "</td><td>" +
             auths + "</td><td>" +
@@ -149,7 +139,6 @@
       fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-
           let auths = "";
           for (let i = 0; i < element.authors.length; i++) {
             auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -157,7 +146,6 @@
               auths += ", "
             }
           }
-
           //do not want to see null but empty space
           dateReturned = "";
           if (element.dateReturned == null) {
@@ -165,9 +153,7 @@
           } else {
             dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
-
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           rows += "</tr><td>" +
             element.bookTitle + "</td><td>" +
             element.bookCopyNr + "</td><td>" +
@@ -192,8 +178,6 @@
       createReservationTable();
     }
 
-
-
     function search1() {
       let keyword = document.getElementById('searchField1').value;
       fetch('http://localhost:8080/reservation/user/search/' + keyword).then(response => response.json()).then(data => {
@@ -210,9 +194,7 @@
               }
             }
           }
-
           let dateReserved = new Date(element.reservationDate).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           rows += "</tr><td>" +
             element.book.title + "</td><td>" +
             auths + "</td><td>" +
@@ -221,10 +203,7 @@
         });
         document.getElementById('reservations-row').innerHTML = rows;
       });
-
     }
-
-
 
     function search() {
       let keyword = document.getElementById('searchField').value;
@@ -241,24 +220,20 @@
               }
             }
           }
-
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           let extra = ''
           if (element.bookCopyStatus == "loaned") {
             extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
           } else {
             extra = '';
           }
-
           let dateReturned = "";
           if (element.dateReturned == null) {
             dateReturned = extra;
           } else {
             dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
-
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
@@ -272,6 +247,7 @@
       });
     }
   </script>
+
 </body>
 
 </html>

@@ -8,6 +8,7 @@
   <title>Bibliotheek</title>
   <link rel="icon" href="../images/favicon.ico">
 
+  <script type="text/javascript" src="../commons.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
@@ -45,7 +46,6 @@
               <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
             </ul>
-
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
@@ -59,19 +59,19 @@
               <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-
+          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <script>
+            logInOutButton(document.getElementById('logout'))
+          </script>
       </div>
     </div>
   </nav>
 
   <div id="image">
   </div>
-
   <div class="container">
     <h3 id="bookTitle"></h3>
   </div>
-
   <div class="container">
     <div class="row">
       <p id="status"></p>
@@ -80,8 +80,6 @@
       <p id="timesLoaned"></p>
     </div>
   </div>
-
-
   <div class="container">
     <div class="row">
       <div class="col">
@@ -98,12 +96,10 @@
     </div>
   </div>
 
-
   <script>
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const bookCopyId = urlParams.get('bookcopy');
-
     window.onload = updateBookcopyTable();
 
     function updateBookcopyTable() {
@@ -115,7 +111,6 @@
         let bookCopyNr = data.bookCopyNr;
         let status = data.status;
         let timesLoaned = data.timesLoaned;
-
         document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
         document.getElementById("bookTitle").innerText = title + ' (' + bookId + '.' + bookCopyNr + ')';
         document.getElementById("status").innerText = "Huidige status: " + status;
@@ -123,9 +118,7 @@
       })
     }
 
-    //still edit into getting all the variables
     function updateBookcopy() {
-
       let currentStatus = ((document.getElementById("status").innerText).split("Huidige status: ")[1])
       if (currentStatus == "loaned") {
         const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
@@ -163,6 +156,7 @@
 
     }
   </script>
+
 </body>
 
 </html>

@@ -8,6 +8,7 @@
   <title>Bibliotheek</title>
   <link rel="icon" href="../images/favicon.ico">
 
+  <script type="text/javascript" src="../commons.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
@@ -45,7 +46,6 @@
               <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
             </ul>
-
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
@@ -59,8 +59,10 @@
               <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-
+          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <script>
+            logInOutButton(document.getElementById('logout'))
+          </script>
       </div>
     </div>
   </nav>
@@ -82,7 +84,6 @@
       </div>
     </div>
   </div>
-
   <div class="container">
     <table class="table">
       <thead>
@@ -101,15 +102,12 @@
       <tbody id="bookcopy-row"></tbody>
     </table>
   </div>
-  <div class="col text-end" id="test">
-    <!--<button class="btn btn-outline-success" type="button" id="archiveButton" onclick="updateBookcopy()"></button>-->
-    <!-- <button class="btn btn-outline-success" type="button"  onclick="updateBookcopy(1,'archived')"   >  Buttoonnn </button></td></tr>-->
-  </div>
   </div>
   </div>
 
   <script>
     window.onload = createLibraryTable();
+
     function createLibraryTable() {
       fetch('http://localhost:8080/bookcopy/details/all').then(response => response.json()).then(data => {
         //http://localhost:8080/bookcopyDetailsDTO
@@ -134,7 +132,6 @@
               }
             }
           }
-
           text = '';
           if (element.bookCopyStatus == "archived") {
             text = "Beschikbaar stellen";
@@ -147,13 +144,10 @@
             '<button class="btn btn-outline-success" type="button" id="BookCopyId' + element.id + '"  onclick="updateBookcopy(' + element.id + ',\'' + element.bookCopyStatus + '\')"   >   ' + text + ' </button></td></tr>';
         });
         document.getElementById('bookcopy-row').innerHTML = rows;
-
       });
     }
 
     function updateBookcopy(bookCopyId, status) {
-      //let idstr = clickedId.split("BookCopyId");
-      //let idnum = parseInt(idstr[1]);
       console.log(bookCopyId);
       console.log(status);
       let currentStatus = status;
@@ -223,10 +217,10 @@
             '<button class="btn btn-outline-success" type="button" id="BookCopyId' + element.id + '"  onclick="updateBookcopy(' + element.id + ',\'' + element.bookCopyStatus + '\')"   >   ' + text + ' </button></td></tr>';
         });
         document.getElementById('bookcopy-row').innerHTML = rows;
-
       })
     }
   </script>
+
 </body>
 
 </html>

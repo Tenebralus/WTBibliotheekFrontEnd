@@ -46,7 +46,6 @@
               <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
             </ul>
-
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
@@ -60,11 +59,14 @@
               <li><a class="dropdown-item active" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-
+          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <script>
+            logInOutButton(document.getElementById('logout'))
+          </script>
       </div>
     </div>
   </nav>
+
   <div class="container">
     <div class="row">
       <div class="col-4">
@@ -79,7 +81,6 @@
       </div>
     </div>
   </div>
-
   <div class="container">
     <table class="table">
       <thead>
@@ -111,16 +112,13 @@
           'Authentication': getCookie('Authentication')
         }
       })
-
         .then(response => response.json()).then(data => {
           let rows = '';
-
           data.forEach(element => {
             let admin = "Gebruiker"
             if (element.admin == true) {
               admin = "Admin"
             }
-
             let status = "Actief"
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
             let delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
@@ -129,14 +127,11 @@
               copyButton = '</td><td></td></td>';
               delButton = '</td><td></td></tr>';
             }
-
             let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
             dateAccountDeleted = "";
             if (element.dateAccountDeleted != null) {
               dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
             }
-
             rows += "<tr><td>" + element.firstName +
               "</td><td>" + element.lastName +
               "</td><td>" + element.emailAddress +
@@ -147,7 +142,6 @@
               copyButton + delButton;
           });
           document.getElementById('book-row').innerHTML = rows;
-
         });
     }
 
@@ -170,26 +164,21 @@
           console.log(element);
           console.log(element.active);
           console.log(element.admin);
-
           let admin = "Gebruiker"
           if (element.admin == true) {
             admin = "Admin"
           }
-
           let status = "Actief"
           let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></tr>';
           if (element.active == false) {
             status = "Verwijderd"
             copyButton = '</td><td></td></tr>';
           }
-
           let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           dateAccountDeleted = "";
           if (element.dateAccountDeleted != null) {
             dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
-
           rows += "<tr><td>" + element.firstName +
             "</td><td>" + element.lastName +
             "</td><td>" + element.emailAddress +
@@ -200,15 +189,12 @@
             copyButton;
         });
         document.getElementById('book-row').innerHTML = rows;
-
       });
-
     }
 
     function changeUser(clickedId) {
       let idstr = clickedId.split("updateUser");
       let idnum = parseInt(idstr[1]);
-
       fetch('http://localhost:8080/user/all', {
         method: 'GET',
         headers: {
@@ -218,7 +204,6 @@
       })
         .then(response => response.json()).then(data => {
           let rows = '';
-
           data.forEach(element => {
             let admin = "Gebruiker"
             if (element.admin == true) {
@@ -227,21 +212,17 @@
             } else {
               adminCheckBox = "";
             }
-
             let status = "Actief"
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></tr>';
             if (element.active == false) {
               status = "Verwijderd"
               copyButton = '</td><td></td></tr>';
             }
-
             let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
             dateAccountDeleted = "";
             if (element.dateAccountDeleted != null) {
               dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
             }
-
             if (element.id == idnum) {
               rows += "<tr><td>" + '<input type="text" id="inputFirstName" name="fname" placeholder=' + element.firstName + '>' +
                 "</td><td>" + '<input type="text" id="inputLastName" name="fname" placeholder=' + element.lastName + '>' +
@@ -251,7 +232,6 @@
                 '</td><td>' + status +
                 "</td><td>" + '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin +
                 "</td><td>" + '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
-
             } else {
               rows += "<tr><td>" + element.firstName +
                 "</td><td>" + element.lastName +
@@ -264,7 +244,6 @@
             }
           });
           document.getElementById('book-row').innerHTML = rows;
-
         });
     }
 
@@ -273,11 +252,9 @@
       let newLastName = document.getElementById('inputLastName').value;
       let newEmailAdress = document.getElementById('inputEmailAddress').value;
       let newAdminValue = document.getElementById('inputAdmin').checked;
-
       if (document.getElementById('inputFirstName').value.length == 0) {
         console.log("test");
       }
-
       let idstr = clickedId.split("saveUser");
       let idnum = parseInt(idstr[1]);
       console.log(newFirstName);
@@ -301,6 +278,7 @@
         });
     }
   </script>
+
 </body>
 
 </html>
