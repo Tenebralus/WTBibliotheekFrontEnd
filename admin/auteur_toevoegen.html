@@ -123,6 +123,7 @@
                     alert('Auteur is opgeslagen');
                     document.getElementById('inputFirstName').value = "";
                     document.getElementById('inputLastName').value = "";
+                    location.reload();
                 })
         }
 
@@ -135,7 +136,6 @@
                         "</tr>";
                 });
                 document.getElementById('author-row').innerHTML = rows;
-
             });
         }
 
@@ -181,7 +181,7 @@
             })
                 .then(() => {
                     alert('Auteur is aangepast');
-                    location.reload()
+                    location.reload();
                 });
         }
 
@@ -193,7 +193,7 @@
             })
                 .then(() => {
                     alert('Auteur verwijderd');
-                    location.reload()
+                    location.reload();
                 })
         }
     </script>
