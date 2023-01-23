@@ -16,6 +16,11 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <link href="../style.css" rel="stylesheet">
   <style>
+    #logout {
+      position: absolute;
+      right: 5%;
+    }
+
     h3 {
       padding-bottom: 30px;
     }
@@ -44,14 +49,12 @@
               <li><a class="dropdown-item active" href="../user/settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="../user/leningen.html">Leningen</a></li>
             </ul>
-
           </li>
-
           <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-
       </div>
     </div>
   </nav>
+
   <div class="container">
     <div class="row">
       <div class="col">
@@ -84,9 +87,7 @@
     </div>
     <div class="row">
       <div class="col text-end">
-
         <button class="btn btn-success" type="button" onclick="changePassword()">Bevestig</button>
-
       </div>
     </div>
   </div>

@@ -46,7 +46,6 @@
               <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
             </ul>
-
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
@@ -64,7 +63,6 @@
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
-
       </div>
     </div>
   </nav>
@@ -79,7 +77,6 @@
       </div>
     </div>
   </div>
-
   <div class="container">
     <table class="table">
       <thead>
@@ -96,7 +93,6 @@
     </table>
   </div>
 
-
   <script>
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
@@ -112,7 +108,6 @@
             auths += ", "
           }
         }
-
         let tagName = '';
         for (let i = 0; i < element.tags.length; i++) {
           tagName += element.tags[i].name
@@ -120,16 +115,14 @@
             tagName += ", "
           }
         }
-
         let copiesAvailable = 0;
         element.bookcopies.forEach(copy => {
           if (copy.status == "available") {
             copiesAvailable++
           }
         })
-
         rows += "</tr><td>" +
-           urlImage + "</td><td>" +
+          urlImage + "</td><td>" +
           element.title + "</td><td>" +
           element.isbn + "</td><td>" +
           auths + "</td><td>" +
@@ -138,17 +131,14 @@
           '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve' + element.id + '">Reserveer</button></td></tr>';
       });
       document.getElementById('book-row').innerHTML = rows;
-
     });
 
     function search() {
       let keyword = document.getElementById('searchField').value;
-
-      fetch('http://localhost:8080/book/search/'+ keyword).then(response => response.json()).then(data => {
+      fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         let urlImage = '<img src=' + data.urlImage + ' style="width: 45px; height: 60px"/>';
         data.forEach(element => {
-
           let auths = '';
           for (let i = 0; i < element.authors.length; i++) {
             auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -156,7 +146,6 @@
               auths += ", "
             }
           }
-
           let tagName = '';
           for (let i = 0; i < element.tags.length; i++) {
             tagName += element.tags[i].name
@@ -164,14 +153,12 @@
               tagName += ", "
             }
           }
-
           let copiesAvailable = 0;
           element.bookcopies.forEach(copy => {
             if (copy.status == "available") {
               copiesAvailable++
             }
           })
-
           rows += "</tr><td>" +
             '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
             element.title + "</td><td>" +
@@ -182,7 +169,6 @@
             '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve' + element.id + '">Reserveer</button></td></tr>';
         });
         document.getElementById('book-row').innerHTML = rows;
-
       });
     }
 
@@ -195,12 +181,12 @@
         .then(alert("Reservering gemaakt"));
     }
 
-    function logout()
-    {
+    function logout() {
       localStorage.clear();
       window.location.href = '../login.html';
     }
   </script>
+
 </body>
 
 </html>

@@ -46,7 +46,6 @@
               <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
             </ul>
-
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
@@ -64,7 +63,6 @@
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
-
       </div>
     </div>
   </nav>
@@ -79,9 +77,12 @@
         <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
       </div>
       <div class="col-6">
-        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur toevoegen</button></a>
-        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag toevoegen</button></a>
-        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek toevoegen</button></a>
+        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur
+            toevoegen</button></a>
+        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag
+            toevoegen</button></a>
+        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek
+            toevoegen</button></a>
       </div>
       <div class="container">
         <table class="table">
@@ -100,7 +101,6 @@
           <tbody id="book-row"></tbody>
         </table>
       </div>
-
     </div>
   </div>
 
@@ -137,9 +137,9 @@
           let bookId = element.id;
           let bookQueryString = '?book=' + bookId;
           let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
-              rows += "<tr><td>"+ urlImage + "<br>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
-                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
-              });
+          rows += "<tr><td>" + urlImage + "<br>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+            '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
+        });
         document.getElementById('book-row').innerHTML = rows;
 
       });
@@ -161,7 +161,6 @@
               authorOptions += `<option value="${element.firstName} ${element.lastName}">`
             });
             data.forEach(element => {
-
               let copiesTotal = 0;
               let copiesAvailable = 0;
               element.bookcopies.forEach(copy => {
@@ -184,7 +183,7 @@
                 // add button to add tag
                 // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
                 // Create rows of the table with auths
-                rows += "<tr><td>" + 
+                rows += "<tr><td>" +
                   "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
                   "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/></td><td>" +
                   auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList' class='form-control' placeholder='Extra auteur toevoegen'>` +
@@ -210,10 +209,8 @@
                 rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
                   '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
               }
-
             });
             document.getElementById('book-row').innerHTML = rows;
-
           });
         });
       });
@@ -222,14 +219,11 @@
     function updateBook(clickedId) {
       let newTitle = document.getElementById('inputBookTitle').value;
       let newIsbn = document.getElementById('inputIsbn').value;
-
       let idstr = clickedId.split("updateBook");
       let idnum = parseInt(idstr[1]);
-
       // add optional tags and authors to book
       addTag(idnum);
       addAuthor(idnum);
-
       fetch('http://localhost:8080/book/update/' + idnum, {
         method: "PUT",
         body: JSON.stringify(
@@ -249,12 +243,9 @@
     }
 
     function addCopy(clickedId) {
-
       if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
-
         let idstr = clickedId.split("addCopy");
         let idnum = parseInt(idstr[1]);
-
         fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
           method: "POST"
         })
@@ -269,7 +260,6 @@
 
     function addTag(bookId) {
       let tagName = document.getElementById("inputTagsList").value;
-
       if (!!tagName) {
         fetch('http://localhost:8080/book/add/tag/' + bookId, {
           method: "POST",
@@ -283,17 +273,13 @@
           }
         });
       }
-
-
     }
 
     function addAuthor(bookId) {
       let name = document.getElementById("inputAuthorsList").value;
-
       if (!!name) {
         let newFirstName = name.split(" ")[0];
         let newLastName = name.split(" ")[1];
-
         fetch('http://localhost:8080/book/add/author/' + bookId, {
           method: "POST",
           body: JSON.stringify(
@@ -310,15 +296,10 @@
     }
 
     function deleteAuthor(clickedId) {
-
-
       if (confirm('Weet je zeker dat je deze auteur wil verwijderen?')) {
-
         let idstr = clickedId.split(" ");
         let authorId = parseInt(idstr[0]);
         let bookId = parseInt(idstr[1]);
-
-
         fetch('http://localhost:8080/book/delete/author/' + bookId + '/' + authorId, {
           method: "PUT"
         })
@@ -332,15 +313,10 @@
     }
 
     function deleteTag(clickedId) {
-
-
       if (confirm('Weet je zeker dat je deze tag wil verwijderen?')) {
-
         let idstr = clickedId.split(" ");
         let tagId = parseInt(idstr[0]);
         let bookId = parseInt(idstr[1]);
-
-
         fetch('http://localhost:8080/book/delete/tag/' + bookId + '/' + tagId, {
           method: "PUT"
         })
@@ -353,13 +329,9 @@
       }
     }
 
-
-
-
     function search() {
       let keyword = document.getElementById('searchField').value;
-
-      fetch('http://localhost:8080/book/search/'+ keyword).then(response => response.json()).then(data => {
+      fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
           let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
@@ -377,7 +349,6 @@
               tagName += ", "
             }
           }
-
           let copiesTotal = 0;
           let copiesAvailable = 0;
           element.bookcopies.forEach(copy => {
@@ -388,11 +359,9 @@
           })
           let bookId = element.id;
           let bookQueryString = '?book=' + bookId;
-
           let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
-
-          rows += "<tr><td>"+ urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tagName + "</td><td>" + copiesTotal  + "</td><td>" +  copiesAvailable  +
-                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary'+element.id+'">Pas aan</button></td></tr>';
+          rows += "<tr><td>" + urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tagName + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+            '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
         });
         document.getElementById('book-row').innerHTML = rows;
       });

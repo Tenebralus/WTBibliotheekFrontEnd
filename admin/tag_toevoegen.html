@@ -47,7 +47,6 @@
                             <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
                             <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
                         </ul>
-
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
@@ -61,11 +60,11 @@
                             <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
                         </ul>
                     </li>
-                    <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+                    <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log
+                        uit</button>
                     <script>
-                      logInOutButton(document.getElementById('logout'))
+                        logInOutButton(document.getElementById('logout'))
                     </script>
-
             </div>
         </div>
     </nav>
@@ -79,7 +78,8 @@
                     <input type="text" class="form-control" id="inputTag" placeholder="Tag">
                 </div>
                 <div class="col-4">
-                    <button class="btn btn-outline-success" type="button" id="addTag" onclick="createTag()">Toevoegen</button>
+                    <button class="btn btn-outline-success" type="button" id="addTag"
+                        onclick="createTag()">Toevoegen</button>
                 </div>
             </div>
             <div class="col">
@@ -98,7 +98,6 @@
         </div>
     </div>
     </div>
-
 
     <script>
         window.onload = createTagTable();
@@ -124,6 +123,7 @@
             createBook();
             window.location = 'bibliotheek.html';
         }
+
         function createBookAndNext() {
             createBook();
             document.getElementById('inputBookTitle').value = "";
@@ -139,7 +139,6 @@
                         "</tr>";
                 });
                 document.getElementById('tag-row').innerHTML = rows;
-
             });
         }
 
@@ -155,12 +154,10 @@
                             '<td><button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="deleteTag' + element.id + '">Verwijder</button></td>' +
                             "</tr>";
                     }
-
                     else {
                         rows += "<tr><td>" + element.name +
                             '<td><button class="btn btn-outline-success" type="button" onclick="updateTagTable(this.id)" id="updateTagTable' + element.id + '">Pas aan</button></td>' +
                             "</tr>";
-
                     }
                 });
                 document.getElementById('tag-row').innerHTML = rows;
@@ -169,11 +166,8 @@
 
         function updateTag(clickedId) {
             let newTag = document.getElementById('newInputTag').value;
-
-
             let idstr = clickedId.split("updateTag");
             let idnum = parseInt(idstr[1]);
-
             fetch('http://localhost:8080/tag/update/' + idnum, {
                 method: "PUT",
                 body: JSON.stringify(
@@ -190,10 +184,10 @@
                     location.reload()
                 });
         }
+
         function deleteTag(clickedId) {
             let idstr = clickedId.split("deleteTag");
             let idnum = parseInt(idstr[1]);
-
             fetch('http://localhost:8080/tag/delete/' + idnum, {
                 method: "DELETE"
             })
@@ -203,6 +197,7 @@
                 })
         }
     </script>
+
 </body>
 
 </html>

@@ -46,7 +46,6 @@
               <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
               <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
             </ul>
-
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
@@ -64,7 +63,6 @@
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
-
       </div>
     </div>
   </nav>
@@ -73,14 +71,14 @@
     <h3>Leningen</h3>
     <div class="row">
       <div class="col-4">
-        <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel, auteur, status of gebruiker">
+        <input class="form-control me-2" type="search" id="searchField"
+          placeholder="Zoek op boektitel, auteur, status of gebruiker">
       </div>
       <div class="col">
         <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
       </div>
     </div>
   </div>
-
   <div class="container">
     <table class="table">
       <thead>
@@ -113,24 +111,20 @@
               authorNames += ", ";
             }
           }
-
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           let extra = ''
           if (element.bookCopyStatus == "loaned") {
             extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
           } else {
             extra = '';
           }
-
           dateReturned = "";
           if (element.dateReturned == null) {
             dateReturned = extra;
           } else {
             dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
-
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
@@ -147,7 +141,6 @@
 
     function returnBookCopy(bookcopy_id, loan_id) {
       let statusValue = "available";
-
       fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id,
         {
           method: 'PUT',
@@ -161,12 +154,10 @@
           alert('Exemplaar is ingeleverd');
           createLoanTable();
         })
-
     }
 
     function search() {
       let keyword = document.getElementById('searchField').value;
-
       fetch('http://localhost:8080/loan/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
@@ -179,24 +170,20 @@
               }
             }
           }
-
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           let extra = ''
           if (element.bookCopyStatus == "loaned") {
             extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
           } else {
             extra = '';
           }
-
           dateReturned = "";
           if (element.dateReturned == null) {
             dateReturned = extra;
           } else {
             dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
-
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
