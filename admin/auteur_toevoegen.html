@@ -120,7 +120,7 @@
             fetch('http://localhost:8080/author/all').then(response => response.json()).then(data => {
                 let rows = '';
                 data.forEach(element => {
-                    rows += "<tr><td>" + element.firstName + "</td><td>" + element.lastName + 
+                    rows += "<tr><td>" + element.firstName + "</td><td>" + element.lastName +
                         '<td><button class="btn btn-outline-success" type="button" onclick="updateAuthorTable(this.id)" id="updateAuthorTable' + element.id + '">Pas aan</button></td>' +
                         "</tr>";
                 });
@@ -136,7 +136,7 @@
                 let rows = '';
                 data.forEach(element => {
                     if (element.id == idnum) {
-                        rows += "<tr><td>" + "<input class='form-control me-2' id='newInputFirstName' form='form1' type='text' name='title' value='" + element.firstName + "'/>" + 
+                        rows += "<tr><td>" + "<input class='form-control me-2' id='newInputFirstName' form='form1' type='text' name='title' value='" + element.firstName + "'/>" +
                             "</td><td>" + "<input class='form-control me-2' id='newInputLastName' form='form1' type='text' name='title' value='" + element.lastName + "'/>" + "</td>" +
                             '<td><button class="btn btn-outline-success" type="button" onclick="updateAuthor(this.id)" id="updateAuthor' + element.id + '">Opslaan</button></td>' +
                             '<td><button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="deleteAuthor' + element.id + '">Verwijder</button></td>' +
@@ -144,9 +144,9 @@
                     }
 
                     else {
-                        rows += "<tr><td>" + element.firstName + "</td><td>" + element.lastName + 
-                        '<td><button class="btn btn-outline-success" type="button" onclick="updateAuthorTable(this.id)" id="updateAuthorTable' + element.id + '">Pas aan</button></td>' +
-                        "</tr>";
+                        rows += "<tr><td>" + element.firstName + "</td><td>" + element.lastName +
+                            '<td><button class="btn btn-outline-success" type="button" onclick="updateAuthorTable(this.id)" id="updateAuthorTable' + element.id + '">Pas aan</button></td>' +
+                            "</tr>";
 
                     }
                 });

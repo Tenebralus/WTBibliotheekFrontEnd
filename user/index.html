@@ -112,13 +112,13 @@
         })
 
         rows += "</tr><td>" +
-           urlImage +  "</td><td>" +
+          urlImage + "</td><td>" +
           element.title + "</td><td>" +
           element.isbn + "</td><td>" +
           auths + "</td><td>" +
           tagName + "</td><td>" +
           copiesAvailable + "</td><td>" +
-          '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve'+element.id+'">Reserveer</button></td></tr>';
+          '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve' + element.id + '">Reserveer</button></td></tr>';
       });
       document.getElementById('book-row').innerHTML = rows;
 
@@ -127,7 +127,7 @@
     function search() {
       let keyword = document.getElementById('searchField').value;
 
-      fetch('http://localhost:8080/book/search/'+ keyword).then(response => response.json()).then(data => {
+      fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
         data.forEach(element => {
@@ -178,8 +178,7 @@
         .then(alert("Reservering gemaakt"));
     }
 
-    function logout()
-    {
+    function logout() {
       localStorage.clear();
       window.location.href = '../login.html';
     }

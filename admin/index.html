@@ -125,7 +125,7 @@
         })
 
         rows += "</tr><td>" +
-           urlImage + "</td><td>" +
+          urlImage + "</td><td>" +
           element.title + "</td><td>" +
           element.isbn + "</td><td>" +
           auths + "</td><td>" +
@@ -140,7 +140,7 @@
     function search() {
       let keyword = document.getElementById('searchField').value;
 
-      fetch('http://localhost:8080/book/search/'+ keyword).then(response => response.json()).then(data => {
+      fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         let urlImage = '<img src=' + data.urlImage + ' style="width: 45px; height: 60px"/>';
         data.forEach(element => {
@@ -191,8 +191,7 @@
         .then(alert("Reservering gemaakt"));
     }
 
-    function logout()
-    {
+    function logout() {
       localStorage.clear();
       window.location.href = '../login.html';
     }

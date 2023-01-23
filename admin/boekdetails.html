@@ -64,7 +64,7 @@
         <div class="row">
             <div class="col" id="image">
             </div>
-            
+
         </div>
     </div>
 
@@ -74,8 +74,8 @@
                 <h3 id="bookTitle"></h3>
             </div>
             <div class="col text-end"><button class="btn btn-outline-success" type="button" id="Button"
-                onclick="addCopy()">Exemplaar toevoegen</button>
-        </div>
+                    onclick="addCopy()">Exemplaar toevoegen</button>
+            </div>
         </div>
     </div>
 
@@ -122,14 +122,14 @@
 
     <div class="container">
         <table class="table">
-          <thead>
-            <tr>
-              <th>Exemplaren</th>
-            </tr>
-          </thead>
-          <tbody id="bookcopy-row"></tbody>
+            <thead>
+                <tr>
+                    <th>Exemplaren</th>
+                </tr>
+            </thead>
+            <tbody id="bookcopy-row"></tbody>
         </table>
-      </div>
+    </div>
 
 
 
@@ -141,7 +141,7 @@
 
         window.onload = populatePage();
         function populatePage() {
-            fetch('http://localhost:8080/book/id/'+bookId).then(response => response.json()).then(data => {
+            fetch('http://localhost:8080/book/id/' + bookId).then(response => response.json()).then(data => {
                 let title = data.title;
                 let isbn = data.isbn;
                 let urlImage = "https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg";
@@ -152,7 +152,7 @@
 
                 let tags = '';
                 for (let i = 0; i < data.tags.length; i++) {
-                    tags += data.tags[i].name 
+                    tags += data.tags[i].name
                     if (i < data.tags.length - 1) {
                         tags += ", "
                     }
@@ -186,12 +186,12 @@
                         bookcop += ",\n "
                     }
                 }
-                
+
                 document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
-                document.getElementById("bookTitle").innerText = "Titel: " + title ;
-                document.getElementById("Isbn").innerText = "ISBN: " + isbn ;
+                document.getElementById("bookTitle").innerText = "Titel: " + title;
+                document.getElementById("Isbn").innerText = "ISBN: " + isbn;
                 document.getElementById("Authors").innerText = "Auteur(s): " + auths;
-                document.getElementById("Tags").innerText = "Tag(s): " + tags ;
+                document.getElementById("Tags").innerText = "Tag(s): " + tags;
                 //document.getElementById("Reserv").innerText = "Reservations: " + reserv;
                 //document.getElementById("Bookcop").innerText = "BookCopies: \n" + bookcop;
                 document.getElementById('bookcopy-row').innerHTML = rows;
@@ -203,10 +203,10 @@
                 fetch('http://localhost:8080/book/' + bookId + '/createbookcopy', {
                     method: "POST"
                 })
-                .then(() => {
-                    alert('Exemplaar toegevoegd');
-                    populatePage();
-                });
+                    .then(() => {
+                        alert('Exemplaar toegevoegd');
+                        populatePage();
+                    });
             } else {
                 return false;
             }

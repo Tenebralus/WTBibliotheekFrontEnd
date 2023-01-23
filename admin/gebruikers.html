@@ -1,64 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gebruikers</title>
-    <link rel="icon" href="../images/favicon.ico">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gebruikers</title>
+  <link rel="icon" href="../images/favicon.ico">
 
-    <script type="text/javascript" src="../commons.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="../style.css" rel="stylesheet">
-    
-    <style>
-        #logout {
-            position: absolute;
-            right: 5%;
-        }
+  <script type="text/javascript" src="../commons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="../style.css" rel="stylesheet">
 
-    </style>
+  <style>
+    #logout {
+      position: absolute;
+      right: 5%;
+    }
+  </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Account
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
-                  <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
-                </ul>
-              
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Admin
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="../admin/bibliotheek.html">Bibliotheek</a></li>
-                <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
-                <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
-                <li><a class="dropdown-item active" href="../admin/gebruikers.html">Gebruikers</a></li>
-              </ul>
-            </li>
-            <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-            
-          </div>
-        </div>
-      </nav>
-      <div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+            </ul>
+
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+              <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+              <li><a class="dropdown-item active" href="../admin/gebruikers.html">Gebruikers</a></li>
+            </ul>
+          </li>
+          <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
+
+      </div>
+    </div>
+  </nav>
+  <div class="container">
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op naam of emailadres">
@@ -67,7 +74,8 @@
         <button class="btn btn-outline-success" type="button" onclick="searchUser()">Zoek</button>
       </div>
       <div class="col-2">
-        <a href='gebruiker_toevoegen.html'><button class="btn btn-outline-success" type="button">Gebruiker toevoegen</button></a>
+        <a href='gebruiker_toevoegen.html'><button class="btn btn-outline-success" type="button">Gebruiker
+            toevoegen</button></a>
       </div>
     </div>
   </div>
@@ -94,69 +102,69 @@
   <script>
     window.onload = createUserTable();
 
-    function createUserTable(){
+    function createUserTable() {
       //fetch('http://localhost:8080/user/all')
       fetch('http://localhost:8080/user/all', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authentication': getCookie('Authentication')
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': getCookie('Authentication')
+        }
+      })
+
+        .then(response => response.json()).then(data => {
+          let rows = '';
+
+          data.forEach(element => {
+            let admin = "Gebruiker"
+            if (element.admin == true) {
+              admin = "Admin"
             }
-        })
-      
-      .then(response => response.json()).then(data => {
-        let rows = '';
 
-        data.forEach(element => {
-          let admin = "Gebruiker"
-          if (element.admin == true) {
-            admin = "Admin"
-          }
+            let status = "Actief"
+            let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
+            let delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
+            if (element.active == false) {
+              status = "Verwijderd"
+              copyButton = '</td><td></td></td>';
+              delButton = '</td><td></td></tr>';
+            }
 
-          let status = "Actief"
-          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></td>';
-          let delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon'+element.id+'">Anonimiseren</button></td></tr>';
-          if (element.active == false) {
-            status = "Verwijderd"
-            copyButton = '</td><td></td></td>';
-            delButton = '</td><td></td></tr>';
-          }
+            let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
 
-          let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          
-          dateAccountDeleted = "";
-          if (element.dateAccountDeleted!=null){
-            dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          }
+            dateAccountDeleted = "";
+            if (element.dateAccountDeleted != null) {
+              dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            }
 
-          rows += "<tr><td>" + element.firstName + 
-            "</td><td>" + element.lastName + 
-              "</td><td>" + element.emailAddress + 
-              "</td><td>" + dateAccountCreated + 
+            rows += "<tr><td>" + element.firstName +
+              "</td><td>" + element.lastName +
+              "</td><td>" + element.emailAddress +
+              "</td><td>" + dateAccountCreated +
               "</td><td>" + dateAccountDeleted +
               '</td><td>' + status +
               "</td><td>" + admin +
               copyButton + delButton;
-        });
-        document.getElementById('book-row').innerHTML = rows;
+          });
+          document.getElementById('book-row').innerHTML = rows;
 
-      });
+        });
     }
 
-    function anonUser(clickedId){
+    function anonUser(clickedId) {
       console.log(clickedId);
       let idstr = clickedId.split("anon");
       let idnum = parseInt(idstr[1]);
-      fetch('http://localhost:8080/user/anonymize/'+idnum, {
-        method : "PUT"
+      fetch('http://localhost:8080/user/anonymize/' + idnum, {
+        method: "PUT"
       })
-      .then();
+        .then();
       createUserTable();
     }
 
     function searchUser() {
       let keyword = document.getElementById('searchField').value;
-      fetch('http://localhost:8080/user/search/'+keyword).then(response => response.json()).then(data => {
+      fetch('http://localhost:8080/user/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
           console.log(element);
@@ -169,27 +177,27 @@
           }
 
           let status = "Actief"
-          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></tr>';
+          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></tr>';
           if (element.active == false) {
             status = "Verwijderd"
             copyButton = '</td><td></td></tr>';
           }
 
           let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          
+
           dateAccountDeleted = "";
-          if (element.dateAccountDeleted!=null){
+          if (element.dateAccountDeleted != null) {
             dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           }
 
-          rows += "<tr><td>" + element.firstName + 
-            "</td><td>" + element.lastName + 
-              "</td><td>" + element.emailAddress + 
-              "</td><td>" + dateAccountCreated + 
-              "</td><td>" + dateAccountDeleted +
-              '</td><td>' + status +
-              "</td><td>" + admin +
-              copyButton;
+          rows += "<tr><td>" + element.firstName +
+            "</td><td>" + element.lastName +
+            "</td><td>" + element.emailAddress +
+            "</td><td>" + dateAccountCreated +
+            "</td><td>" + dateAccountDeleted +
+            '</td><td>' + status +
+            "</td><td>" + admin +
+            copyButton;
         });
         document.getElementById('book-row').innerHTML = rows;
 
@@ -197,76 +205,76 @@
 
     }
 
-    function changeUser(clickedId){
+    function changeUser(clickedId) {
       let idstr = clickedId.split("updateUser");
       let idnum = parseInt(idstr[1]);
-      
+
       fetch('http://localhost:8080/user/all', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authentication': getCookie('Authentication')
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': getCookie('Authentication')
+        }
+      })
+        .then(response => response.json()).then(data => {
+          let rows = '';
+
+          data.forEach(element => {
+            let admin = "Gebruiker"
+            if (element.admin == true) {
+              admin = "Admin"
+              adminCheckBox = "checked";
+            } else {
+              adminCheckBox = "";
             }
-        })
-    .then(response => response.json()).then(data => {
-        let rows = '';
 
-        data.forEach(element => {
-          let admin = "Gebruiker"
-          if (element.admin == true) {
-            admin = "Admin"
-            adminCheckBox = "checked";
-          }else{
-            adminCheckBox = "";
-          }
+            let status = "Actief"
+            let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></tr>';
+            if (element.active == false) {
+              status = "Verwijderd"
+              copyButton = '</td><td></td></tr>';
+            }
 
-          let status = "Actief"
-          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser'+element.id+'">Pas aan</button></td></tr>';
-          if (element.active == false) {
-            status = "Verwijderd"
-            copyButton = '</td><td></td></tr>';
-          }
+            let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
 
-          let dateAccountCreated = new Date(element.dateAccountCreated).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          
-          dateAccountDeleted = "";
-          if (element.dateAccountDeleted!=null){
-            dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          }
+            dateAccountDeleted = "";
+            if (element.dateAccountDeleted != null) {
+              dateAccountDeleted = new Date(element.dateAccountDeleted).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            }
 
-          if (element.id == idnum) {
-            rows += "<tr><td>" + '<input type="text" id="inputFirstName" name="fname" placeholder='+element.firstName+'>' + 
-              "</td><td>" + '<input type="text" id="inputLastName" name="fname" placeholder='+element.lastName+'>' +
-                "</td><td>" + '<input type="text" id="inputEmailAddress" name="fname" placeholder='+element.emailAddress+'>' + 
-                "</td><td>" + dateAccountCreated + 
+            if (element.id == idnum) {
+              rows += "<tr><td>" + '<input type="text" id="inputFirstName" name="fname" placeholder=' + element.firstName + '>' +
+                "</td><td>" + '<input type="text" id="inputLastName" name="fname" placeholder=' + element.lastName + '>' +
+                "</td><td>" + '<input type="text" id="inputEmailAddress" name="fname" placeholder=' + element.emailAddress + '>' +
+                "</td><td>" + dateAccountCreated +
                 "</td><td>" + dateAccountDeleted +
                 '</td><td>' + status +
-                "</td><td>" + '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" '+adminCheckBox+'>' + admin +
-                "</td><td>" + '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser'+element.id+'">Bewaar wijzigingen</button>';
+                "</td><td>" + '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin +
+                "</td><td>" + '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
 
-          }else{
-            rows += "<tr><td>" + element.firstName + 
-              "</td><td>" + element.lastName + 
-                "</td><td>" + element.emailAddress + 
-                "</td><td>" + dateAccountCreated + 
+            } else {
+              rows += "<tr><td>" + element.firstName +
+                "</td><td>" + element.lastName +
+                "</td><td>" + element.emailAddress +
+                "</td><td>" + dateAccountCreated +
                 "</td><td>" + dateAccountDeleted +
                 '</td><td>' + status +
                 "</td><td>" + admin +
                 copyButton;
-          }
-        });
-        document.getElementById('book-row').innerHTML = rows;
+            }
+          });
+          document.getElementById('book-row').innerHTML = rows;
 
-      });
+        });
     }
 
-    function saveUser(clickedId){
+    function saveUser(clickedId) {
       let newFirstName = document.getElementById('inputFirstName').value;
       let newLastName = document.getElementById('inputLastName').value;
       let newEmailAdress = document.getElementById('inputEmailAddress').value;
       let newAdminValue = document.getElementById('inputAdmin').checked;
 
-      if(document.getElementById('inputFirstName').value.length == 0){
+      if (document.getElementById('inputFirstName').value.length == 0) {
         console.log("test");
       }
 
@@ -294,4 +302,5 @@
     }
   </script>
 </body>
+
 </html>

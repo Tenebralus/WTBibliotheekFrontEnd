@@ -76,7 +76,7 @@
       </div>
     </div>
   </div>
-  
+
   <div class="container">
     <table class="table">
       <thead>
@@ -162,7 +162,7 @@
 
     function search() {
       let keyword = document.getElementById('searchField').value;
-      fetch('http://localhost:8080/reservation/search/'+keyword).then(response => response.json()).then(data => {
+      fetch('http://localhost:8080/reservation/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
 
