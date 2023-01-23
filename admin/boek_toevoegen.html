@@ -47,7 +47,6 @@
                             <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
                             <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
                         </ul>
-
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
@@ -61,18 +60,22 @@
                             <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
                         </ul>
                     </li>
-                    <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
-
+                    <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log
+                        uit</button>
+                    <script>
+                        logInOutButton(document.getElementById('logout'))
+                    </script>
             </div>
         </div>
     </nav>
 
     <div class="container">
         <h1>Boek toevoegen</h1>
-        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur toevoegen</button></a>
-        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag toevoegen</button></a>
+        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur
+                toevoegen</button></a>
+        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag
+                toevoegen</button></a>
         <div class="row">
-            
             <div class="col-4">
                 <div class="mb-3">
                     <label for="inputBookTitle" class="form-label">Titel</label>
@@ -90,14 +93,15 @@
             <div class="col-4">
                 <div class="mb-3">
                     <fieldset class="inputs-set" id="author-list" class="input-field">
-                    <!-- <input id="author-list" list="newAuthorField"/> -->
+                        <!-- <input id="author-list" list="newAuthorField"/> -->
                         <!-- <label for="inputAuthor" class="form-label">Auteur</label> -->
                         <!-- <input type="text" class="form-control" id="inputAuthor0" placeholder="Auteur"> -->
                         <!-- <body onLoad="addAuthorField();"></body> -->
                         <label for="inputBookTitle" class="form-label">Auteur(s)</label>
                         <br>
-                        <body onLoad="loadFields();"></body> 
-                    <!-- </input> -->
+
+                        <body onLoad="loadFields();"></body>
+                        <!-- </input> -->
                     </fieldset>
                 </div>
             </div>
@@ -116,29 +120,31 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
-                    <button class="btn btn-secondary" type="button" id="extraAuthor" onclick="addAuthorField()">+ Extra auteur</button>
+                    <button class="btn btn-secondary" type="button" id="extraAuthor" onclick="addAuthorField()">+ Extra
+                        auteur</button>
                 </div>
             </div>
             <div class="col-4">
                 <div class="mb-3">
-                    <button class="btn btn-secondary" type="button" id="extraTag" onclick="addTagField()">+ Extra tag</button>
+                    <button class="btn btn-secondary" type="button" id="extraTag" onclick="addTagField()">+ Extra
+                        tag</button>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-outline-success" type="button" id="addBook" onclick="createBookAndNext()">Toevoegen</button>
+                <button class="btn btn-outline-success" type="button" id="addBook"
+                    onclick="createBookAndNext()">Toevoegen</button>
                 <!-- <button class="btn btn-outline-success" type="button" id="addBookAndNext" onclick="createBookAndNext()">Toevoegen en volgende</button> -->
             </div>
         </div>
     </div>
 
     <script>
-        
         let authorNumber = 0;
         let tagNumber = 0;
 
-        function loadFields(){
+        function loadFields() {
             addAuthorField();
             addTagField();
         }
@@ -146,48 +152,38 @@
         async function createBook() {
             let newBookTitle = document.getElementById('inputBookTitle').value;
             let newIsbn = document.getElementById('inputIsbn').value;
-
-            if(newBookTitle.length == 0 || newIsbn.length == 0){
+            if (newBookTitle.length == 0 || newIsbn.length == 0) {
                 alert("Voer een titel en isbn in")
                 return;
             }
-
             let authorsArr = [];
-            for(let i = 0; i < authorNumber; i++){
-
+            for (let i = 0; i < authorNumber; i++) {
                 await searchAuthorId().then(data => {
-
                     data.forEach(element => {
                         compareString = element.firstName + " " + element.lastName;
-                        if(compareString.localeCompare(document.getElementById('inputAuthor'+i).value) == 0){
-
+                        if (compareString.localeCompare(document.getElementById('inputAuthor' + i).value) == 0) {
                             authorId = element.id;
                         }
                     });
                 });
-                
-                if(document.getElementById('inputAuthor'+i).value.length != 0 && typeof authorId !== 'undefined'){
-                    if(!authorsArr.find(element => {if (element.id == authorId){return true}})){
-                        authorsArr.push({"id":authorId});
+                if (document.getElementById('inputAuthor' + i).value.length != 0 && typeof authorId !== 'undefined') {
+                    if (!authorsArr.find(element => { if (element.id == authorId) { return true } })) {
+                        authorsArr.push({ "id": authorId });
                     }
                 }
-
             }
             console.log(authorsArr);
-
             let tagsArr = [];
-            for(let i = 0; i < tagNumber; i++){
-                if(document.getElementById('inputTag'+i).value.length != 0){
-                    await searchTagId(document.getElementById('inputTag'+i).value).then(data => {
-                        if(typeof data[0] !== 'undefined'){
+            for (let i = 0; i < tagNumber; i++) {
+                if (document.getElementById('inputTag' + i).value.length != 0) {
+                    await searchTagId(document.getElementById('inputTag' + i).value).then(data => {
+                        if (typeof data[0] !== 'undefined') {
                             tagId = data[0].id;
-
-                            if(!tagsArr.find(element => {if (element.id == tagId){return true}})){
-                                tagsArr.push({"id":tagId});
+                            if (!tagsArr.find(element => { if (element.id == tagId) { return true } })) {
+                                tagsArr.push({ "id": tagId });
                             }
                         }
                     });
-
                     /*
                     if(!tagsArr.find(element => {if (element.id == tagId){return true}})){
                         tagsArr.push({"id":tagId});
@@ -195,9 +191,7 @@
                     */
                 }
             }
-
             console.log(tagsArr);
-
             fetch('http://localhost:8080/book/create', {
                 method: 'POST',
                 body: JSON.stringify(
@@ -212,7 +206,7 @@
                     'Content-Type': 'application/json'
                 }
             })
-            .then(() => {
+                .then(() => {
                     alert('Boek is opgeslagen');
                 })
         }
@@ -227,7 +221,6 @@
             document.getElementById('inputIsbn').value = "";
         }
 
-
         async function searchAuthorId() {
             const response = await fetch('http://localhost:8080/author/all');
             const authorIdResponse = await response.json();
@@ -235,30 +228,23 @@
         }
 
         async function searchTagId(searchName) {
-            const response = await fetch('http://localhost:8080/tag/name/'+searchName);
+            const response = await fetch('http://localhost:8080/tag/name/' + searchName);
             const TagIdResponse = await response.json();
             return TagIdResponse;
         }
 
-        
-
         function addAuthorField() {
             const myAuthorForm = document.getElementById("author-list");
-
             var x = document.createElement("INPUT");
-            x.setAttribute("list", "inputAuthorList"+authorNumber);
-            x.setAttribute("id", "inputAuthor"+authorNumber);
+            x.setAttribute("list", "inputAuthorList" + authorNumber);
+            x.setAttribute("id", "inputAuthor" + authorNumber);
             x.setAttribute("placeholder", "Auteur");
             x.setAttribute("class", "form-control");
-            
             const newAuthorField = document.createElement("datalist");
-            newAuthorField.setAttribute("id", "inputAuthorList"+authorNumber);
+            newAuthorField.setAttribute("id", "inputAuthorList" + authorNumber);
             newAuthorField.classList.add("col-4");
             newAuthorField.classList.add("mb-3");
-            
-            
             fetch('http://localhost:8080/author/all').then(response => response.json()).then(data => {
-
                 data.forEach(element => {
                     var option = document.createElement('option');
                     option.setAttribute("value", element.firstName + " " + element.lastName);
@@ -266,7 +252,6 @@
                     newAuthorField.appendChild(option);
                 });
             });
-
             x.appendChild(newAuthorField);
             myAuthorForm.appendChild(x);
             authorNumber++;
@@ -274,21 +259,16 @@
 
         function addTagField() {
             const myTagForm = document.getElementById("tag-list");
-
             var x = document.createElement("INPUT");
-            x.setAttribute("list", "inputTagList"+tagNumber);
-            x.setAttribute("id", "inputTag"+tagNumber);
+            x.setAttribute("list", "inputTagList" + tagNumber);
+            x.setAttribute("id", "inputTag" + tagNumber);
             x.setAttribute("placeholder", "Tag");
             x.setAttribute("class", "form-control");
-            
-
             const newTagField = document.createElement("datalist");
-            newTagField.setAttribute("id", "inputTagList"+tagNumber);
+            newTagField.setAttribute("id", "inputTagList" + tagNumber);
             newTagField.classList.add("col-4");
             newTagField.classList.add("mb-3");
-            
             fetch('http://localhost:8080/tag/all').then(response => response.json()).then(data => {
-
                 data.forEach(element => {
                     var option = document.createElement('option');
                     option.setAttribute("value", element.name);
@@ -296,13 +276,12 @@
                     newTagField.appendChild(option);
                 });
             });
-
             x.appendChild(newTagField);
             myTagForm.appendChild(x);
             tagNumber++;
         }
-
     </script>
+
 </body>
 
 </html>

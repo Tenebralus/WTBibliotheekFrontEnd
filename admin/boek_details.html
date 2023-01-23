@@ -1,303 +1,326 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boek Details</title>
-    <link rel="icon" href="../images/favicon.ico">
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="../style.css" rel="stylesheet">
-    
-    <style>
-        #logout {
-            position: absolute;
-            right: 5%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boek Details</title>
+  <link rel="icon" href="../images/favicon.ico">
+
+  <script type="text/javascript" src="../commons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="../style.css" rel="stylesheet">
+
+  <style>
+    #logout {
+      position: absolute;
+      right: 5%;
+    }
+  </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Account
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
-                  <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
-                </ul>
-                
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Admin
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
-                <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
-                <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
-                <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
-              </ul>
-            </li>
-            <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-            
-          </div>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+              <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+              <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
+            </ul>
+          </li>
+          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <script>
+            logInOutButton(document.getElementById('logout'))
+          </script>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="container text-left">
+      <div class="row align-items-start">
+        <div class="col-3" id="image">
+          <!--<img id=image src="https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg" style="width: 50%; height: 50%"/>-->
         </div>
-      </nav>
-
-      <div class="container">
-        <div class="container text-left">
-          <div class="row align-items-start">
-
-            <div class="col-3" id="image">
-              <!--<img id=image src="https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg" style="width: 50%; height: 50%"/>-->
-            </div>
-
-            <div class="col" id="col12">
-
-              <div class="container">
-                <div class="container text-left">
-                  <div class="row align-items-start">
-                    <div class="row" id="col2">
-                      <h3 id="book-title">Boek Titel</h3>
-                      <h3 id="book-author">Auteur(s)</h3>
-                      <h3 id="book-isbn">ISBN</h3>
-                      <h3 id="book-tags">Tag(s)</h3>
-                    </div>
-                    <div class="col text-end"><button class="btn btn-outline-success" type="button" id="addCopy"
-                      onclick="addCopy()">Exemplaar toevoegen</button>
-                    </div>
-                    <table class="table">
-                      <thead>
-                        <tr>
-                          <th>Exemplaar</th>
-                          <th>Status</th>
-                          <th>Gebruiker</th>
-                          <th>Datum van uitlenen</th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <tbody id="table-bookcopies">
-                      </tbody>
-                    </table>
-                  </div>
+        <div class="col" id="col12">
+          <div class="container">
+            <div class="container text-left">
+              <div class="row align-items-start">
+                <div class="row" id="col2">
+                  <h3 id="book-title">Boek Titel</h3>
+                  <h3 id="book-author">Auteur(s)</h3>
+                  <h3 id="book-isbn">ISBN</h3>
+                  <h3 id="book-tags">Tag(s)</h3>
                 </div>
+                <div class="col text-end"><button class="btn btn-outline-success" type="button" id="addCopy"
+                    onclick="addCopy()">Exemplaar toevoegen</button>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Exemplaar</th>
+                      <th>Status</th>
+                      <th>Gebruiker</th>
+                      <th>Datum van uitlenen</th>
+                      <th></th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody id="table-bookcopies">
+                  </tbody>
+                </table>
               </div>
-
             </div>
-
           </div>
         </div>
       </div>
-
-
-      <div class="container" id="loanHistory">
-        <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
     </div>
-    
-      <script>
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const bookId = urlParams.get('book');
-        const bookCopyId = urlParams.get('bookcopy');
+  </div>
+  <div class="container" id="loanHistory">
+    <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
+  </div>
 
-        window.onload = createBookCopiesTable();
-        function createBookCopiesTable(){
-          fetch('http://localhost:8080/book/details/'+ bookId).then(response => response.json()).then(data => {
-            let rows = '';
-            let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
-            console.log(data);
-            console.log(data.urlImage);
+  <script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const bookId = urlParams.get('book');
+    const bookCopyId = urlParams.get('bookcopy');
+    window.onload = createBookCopiesTable();
 
-            let bookAuthors = '';
-            for(let i = 0; i < data.bookAuthors.length; i++){
-              bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
-              if(i < data.bookAuthors.length - 1){
-                bookAuthors += ", ";
-              }
-            }
-
-            let bookTags = '';
-            if (!!data.bookTag){
-              for (let i = 0; i < data.bookTag.length; i++) {
-                bookTags += data.bookTag[i].name
-                if (i < data.bookTag.length - 1) {
-                  bookTags += ", "
-                }
-              }
-            }
-            document.getElementById('image').innerHTML = '<img src=' + urlImage + ' style="width: 135px; height: 180px"/>';
-            document.getElementById('book-title').innerHTML = "Titel: "+data.bookTitle;
-            document.getElementById('book-author').innerHTML = "Auteur(s): "+bookAuthors;
-            document.getElementById('book-isbn').innerHTML = "ISBN: "+data.bookIsbn;
-            document.getElementById('book-tags').innerHTML = "Tag(s): "+bookTags;
-
-            for(let i = 0; i < data.bookCopyDetailsDTOs.length; i++)
-            {
-              let usernameCurrentLoan = '';
-              let dateLoaned = '';
-              if(data.bookCopyDetailsDTOs[i].currentLoan != null)
-              {
-                dateLoaned = new Date(data.bookCopyDetailsDTOs[i].currentLoan.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-                if(data.bookCopyDetailsDTOs[i].currentLoan.user != null)
-                {
-                  let userFirstNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.firstName;
-                  let userLastNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.lastName;
-                  usernameCurrentLoan = userFirstNameCurrentLoan + " " + userLastNameCurrentLoan;
-                }
-              }
-
-              text=''; 
-              if (data.bookCopyDetailsDTOs[i].status == "archived") {
-                  text = "Beschikbaar stellen";
-              } else {
-                  text = "Archiveer exemplaar";
-              }
-
-              let returnButtonHTML = '';
-              if(data.bookCopyDetailsDTOs[i].status == "loaned")
-              {
-                returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
-              }
-              
-              let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId'+data.bookCopyDetailsDTOs[i].id+'"  onclick="updateBookcopy('+data.bookCopyDetailsDTOs[i].id+',\''+data.bookCopyDetailsDTOs[i].status+'\')" >'+text+' </button>';
-            
-              rows += "<tr><td>" +
-                      '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
-                      data.bookCopyDetailsDTOs[i].status + "</td><td>" +
-                      usernameCurrentLoan + "</td><td>" +
-                      dateLoaned + "</td><td>" +
-                      returnButtonHTML + "</td><td>" +
-                      updateButtonHTML + "</td>" +
-                      "</tr>";
-              }
-                
-                //document.getElementById("book-title").innerHTML = "Titel: " + title ;
-                //document.getElementById("book-isbn").innerHTML = "ISBN: " + isbn ;
-                //document.getElementById("book-author").innerHTML = "Auteur(s): " + bookAuthors;
-                //document.getElementById("Tags").innerHTML = "Tag(s): " + tags ;
-            document.getElementById('table-bookcopies').innerHTML = rows;
-          });
+    function createBookCopiesTable() {
+      fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
+        let rows = '';
+        let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
+        console.log(data);
+        console.log(data.urlImage);
+        let bookAuthors = '';
+        for (let i = 0; i < data.bookAuthors.length; i++) {
+          bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
+          if (i < data.bookAuthors.length - 1) {
+            bookAuthors += ", ";
+          }
         }
+        let bookTags = '';
+        if (!!data.bookTag) {
+          for (let i = 0; i < data.bookTag.length; i++) {
+            bookTags += data.bookTag[i].name
+            if (i < data.bookTag.length - 1) {
+              bookTags += ", "
+            }
+          }
+        }
+        document.getElementById('image').innerHTML = '<img src=' + urlImage + ' style="width: 135px; height: 180px"/>';
+        document.getElementById('book-title').innerHTML = "Titel: " + data.bookTitle;
+        document.getElementById('book-author').innerHTML = "Auteur(s): " + bookAuthors;
+        document.getElementById('book-isbn').innerHTML = "ISBN: " + data.bookIsbn;
+        document.getElementById('book-tags').innerHTML = "Tag(s): " + bookTags;
+        for (let i = 0; i < data.bookCopyDetailsDTOs.length; i++) {
+          let usernameCurrentLoan = '';
+          let dateLoaned = '';
+          if (data.bookCopyDetailsDTOs[i].currentLoan != null) {
+            dateLoaned = new Date(data.bookCopyDetailsDTOs[i].currentLoan.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            if (data.bookCopyDetailsDTOs[i].currentLoan.user != null) {
+              let userFirstNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.firstName;
+              let userLastNameCurrentLoan = data.bookCopyDetailsDTOs[i].currentLoan.user.lastName;
+              usernameCurrentLoan = userFirstNameCurrentLoan + " " + userLastNameCurrentLoan;
+            }
+          }
+          text = '';
+          if (data.bookCopyDetailsDTOs[i].status == "archived") {
+            text = "Beschikbaar stellen";
+          } else {
+            text = "Archiveer exemplaar";
+          }
+          let returnButtonHTML = '';
+          if (data.bookCopyDetailsDTOs[i].status == "loaned") {
+            returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
+          }
+          let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
+          rows += "<tr><td>" +
+            '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+            data.bookCopyDetailsDTOs[i].status + "</td><td>" +
+            usernameCurrentLoan + "</td><td>" +
+            dateLoaned + "</td><td>" +
+            returnButtonHTML + "</td><td>" +
+            updateButtonHTML + "</td>" +
+            "</tr>";
+        }
+        //document.getElementById("book-title").innerHTML = "Titel: " + title ;
+        //document.getElementById("book-isbn").innerHTML = "ISBN: " + isbn ;
+        //document.getElementById("book-author").innerHTML = "Auteur(s): " + bookAuthors;
+        //document.getElementById("Tags").innerHTML = "Tag(s): " + tags ;
+        document.getElementById('table-bookcopies').innerHTML = rows;
+      });
+    }
 
-        function returnBookCopy(bookcopy_id, loan_id)
+    function returnBookCopy(bookcopy_id, loan_id) {
+      let statusValue = "available";
+      fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id,
         {
-          let statusValue = "available";
+          method: 'PUT',
+          body: statusValue,
+          headers:
+          {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(() => {
+          alert('Exemplaar is ingeleverd');
+          createLoanTable();
+        })
+    }
 
-          fetch('http://localhost:8080/bookcopy/update/returnbookcopy/' + bookcopy_id + '/' + loan_id,
-            {
-              method: 'PUT',
-              body: statusValue,
-              headers:
-              {
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(() => {
-              alert('Exemplaar is ingeleverd');
-              createLoanTable();
+    function getLoanHistory() {
+      fetch('http://localhost:8080/loan/dto/book/' + bookId).then(response => response.json()).then(data => {
+        data = data.sort((a, b) => {
+          return new Date(b.dateLoaned) - new Date(a.dateLoaned);
+        });
+        let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button></div></div></div>'
+        let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
+        let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
+        let rows = '';
+        data.forEach(element => {
+          //do not want to see null but empty space
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          dateReturned = "";
+          if (element.dateReturned == null) {
+            dateReturned = "";
+          } else {
+            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          }
+          rows +=
+            "<td>" + "Exemplaar " + element.bookCopyNr + "</td>" +
+            "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+            "<td>" + dateLoaned + "</td>" +
+            "<td>" + dateReturned + "</td></tr>";
+        });
+        document.getElementById('loanHistory').innerHTML = tableTitle + searchBar + tableHead + rows;
+      });
+    }
+
+    function addCopy() {
+      if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
+        fetch('http://localhost:8080/book/' + bookId + '/createbookcopy', {
+          method: "POST"
+        })
+          .then(() => {
+            alert('Exemplaar toegevoegd');
+            createBookCopiesTable();
+          });
+      } else {
+        return false;
+      }
+    }
+
+    function updateBookcopy(bookCopyId, status) {
+      let currentStatus = (status)
+      if (currentStatus == "loaned") {
+        const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
+        if (response) {
+          fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+            method: "PUT"
           })
+            .then(() => {
+              alert('Exemplaar is gearchiveerd');
+              createBookCopiesTable();
+            });
+        } else {
+          alert('Exemplaar ongewijzigd');
         }
-
-        function getLoanHistory()
-        {
-          fetch('http://localhost:8080/loan/dto/book/' + bookId).then(response => response.json()).then(data => {
-              data = data.sort((a, b) => {
-                  return new Date(b.dateLoaned) - new Date(a.dateLoaned);
-              });
-
-              let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
-              let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
-
-              let rows = '';
-
-              data.forEach(element => {
-
-                  //do not want to see null but empty space
-                  let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
-                  dateReturned = "";
-                  if (element.dateReturned == null) {
-                      dateReturned = "";
-                  } else {
-                      dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-                  }
-
-                  rows +=
-                      "<td>" + "Exemplaar " + element.bookCopyNr + "</td>" +
-                      "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-                      "<td>" + dateLoaned + "</td>" +
-                      "<td>" + dateReturned + "</td></tr>";
-              });
-              document.getElementById('loanHistory').innerHTML = tableTitle + tableHead + rows;
+      } else if (currentStatus == "archived") {
+        fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+          method: "PUT"
+        })
+          .then(() => {
+            alert('Exemplaar is geactiveerd');
+            createBookCopiesTable();
           });
-        }
-    
-        function addCopy() {
-            if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
-                fetch('http://localhost:8080/book/' + bookId + '/createbookcopy', {
-                    method: "POST"
-                })
-                .then(() => {
-                    alert('Exemplaar toegevoegd');
-                    createBookCopiesTable();
-                });
-            } else {
-                return false;
-            }
-        }
+      } else {
+        fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+          method: "PUT"
+        })
+          .then(() => {
+            alert('Exemplaar is gearchiveerd');
+            createBookCopiesTable();
+          });
+      }
+    }
 
-        function updateBookcopy(bookCopyId, status) {
-            let currentStatus = (status)
-            if (currentStatus == "loaned") {
-                const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
-                if (response) {
-                    fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
-                        method: "PUT"
-                    })
-                        .then(() => {
-                            alert('Exemplaar is gearchiveerd');
-                            createBookCopiesTable();
-                        });
-                } else {
-                    alert('Exemplaar ongewijzigd');
-                }
-            } else if (currentStatus == "archived") {
-                fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
-                    method: "PUT"
-                })
-                    .then(() => {
-                        alert('Exemplaar is geactiveerd');
-                        createBookCopiesTable();
-                    });
-            } else {
-                fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
-                    method: "PUT"
-                })
-                    .then(() => {
-                        alert('Exemplaar is gearchiveerd');
-                        createBookCopiesTable();
-                    });
-            }
-
+    function search() {
+      let keyword = document.getElementById('searchField').value;
+      if (!keyword) {
+        return getLoanHistory();
+      }
+      fetch('http://localhost:8080/loan/search/bookdetails', {
+        method: 'POST',
+        body: JSON.stringify(
+          {
+            keyword: keyword,
+            bookId: bookId
+          }
+        ),
+        headers: {
+          'Content-Type': 'application/json'
         }
+      }).then(response => response.json()).then(data => {
+        data = data.sort((a, b) => {
+          return new Date(b.dateLoaned) - new Date(a.dateLoaned);
+        });
+        let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button></div></div></div>'
+        let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
+        let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
+        let rows = '';
+        data.forEach(element => {
+          //do not want to see null but empty space
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          dateReturned = "";
+          if (element.dateReturned == null) {
+            dateReturned = "";
+          } else {
+            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          }
+          rows +=
+            "<td>" + "Exemplaar " + element.bookCopyNr + "</td>" +
+            "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+            "<td>" + dateLoaned + "</td>" +
+            "<td>" + dateReturned + "</td></tr>";
+        });
+        document.getElementById('loanHistory').innerHTML = tableTitle + searchBar + tableHead + rows;
+      });
+    }
+  </script>
 
-        function search() {
-          
-        }
-      </script>
 </body>
+
 </html>

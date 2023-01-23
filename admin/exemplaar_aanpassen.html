@@ -1,159 +1,162 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bibliotheek</title>
-    <link rel="icon" href="../images/favicon.ico">
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link href="../style.css" rel="stylesheet">
-    
-    <style>
-        #logout {
-            position: absolute;
-            right: 5%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bibliotheek</title>
+  <link rel="icon" href="../images/favicon.ico">
+
+  <script type="text/javascript" src="../commons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="../style.css" rel="stylesheet">
+
+  <style>
+    #logout {
+      position: absolute;
+      right: 5%;
+    }
+  </style>
 </head>
+
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
-              </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Account
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
-                  <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
-                </ul>
-                
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Admin
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
-                <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
-                <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
-                <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
-              </ul>
-            </li>
-            <button class="btn btn-outline-success" type="button" id='logout'>Log uit</button>
-            
-          </div>
-        </div>
-      </nav>
-      
-      <div id="image">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+              <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+              <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
+            </ul>
+          </li>
+          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <script>
+            logInOutButton(document.getElementById('logout'))
+          </script>
       </div>
+    </div>
+  </nav>
 
-      <div class="container">
-        <h3 id="bookTitle"></h3>
+  <div id="image">
+  </div>
+  <div class="container">
+    <h3 id="bookTitle"></h3>
+  </div>
+  <div class="container">
+    <div class="row">
+      <p id="status"></p>
+    </div>
+    <div class="row">
+      <p id="timesLoaned"></p>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>Exemplaar aanpassen</h3>
       </div>
-
-      <div class="container">
-        <div class="row">
-            <p id="status"></p>
-        </div>
-        <div class="row">
-            <p id="timesLoaned"></p>
-        </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <p id='done' class="user-succes" style='display: none'>Exemplaar aangepast!</p>
       </div>
-
-
-      <div class="container">
-        <div class="row">
-          <div class="col">
-            <h3>Exemplaar aanpassen</h3>
-          </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <p id='done' class="user-succes" style='display: none'>Exemplaar aangepast!</p>     
-            </div>
-          <div class="col text-end">
-              <button class="btn btn-success" type="button" onclick="updateBookcopy()">(on) Archiveren</button>
-          </div>
-        </div>
+      <div class="col text-end">
+        <button class="btn btn-success" type="button" onclick="updateBookcopy()">(on) Archiveren</button>
       </div>
-    
-    
-      <script>
-        const queryString = window.location.search;
-        const urlParams = new URLSearchParams(queryString);
-        const bookCopyId = urlParams.get('bookcopy');
+    </div>
+  </div>
 
-        window.onload = updateBookcopyTable();
+  <script>
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const bookCopyId = urlParams.get('bookcopy');
+    window.onload = updateBookcopyTable();
 
-        function updateBookcopyTable(){
-            fetch('http://localhost:8080/bookcopy/details/'+bookCopyId).then(response => response.json()).then(data => {
-                  let rows = '';
-                  let urlImage = "https://covers.openlibrary.org/b/isbn/1565924649.jpg";
-                  let title = data.bookTitle;
-                  let bookId = data.bookId;
-                  let bookCopyNr = data.bookCopyNr;
-                  let status = data.status;
-                  let timesLoaned = data.timesLoaned;
+    function updateBookcopyTable() {
+      fetch('http://localhost:8080/bookcopy/details/' + bookCopyId).then(response => response.json()).then(data => {
+        let rows = '';
+        let urlImage = "https://covers.openlibrary.org/b/isbn/1565924649.jpg";
+        let title = data.bookTitle;
+        let bookId = data.bookId;
+        let bookCopyNr = data.bookCopyNr;
+        let status = data.status;
+        let timesLoaned = data.timesLoaned;
+        document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
+        document.getElementById("bookTitle").innerText = title + ' (' + bookId + '.' + bookCopyNr + ')';
+        document.getElementById("status").innerText = "Huidige status: " + status;
+        document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;
+      })
+    }
 
-                  document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
-                  document.getElementById("bookTitle").innerText = title + ' (' + bookId + '.' + bookCopyNr + ')';
-                  document.getElementById("status").innerText = "Huidige status: " + status;
-                  document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;     
-            })
-        }
-        
-        //still edit into getting all the variables
-        function updateBookcopy(){
-
-          let currentStatus = ((document.getElementById("status").innerText).split("Huidige status: ")[1])
-          if (currentStatus == "loaned") {
-            const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
-            if (response) {
-              fetch('http://localhost:8080/bookcopy/archive/'+bookCopyId, {
-              method : "PUT"
-              })
-              .then(() => {
+    function updateBookcopy() {
+      let currentStatus = ((document.getElementById("status").innerText).split("Huidige status: ")[1])
+      if (currentStatus == "loaned") {
+        const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
+        if (response) {
+          fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+            method: "PUT"
+          })
+            .then(() => {
               alert('Exemplaar is gearchiveerd');
               updateBookcopyTable();
             });
-            } else {
-              alert('Exemplaar ongewijzigd');
-            }
-          } else if (currentStatus == "archived") {
-            fetch('http://localhost:8080/bookcopy/archive/'+bookCopyId, {
-              method : "PUT"
-              })
-              .then(() => {
-              alert('Exemplaar is on-gearchiveerd');
-              updateBookcopyTable();
-            });
-          } else {
-            fetch('http://localhost:8080/bookcopy/archive/'+bookCopyId, {
-              method : "PUT"
-              })
-              .then(() => {
-              alert('Exemplaar is gearchiveerd');
-              updateBookcopyTable();
-            });
-          }
+        } else {
+          alert('Exemplaar ongewijzigd');
         }
-    
-        function search() {
-          
-        }
-      </script>
+      } else if (currentStatus == "archived") {
+        fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+          method: "PUT"
+        })
+          .then(() => {
+            alert('Exemplaar is on-gearchiveerd');
+            updateBookcopyTable();
+          });
+      } else {
+        fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
+          method: "PUT"
+        })
+          .then(() => {
+            alert('Exemplaar is gearchiveerd');
+            updateBookcopyTable();
+          });
+      }
+    }
+
+    function search() {
+
+    }
+  </script>
+
 </body>
+
 </html>
