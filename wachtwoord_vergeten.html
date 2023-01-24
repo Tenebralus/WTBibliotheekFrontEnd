@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" href="images/favicon.ico">
+
+    <script type="text/javascript" src="commons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+        #forgotPassword {
+            font-size: small;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <a class="navbar-brand" href="#"><img src='images/WT-Basislogo-RGB.png' width="200"></a>
+                </div>
+                <div class="col-12 col-md-6">
+                    <ul class="nav-item text-center">
+                        <h1 class="">WTBibliotheek</h1>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <h3>Wachtwoord vergeten</h3>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Emailadres</label>
+                    <input type="email" class="form-control disabled" id="input-email"
+                        placeholder="naam@workingtalent.nl">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-success" type="button" id="email-button" onclick="email()">Verzend mail</button>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5" id="code-invoer" style="display: none;">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Voer de verificatiecode in</label>
+                    <input type="email" class="form-control disabled" id="input-code"
+                        placeholder="code">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-success" type="button" id="code-button" onclick="codeSubmit()">Bevestig code</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let code;
+
+        function email() {
+            code = (Math.floor(Math.random() * 90000) +10000).toString() + "WT";
+            console.log(code);
+
+            document.getElementById('code-invoer').style.display = "block";
+
+
+            // Verstuurt mail met code
+
+
+            // Voer je code in
+
+            
+        }
+
+        function codeSubmit() {
+            if (document.getElementById('input-code').value == code) {
+                window.location.href = 'eerste_login.html';
+            } else {
+                alert("Verificatiecode onjuist");
+            }
+        }
+    </script>
+</body>
+
+</html>
