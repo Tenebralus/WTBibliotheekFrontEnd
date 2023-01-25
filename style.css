@@ -15,3 +15,17 @@ body {
   background-color: #00e600 !important;
   border-color: #00e600 !important;
 }
+div {
+  padding-bottom: 10px;
+}
+h3 {
+  padding-bottom: 30px;
+}
+#forgotPassword {
+  font-size: small;
+}
+.user-succes {
+  font-size: 1.2rem;
+  color: rgb(5, 173, 5);
+  font-weight: 500;
+}

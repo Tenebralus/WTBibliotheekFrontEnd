@@ -164,9 +164,7 @@
           if (data) {//true means having a loan so do not anon
             alert("Je kan deze gebruiker niet verwijderen, omdat deze nog een lening heeft lopen");
           } else {
-            //maar een admin mag zichzelf niet anonimiseren, dus..
-
-
+            //maar een admin mag zichzelf niet anonimiseren, dus.. button is removed
             fetch('http://localhost:8080/user/anonymize/' + idnum, {
               method: "PUT"
             });
