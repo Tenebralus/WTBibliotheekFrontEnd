@@ -246,7 +246,8 @@
     function updateBookcopy(bookCopyId, status) {
       let currentStatus = (status)
       if (currentStatus == "loaned") {
-        const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
+        alert('Exemplaar is nog uitgeleend, je kan het niet archiveren');
+        /*const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
         if (response) {
           fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
             method: "PUT"
@@ -257,7 +258,7 @@
             });
         } else {
           alert('Exemplaar ongewijzigd');
-        }
+        }*/
       } else if (currentStatus == "archived") {
         fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
           method: "PUT"
