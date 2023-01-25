@@ -171,10 +171,20 @@
     }
 
     function createReservation(clickedId) {
+      console.log(getCookie('Authentication'))
+
       let idstr = clickedId.split("reserve");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/book/' + idnum + '/createreservation', {
-        method: "POST"
+        method: "POST",
+        headers: {
+                'Content-Type': 'application/json'
+            },
+        body: JSON.stringify(
+          {
+            token: getCookie('Authentication')
+          }
+        )
       })
         .then(alert("Reservering gemaakt"));
     }
