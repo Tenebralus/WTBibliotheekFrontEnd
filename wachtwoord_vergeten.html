@@ -91,13 +91,17 @@
             ),headers: {
                 'Content-Type': 'application/json'
             }
-            }).then(response => response.json()).then(data => {
-                code = data.verificationCode;
+            }).then(response => {
+                if(response.status == 500)
+                {
+                    alert("Email kon niet worden verzonden, probeer het later nog eens");
+                }       
+            }).then(data => {
+                if(data != null)
+                {
+                    code = data.verificationCode;
+                }
             });
-
-            // Voer je code in
-
-            
         }
 
         function codeSubmit() {
