@@ -111,6 +111,10 @@
         let rows = '';
         data.forEach(element => {
           let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
+
+          // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
+          // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
+
           let auths = '';
           let tags = '';
           for (let i = 0; i < element.authors.length; i++) {
