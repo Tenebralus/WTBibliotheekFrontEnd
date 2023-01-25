@@ -57,3 +57,32 @@ function changePassword() {
       }
     })
   }
+
+  function createReservation(clickedId) {
+
+    let idstr = clickedId.split("reserve");
+    let idnum = parseInt(idstr[1]);
+    fetch('http://localhost:8080/book/' + idnum + '/createreservation', {
+      method: "POST",
+      headers: {
+              'Content-Type': 'application/json'
+          },
+      body: JSON.stringify(
+        {
+          token: getCookie('Authentication')
+        }
+      )
+    })
+    // Nadat de backend de reservering heeft geprobeerd aan te maken, geeft het terug of het is gelukt, en zo nee of de gebruiker
+    // al een reservering op dat boek open heeft staan
+      .then(response => response.json()).then(data => {
+        if (data.success) {
+          return alert("Reservering gemaakt");
+        }
+        else if (data.duplicate) {
+          return alert("Je hebt dit boek al gereserveerd!");
+        } else {
+          return alert("Er is iets mis gegaan.");
+        }
+      });
+  }
