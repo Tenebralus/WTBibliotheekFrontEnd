@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -124,7 +120,7 @@
             let status = "Actief"
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
             let delButton = ''
-            if (element.emailAddress!=getCookie('Email')) {
+            if (element.emailAddress != getCookie('Email')) {
               delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
             } else {
               delButton = '</td><td></td></tr>';
@@ -169,7 +165,7 @@
             alert("Je kan deze gebruiker niet verwijderen, omdat deze nog een lening heeft lopen");
           } else {
             //maar een admin mag zichzelf niet anonimiseren, dus..
-            
+
 
             fetch('http://localhost:8080/user/anonymize/' + idnum, {
               method: "PUT"

@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -110,6 +106,8 @@
   <div class="container" id="loanHistory">
     <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
   </div>
+  <div></div>
+
 
   <script>
     const queryString = window.location.search;
@@ -159,14 +157,16 @@
           text = '';
           if (data.bookCopyDetailsDTOs[i].status == "archived") {
             text = "Beschikbaar stellen";
+            updateButtonHTML = '<button class="btn btn-secondary" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           } else {
             text = "Archiveer exemplaar";
+            updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           }
           let returnButtonHTML = '';
           if (data.bookCopyDetailsDTOs[i].status == "loaned") {
             returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
           }
-          let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
+          //let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           rows += "<tr><td>" +
             '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
             data.bookCopyDetailsDTOs[i].status + "</td><td>" +

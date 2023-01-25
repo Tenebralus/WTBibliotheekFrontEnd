@@ -16,10 +16,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -112,7 +108,7 @@
   <script>
     window.onload = createReservationTable();
     window.onload = createLoanTable();
-    
+
     function createReservationTable() {
       fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
         let rows = '';

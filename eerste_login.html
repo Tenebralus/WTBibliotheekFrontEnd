@@ -16,9 +16,6 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
-        #forgotPassword {
-            font-size: small;
-        }
     </style>
 </head>
 
@@ -80,7 +77,7 @@
                     console.log(data);
                     alert("Nieuw wachtwoord opgeslagen, je wordt nu ingelogd");
                     setCookie('Authentication', data.token);
-                    
+
                     if (data.admin) {
                         window.location.href = 'admin/index.html';
                     }
