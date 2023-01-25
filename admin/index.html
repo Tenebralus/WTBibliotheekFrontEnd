@@ -175,7 +175,6 @@
     }
 
     function createReservation(clickedId) {
-      console.log(getCookie('Authentication'))
 
       let idstr = clickedId.split("reserve");
       let idnum = parseInt(idstr[1]);
@@ -190,7 +189,18 @@
           }
         )
       })
-        .then(alert("Reservering gemaakt"));
+      // Nadat de backend de reservering heeft geprobeerd aan te maken, geeft het terug of het is gelukt, en zo nee of de gebruiker
+      // al een reservering op dat boek open heeft staan
+        .then(response => response.json()).then(data => {
+          if (data.success) {
+            return alert("Reservering gemaakt");
+          }
+          else if (data.duplicate) {
+            return alert("Je hebt dit boek al gereserveerd!");
+          } else {
+            return alert("Er is iets mis gegaan.");
+          }
+        });
     }
 
     function logout() {
