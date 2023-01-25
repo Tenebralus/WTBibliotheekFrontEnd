@@ -15,7 +15,7 @@ function logInOutButton(btn){
 }
 
 function setCookie(name, value) {
-        document.cookie = name + "=" + encodeURIComponent(value) + ";";
+        document.cookie = name + "=" + encodeURIComponent(value);
 }
 
 function getCookie(name) {
