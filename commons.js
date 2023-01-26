@@ -134,7 +134,7 @@ function createReservation(clickedId) {
     document.getElementById("current-page").innerHTML = '<p>' + currentPage + '</p>';
 
     let totalElements = data.length;
-    let elementsPerPage = 2;
+    let elementsPerPage = 20;
     let numPages = Math.ceil(totalElements / elementsPerPage);
 
     if (currentPage > 1) {
