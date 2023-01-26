@@ -50,6 +50,11 @@
 
   <div class="container">
     <div class="row">
+      <div class="col">
+        <h3>Boeken in de bibliotheek</h3>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op titel, auteur, of tags">
       </div>
@@ -78,7 +83,6 @@
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
       data.forEach(element => {
-        console.log(element);
         let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {

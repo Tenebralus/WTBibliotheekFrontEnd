@@ -64,6 +64,11 @@
   </nav>
 
   <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>Boek details</h3>
+      </div>
+    </div>
     <div class="container text-left">
       <div class="row align-items-start">
         <div class="col-3" id="image">
@@ -108,7 +113,6 @@
   </div>
   <div></div>
 
-
   <script>
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -120,8 +124,6 @@
       fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
         let rows = '';
         let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
-        console.log(data);
-        console.log(data.urlImage);
         let bookAuthors = '';
         for (let i = 0; i < data.bookAuthors.length; i++) {
           bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
@@ -168,7 +170,7 @@
           }
           //let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           rows += "<tr><td>" +
-            '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+            '<a href=exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
             data.bookCopyDetailsDTOs[i].status + "</td><td>" +
             usernameCurrentLoan + "</td><td>" +
             dateLoaned + "</td><td>" +

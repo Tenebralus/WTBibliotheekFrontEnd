@@ -64,7 +64,11 @@
   </nav>
 
   <div class="container">
-    <h3>Openstaande reserveringen</h3>
+    <div class="row">
+      <div class="col">
+        <h3>Openstaande reserveringen</h3>
+      </div>
+    </div>
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of gebruiker">
@@ -132,7 +136,6 @@
       let idnum = parseInt(idstr[1]);
       //copy is the id of the selected bookCopy
       let copy = document.getElementById("reservation" + idnum + "dropdown").value;
-      console.log(copy)
       if (copy != 0) {
         fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
           method: 'POST'
