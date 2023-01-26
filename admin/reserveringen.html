@@ -110,7 +110,7 @@
           //Generates the list of available copies, or grays out if none
           let copyDropDown = '<select class="form-select" id="reservation' + element.id + 'dropdown"><option value ="0">Selecteer exemplaar</option>';
           let copyCounter = 0;
-          let buttonHtml = '<button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button>';
+          let buttonHtml = '<button class="btn btn-outline-primary" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button>';
           let dateReserved = new Date(element.reservationDate).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           element.bookcopies.forEach(copy => {
             if (copy.status == "available") {
@@ -136,6 +136,8 @@
       let idnum = parseInt(idstr[1]);
       //copy is the id of the selected bookCopy
       let copy = document.getElementById("reservation" + idnum + "dropdown").value;
+      console.log(clickedId);
+      console.log(copy);
       if (copy != 0) {
         fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
           method: 'POST'

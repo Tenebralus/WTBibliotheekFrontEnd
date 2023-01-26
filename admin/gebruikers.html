@@ -126,7 +126,7 @@
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
             let delButton = ''
             if (element.emailAddress != getCookie('Email')) { //nog beter zou zijn om token te gebruiken
-              delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
+              delButton = '</td><td><button class="btn btn-outline-danger" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
             } else {
               delButton = '</td><td></td></tr>';
             }
