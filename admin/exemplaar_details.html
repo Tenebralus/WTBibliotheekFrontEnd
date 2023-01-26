@@ -104,22 +104,16 @@
                 <!--<div><select class="form-select" id="userdropdown">
                     <option value="0">Kies gebruiker</option>;
                 </div>-->
-                <div class="text-end">
-                    <div class="row">
-                        <div class="col-6 text-end">
-                            <!--<div id="select-user-field">
-                                <select class="form-select" id="userdropdown">
-                                    <option value="0">Kies gebruiker</option>
-                            </div>-->
-                        </div>
-                        <div class="col-6 text-end">
-                            <div id="userLoanButton">
-                                <!--<button class="btn btn-outline-primary" type="button" id="userButton"
-                                    onclick="createLoan(this.id)">Uitlenen</button>-->
-                            </div>
-                        </div>
+
+                <div class="row">
+                    <div class="col-6 text-end">
+                        <div id="user-select"></div>
+                    </div>
+                    <div class="col-6">
+                        <div id="userLoanButton"></div>
                     </div>
                 </div>
+
 
 
 
@@ -185,8 +179,10 @@
 
                 let currentLoan = data.currentLoan
                 if (data.status == "available") {
+                    document.getElementById("user-select").innerHTML =
+                        '<select class="form-select" id="user' + data.id + 'dropdown"><option value ="0">Kies gebruiker</option>';
                     document.getElementById("userLoanButton").innerHTML =
-                    '<button class="btn btn-outline-primary" type="button" id="userButton" onclick="createLoan(this.id)">Uitlenen</button>';  
+                        '<button class="btn btn-outline-primary" type="button" id="userButton" onclick="createLoan(this.id)">Uitlenen</button>';
                 }
                 if (data.currentLoan == null) {
                     document.getElementById("currentLoan").innerHTML =
