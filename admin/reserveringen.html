@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -120,7 +116,7 @@
             }
           })
           if (copyCounter == 0) {
-            copyDropDown = '<select class="form-select" disabled><option>Geen exemplaren beschikbaar</option>';
+            copyDropDown = '<p class="text-center">Geen exemplaren beschikbaar</p>';
             buttonHtml = ''
           }
           //Generates HTML per row
@@ -136,7 +132,6 @@
       let idnum = parseInt(idstr[1]);
       //copy is the id of the selected bookCopy
       let copy = document.getElementById("reservation" + idnum + "dropdown").value;
-      console.log(copy)
       if (copy != 0) {
         fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
           method: 'POST'
@@ -171,7 +166,7 @@
             }
           })
           if (copyCounter == 0) {
-            copyDropDown = '<select class="form-select" disabled><option>Geen exemplaren beschikbaar</option>';
+            copyDropDown = '<p class="text-center>Geen exemplaren beschikbaar</p>';
             buttonHtml = ''
           }
           //Generates HTML per row

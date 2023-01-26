@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -110,6 +106,7 @@
   <div class="container" id="loanHistory">
     <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
   </div>
+  <div></div>
 
   <script>
     const queryString = window.location.search;
@@ -122,8 +119,6 @@
       fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
         let rows = '';
         let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
-        console.log(data);
-        console.log(data.urlImage);
         let bookAuthors = '';
         for (let i = 0; i < data.bookAuthors.length; i++) {
           bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
@@ -159,16 +154,18 @@
           text = '';
           if (data.bookCopyDetailsDTOs[i].status == "archived") {
             text = "Beschikbaar stellen";
+            updateButtonHTML = '<button class="btn btn-secondary" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           } else {
             text = "Archiveer exemplaar";
+            updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           }
           let returnButtonHTML = '';
           if (data.bookCopyDetailsDTOs[i].status == "loaned") {
             returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
           }
-          let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
+          //let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           rows += "<tr><td>" +
-            '<a href=exemplaardetails.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+            '<a href=exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
             data.bookCopyDetailsDTOs[i].status + "</td><td>" +
             usernameCurrentLoan + "</td><td>" +
             dateLoaned + "</td><td>" +
@@ -246,7 +243,8 @@
     function updateBookcopy(bookCopyId, status) {
       let currentStatus = (status)
       if (currentStatus == "loaned") {
-        const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
+        alert('Exemplaar is nog uitgeleend, je kan het niet archiveren');
+        /*const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
         if (response) {
           fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
             method: "PUT"
@@ -257,7 +255,7 @@
             });
         } else {
           alert('Exemplaar ongewijzigd');
-        }
+        }*/
       } else if (currentStatus == "archived") {
         fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
           method: "PUT"

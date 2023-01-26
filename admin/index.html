@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -99,10 +95,7 @@
       data.forEach(element => {
         let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
         // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
-        
         // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
-
-        console.log(element);
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {
           auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -172,25 +165,6 @@
         });
         document.getElementById('book-row').innerHTML = rows;
       });
-    }
-
-    function createReservation(clickedId) {
-      console.log(getCookie('Authentication'))
-
-      let idstr = clickedId.split("reserve");
-      let idnum = parseInt(idstr[1]);
-      fetch('http://localhost:8080/book/' + idnum + '/createreservation', {
-        method: "POST",
-        headers: {
-                'Content-Type': 'application/json'
-            },
-        body: JSON.stringify(
-          {
-            token: getCookie('Authentication')
-          }
-        )
-      })
-        .then(alert("Reservering gemaakt"));
     }
 
     function logout() {

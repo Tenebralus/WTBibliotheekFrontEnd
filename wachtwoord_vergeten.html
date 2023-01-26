@@ -16,9 +16,6 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
-        #forgotPassword {
-            font-size: small;
-        }
     </style>
 </head>
 
@@ -46,7 +43,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="mb-3">
-                    <label for="inputEmail" class="form-label">Emailadres</label>
+                    <label for="input-email" class="form-label">Emailadres</label>
                     <input type="email" class="form-control disabled" id="input-email"
                         placeholder="naam@workingtalent.nl">
                 </div>
@@ -62,15 +59,15 @@
         <div class="row">
             <div class="col-12">
                 <div class="mb-3">
-                    <label for="inputEmail" class="form-label">Voer de verificatiecode in</label>
-                    <input type="email" class="form-control disabled" id="input-code"
-                        placeholder="code">
+                    <label for="input-code" class="form-label">Voer de verificatiecode in</label>
+                    <input type="code" class="form-control disabled" id="input-code" placeholder="code">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-success" type="button" id="code-button" onclick="codeSubmit()">Bevestig code</button>
+                <button class="btn btn-success" type="button" id="code-button" onclick="codeSubmit()">Bevestig
+                    code</button>
             </div>
         </div>
     </div>
@@ -83,21 +80,48 @@
 
             // Verstuurt mail met code
             fetch('http://localhost:8080/sendemail', {
-            method: 'POST',
-            body: JSON.stringify(
-                {
-                    receiver: document.getElementById('input-email').value
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        receiver: document.getElementById('input-email').value
+                    }
+                ), headers: {
+                    'Content-Type': 'application/json'
                 }
-            ),headers: {
+                }).then(response => {
+                    if(response.status == 500)
+                    {
+                        alert("Email kon niet worden verzonden, probeer het later nog eens");
+                    }
+                    response.json()      
+            }).then(data => {
+                if(data != null)
+                {
+                    code = data.verificationCode;
+                }
+            });
+        }
+
+        function GenerateEmailList()
+        {
+            const emails = [];
+            fetch('http://localhost:8080/user/all', {
+            method: 'GET',
+            headers: {
                 'Content-Type': 'application/json'
             }
             }).then(response => response.json()).then(data => {
-                code = data.verificationCode;
+                if(data != null)
+                {
+                    let i = 0;
+                    data.forEach(element => {
+                        emails[i] = element.emailAddress;
+                        i++;
+                    });
+                }
             });
 
-            // Voer je code in
-
-            
+            return emails;
         }
 
         function codeSubmit() {

@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -133,7 +129,6 @@
       fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-          console.log(element);
           let auths = '';
           for (let i = 0; i < element.book.authors.length; i++) {
             auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
@@ -153,7 +148,6 @@
     }
 
     function cancel(clickedId) {
-      console.log(clickedId);
       let idstr = clickedId.split("cancel");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/reservation/delete/' + idnum, {
@@ -168,7 +162,6 @@
       fetch('http://localhost:8080/reservation/user/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-          console.log(element);
           let auths = '';
           for (let i = 0; i < element.book.authors.length; i++) {
             auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName

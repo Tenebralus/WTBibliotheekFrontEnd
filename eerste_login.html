@@ -16,9 +16,6 @@
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
     <style>
-        #forgotPassword {
-            font-size: small;
-        }
     </style>
 </head>
 
@@ -75,9 +72,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     }
-
                 }).then(response => response.json()).then(data => {
-                    console.log(data);
                     alert("Nieuw wachtwoord opgeslagen, je wordt nu ingelogd");
                     setCookie('Authentication', data.token);
 
