@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -120,7 +116,7 @@
             }
           })
           if (copyCounter == 0) {
-            copyDropDown = '<select class="form-select" disabled><option>Geen exemplaren beschikbaar</option>';
+            copyDropDown = '<p class="text-center">Geen exemplaren beschikbaar</p>';
             buttonHtml = ''
           }
           //Generates HTML per row
@@ -171,7 +167,7 @@
             }
           })
           if (copyCounter == 0) {
-            copyDropDown = '<select class="form-select" disabled><option>Geen exemplaren beschikbaar</option>';
+            copyDropDown = '<p class="text-center>Geen exemplaren beschikbaar</p>';
             buttonHtml = ''
           }
           //Generates HTML per row

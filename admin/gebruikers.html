@@ -17,10 +17,6 @@
   <link href="../style.css" rel="stylesheet">
 
   <style>
-    #logout {
-      position: absolute;
-      right: 5%;
-    }
   </style>
 </head>
 
@@ -104,7 +100,6 @@
     window.onload = createUserTable();
 
     function createUserTable() {
-      //fetch('http://localhost:8080/user/all')
       fetch('http://localhost:8080/user/all', {
         method: 'GET',
         headers: {
@@ -115,13 +110,21 @@
         .then(response => response.json()).then(data => {
           let rows = '';
           data.forEach(element => {
+            console.log(data);
+            console.log(element);
+
             let admin = "Gebruiker"
             if (element.admin == true) {
               admin = "Admin"
             }
             let status = "Actief"
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
-            let delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
+            let delButton = ''
+            if (element.emailAddress != getCookie('Email')) {
+              delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
+            } else {
+              delButton = '</td><td></td></tr>';
+            }
             if (element.active == false) {
               status = "Verwijderd"
               copyButton = '</td><td></td></td>';
@@ -149,11 +152,27 @@
       console.log(clickedId);
       let idstr = clickedId.split("anon");
       let idnum = parseInt(idstr[1]);
-      fetch('http://localhost:8080/user/anonymize/' + idnum, {
-        method: "PUT"
+      console.log(idnum);
+      fetch("http://localhost:8080/users/loans/" + idnum, {
+        method: "GET",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authentication': getCookie('Authentication')
+        }
       })
-        .then();
-      createUserTable();
+        .then(response => response.json()).then(data => {
+          if (data) {//true means having a loan so do not anon
+            alert("Je kan deze gebruiker niet verwijderen, omdat deze nog een lening heeft lopen");
+          } else {
+            //maar een admin mag zichzelf niet anonimiseren, dus..
+
+
+            fetch('http://localhost:8080/user/anonymize/' + idnum, {
+              method: "PUT"
+            });
+            location.reload();
+          }
+        });
     }
 
     function searchUser() {
