@@ -129,3 +129,29 @@ function createReservation(clickedId) {
       document.getElementById('loans-row').innerHTML = rows;
     });
   }
+
+  function InitializePage(userPage, adminPage)
+    {
+      let user = 0;
+      let admin = 1;
+      fetch('http://localhost:8080/user/usertype', {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+            'Authentication': getCookie("Authentication")
+          }
+        }).then(response => response.json())
+          .then(data => {
+            if(data == admin)
+            {
+              window.location.href = adminPage
+            }
+            else if (data == user){
+              window.location.href = userPage
+            }
+            else
+            {
+              window.location.href = "../login.html"
+            }
+          });
+    }

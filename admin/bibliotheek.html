@@ -105,7 +105,10 @@
   </div>
 
   <script>
+    InitializePage("../user/index.html" ,"bibliotheek.html");
+
     window.onload = createLibraryTable();
+    
     function createLibraryTable() {
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
