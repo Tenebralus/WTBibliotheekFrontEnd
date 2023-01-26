@@ -68,9 +68,9 @@
     <div class="container">
         <div class="row">
             <div class="col">
-              <h3>Boek exemplaar details</h3>
+                <h3>Boek exemplaar details</h3>
             </div>
-          </div>
+        </div>
         <div class="row">
             <div class="col" id="image">
             </div>
@@ -81,40 +81,18 @@
     <div class="container">
         <div class="row">
             <div class="col">
-                <h3 id="bookTitle"></h3>
+                <h5 id="bookTitle"></h5>
+                <h5 id="book-tags"></h5>
+                <h5 id="book-authors"></h5>
+                <h5 id="status"></h5>
+                <h5 id="timesLoaned"></h5>
             </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <p id="book-tags"></p>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <p id="book-authors"></p>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <p id="status"></p>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <p id="timesLoaned"></p>
-            </div>
-            <div class="col text-end"><button class="btn btn-outline-success" type="button" id="archiveButton"
+            <div class="text-end"><button class="btn btn-outline-success" type="button" id="archiveButton"
                     onclick="updateBookCopy()"></button>
             </div>
+            <div class="container" id="currentLoan">
+            </div>
         </div>
-    </div>
-    <div class="container" id="currentLoan">
     </div>
     <div class="container" id="loanHistory">
         <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
@@ -156,7 +134,7 @@
                         }
                     }
                 }
-                document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>';
+                document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 90px; height: 120px"/>';
                 document.getElementById("bookTitle").innerText = "Titel: " + title + ' (' + bookId + '.' + bookCopyNr + ')';
                 document.getElementById("book-authors").innerText = "Auteur(s): " + bookAuthors;
                 document.getElementById("book-tags").innerText = "Tag(s): " + bookTags;

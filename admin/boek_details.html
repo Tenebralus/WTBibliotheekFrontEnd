@@ -76,14 +76,28 @@
         </div>
         <div class="col" id="col12">
           <!--<div class="row" id="col2">-->
-          <h3 id="book-title">Boek Titel</h3>
-          <h3 id="book-author">Auteur(s)</h3>
-          <h3 id="book-isbn">ISBN</h3>
-          <h3 id="book-tags">Tag(s)</h3>
+            <h3 id="book-title">Boek Titel</h3>
+            <h3 id="book-author">Auteur(s)</h3>
+            <h3 id="book-isbn">ISBN</h3>
+            <h3 id="book-tags">Tag(s)</h3>
           <!--</div>-->
           <div class="col text-end"><button class="btn btn-outline-success" type="button" id="addCopy"
               onclick="addCopy()">Exemplaar toevoegen</button>
           </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Exemplaar</th>
+                <th>Status</th>
+                <th>Gebruiker</th>
+                <th>Datum van uitlenen</th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="table-bookcopies">
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
@@ -142,7 +156,7 @@
             updateButtonHTML = '<button class="btn btn-secondary" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           } else {
             text = "Archiveer exemplaar";
-            updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
+            updateButtonHTML = '<button class="btn btn-outline-danger" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           }
           let returnButtonHTML = '';
           if (data.bookCopyDetailsDTOs[i].status == "loaned") {
