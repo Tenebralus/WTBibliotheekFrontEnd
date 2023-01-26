@@ -75,34 +75,14 @@
           <!--<img id=image src="https://media.s-bol.com/xkkJAr3pYE4l/867x1200.jpg" style="width: 50%; height: 50%"/>-->
         </div>
         <div class="col" id="col12">
-          <div class="container">
-            <div class="container text-left">
-              <div class="row align-items-start">
-                <div class="row" id="col2">
-                  <h3 id="book-title">Boek Titel</h3>
-                  <h3 id="book-author">Auteur(s)</h3>
-                  <h3 id="book-isbn">ISBN</h3>
-                  <h3 id="book-tags">Tag(s)</h3>
-                </div>
-                <div class="col text-end"><button class="btn btn-outline-success" type="button" id="addCopy"
-                    onclick="addCopy()">Exemplaar toevoegen</button>
-                </div>
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>Exemplaar</th>
-                      <th>Status</th>
-                      <th>Gebruiker</th>
-                      <th>Datum van uitlenen</th>
-                      <th></th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody id="table-bookcopies">
-                  </tbody>
-                </table>
-              </div>
-            </div>
+          <!--<div class="row" id="col2">-->
+          <h3 id="book-title">Boek Titel</h3>
+          <h3 id="book-author">Auteur(s)</h3>
+          <h3 id="book-isbn">ISBN</h3>
+          <h3 id="book-tags">Tag(s)</h3>
+          <!--</div>-->
+          <div class="col text-end"><button class="btn btn-outline-success" type="button" id="addCopy"
+              onclick="addCopy()">Exemplaar toevoegen</button>
           </div>
         </div>
       </div>
@@ -167,6 +147,8 @@
           let returnButtonHTML = '';
           if (data.bookCopyDetailsDTOs[i].status == "loaned") {
             returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
+          } else if (data.bookCopyDetailsDTOs[i].status == "available") {
+            returnButtonHTML = '<button class="btn btn-info" type="button" id="Uitlenen' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="createLoan(this.id)">Uitlenen</button>'
           }
           //let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           rows += "<tr><td>" +
@@ -184,6 +166,22 @@
         //document.getElementById("Tags").innerHTML = "Tag(s): " + tags ;
         document.getElementById('table-bookcopies').innerHTML = rows;
       });
+    }
+
+    function createLoan(clickedId) {
+      let idstr = clickedId.split("Uitlenen");
+      //idnum is the id of the reservation
+      let idnum = parseInt(idstr[1]);
+      //copy is the id of the selected bookCopy
+      idstr = clickedId.split(" ");
+      let copy = parseInt(idstr[1]);
+      console.log(clickedId);
+      console.log(idstr);
+      fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
+        method: 'POST'
+      })
+        .then(alert("Boek uitgeleend."));
+      createBookCopiesTable();
     }
 
     function returnBookCopy(bookcopy_id, loan_id) {
