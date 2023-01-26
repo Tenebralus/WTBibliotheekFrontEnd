@@ -164,8 +164,10 @@
                 }
                 if (status == "archived") {
                     document.getElementById("archiveButton").innerText = "Beschikbaar stellen";
+                    document.getElementById("archiveButton").setAttribute('class', 'btn btn-outline-secondary');
                 } else {
                     document.getElementById("archiveButton").innerText = "Archiveer exemplaar";
+                    document.getElementById("archiveButton").setAttribute('class', 'btn btn-outline-danger');
                 }
             })
         }
