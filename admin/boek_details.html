@@ -76,10 +76,10 @@
         </div>
         <div class="col" id="col12">
           <!--<div class="row" id="col2">-->
-            <h3 id="book-title">Boek Titel</h3>
-            <h3 id="book-author">Auteur(s)</h3>
-            <h3 id="book-isbn">ISBN</h3>
-            <h3 id="book-tags">Tag(s)</h3>
+          <h3 id="book-title">Boek Titel</h3>
+          <h3 id="book-author">Auteur(s)</h3>
+          <h3 id="book-isbn">ISBN</h3>
+          <h3 id="book-tags">Tag(s)</h3>
           <!--</div>-->
           <div class="col text-end"><button class="btn btn-outline-success" type="button" id="addCopy"
               onclick="addCopy()">Exemplaar toevoegen</button>
@@ -89,9 +89,21 @@
               <tr>
                 <th>Exemplaar</th>
                 <th>Status</th>
-                <th>Gebruiker</th>
                 <th>Datum van uitlenen</th>
-                <th></th>
+                <th>Gebruiker</th>
+                <th>
+
+
+                  <fieldset class="inputs-set" id="user-list" class="input-field">
+                    <!--<label for="inputUser" class="form-label">Gebruiker</label>-->
+                    <br>
+
+                    <body onLoad="addUserField();"></body>
+                    <!-- </input> -->
+                  </fieldset>
+
+
+                </th>
                 <th></th>
               </tr>
             </thead>
@@ -153,23 +165,26 @@
           text = '';
           if (data.bookCopyDetailsDTOs[i].status == "archived") {
             text = "Beschikbaar stellen";
-            updateButtonHTML = '<button class="btn btn-secondary" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
+            updateButtonHTML = '<button class="btn btn-outline-secondary" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           } else {
             text = "Archiveer exemplaar";
             updateButtonHTML = '<button class="btn btn-outline-danger" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           }
           let returnButtonHTML = '';
+          //let userDropDown = '';
           if (data.bookCopyDetailsDTOs[i].status == "loaned") {
             returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
           } else if (data.bookCopyDetailsDTOs[i].status == "available") {
-            returnButtonHTML = '<button class="btn btn-info" type="button" id="Uitlenen' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="createLoan(this.id)">Uitlenen</button>'
-          }
+            usernameCurrentLoan = '<select class="form-select" id="user' + data.bookCopyDetailsDTOs[i].id + 'dropdown"><option value ="0">Kies gebruiker</option>';
+            returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="Uitlenen' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="createLoan(this.id)">Uitlenen</button>'
+          } 
           //let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           rows += "<tr><td>" +
             '<a href=exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
             data.bookCopyDetailsDTOs[i].status + "</td><td>" +
-            usernameCurrentLoan + "</td><td>" +
             dateLoaned + "</td><td>" +
+            usernameCurrentLoan + "</td><td>" + 
+            //userDropDown + "</td><td>" + 
             returnButtonHTML + "</td><td>" +
             updateButtonHTML + "</td>" +
             "</tr>";
@@ -182,6 +197,42 @@
       });
     }
 
+
+
+
+
+    function addUserField() {
+      const myAuthorForm = document.getElementById("user-list");
+      var x = document.createElement("INPUT");
+      x.setAttribute("list", "inputUserList" + userNumber);
+      x.setAttribute("id", "inputUser" + userNumber);
+      x.setAttribute("placeholder", "Gebruiker");
+      x.setAttribute("class", "form-control");
+      const newAuthorField = document.createElement("datalist");
+      newAuthorField.setAttribute("id", "inputUserList" + userNumber);
+      //newAuthorField.classList.add("col-4");
+      //newAuthorField.classList.add("mb-3");
+      fetch('http://localhost:8080/user/all').then(response => response.json()).then(data => {
+        data.forEach(element => {
+          var option = document.createElement('option');
+          option.setAttribute("value", element.firstName + " " + element.lastName);
+          option.setAttribute("id", element.id);
+          newAuthorField.appendChild(option);
+        });
+      });
+      x.appendChild(newUserField);
+      myUserForm.appendChild(x);
+      userNumber++;
+    }
+
+
+
+
+
+
+
+
+
     function createLoan(clickedId) {
       let idstr = clickedId.split("Uitlenen");
       //idnum is the id of the reservation
@@ -191,6 +242,7 @@
       let copy = parseInt(idstr[1]);
       console.log(clickedId);
       console.log(idstr);
+      let user = document.getElementById("user" + idnum + "dropdown").value;
       fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
         method: 'POST'
       })
