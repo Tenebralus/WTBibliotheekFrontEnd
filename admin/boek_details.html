@@ -108,7 +108,6 @@
   </div>
   <div></div>
 
-
   <script>
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -120,8 +119,6 @@
       fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
         let rows = '';
         let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
-        console.log(data);
-        console.log(data.urlImage);
         let bookAuthors = '';
         for (let i = 0; i < data.bookAuthors.length; i++) {
           bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;

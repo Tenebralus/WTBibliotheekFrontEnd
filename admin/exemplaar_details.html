@@ -133,8 +133,6 @@
                 let bookQueryString = '?book=' + bookId;
                 document.getElementById("backButton").innerHTML = '<a href="boek_details.html' + bookQueryString + '"" class="btn btn-success">Terug naar boek</a>';
                 let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
-                console.log(data);
-                console.log(data.urlImage);
                 let bookAuthors = '';
                 if (!!data.bookAuthors) {
                     for (let i = 0; i < data.bookAuthors.length; i++) {

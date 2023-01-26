@@ -132,7 +132,6 @@
       let idnum = parseInt(idstr[1]);
       //copy is the id of the selected bookCopy
       let copy = document.getElementById("reservation" + idnum + "dropdown").value;
-      console.log(copy)
       if (copy != 0) {
         fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
           method: 'POST'
