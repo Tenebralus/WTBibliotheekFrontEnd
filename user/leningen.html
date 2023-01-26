@@ -8,6 +8,7 @@
   <title>Leningen</title>
   <link rel="icon" href="../images/favicon.ico">
 
+  <script type="text/javascript" src="../commons.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
     crossorigin="anonymous"></script>
@@ -48,7 +49,11 @@
   </nav>
 
   <div class="container">
-    <h3>Reserveringen</h3>
+    <div class="row">
+      <div class="col">
+        <h3>Reserveringen</h3>
+      </div>
+    </div>
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField1" placeholder="Zoek op boektitel of auteur">
@@ -131,41 +136,7 @@
       });
     }
 
-    function createLoanTable() {
-      //these are all loans, still waiting for login-sessions until this is personalized
-      fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
-        let rows = '';
-        data.forEach(element => {
-          let auths = "";
-          for (let i = 0; i < element.authors.length; i++) {
-            auths += element.authors[i].firstName + " " + element.authors[i].lastName
-            if (i < element.authors.length - 1) {
-              auths += ", "
-            }
-          }
-          //do not want to see null but empty space
-          dateReturned = "";
-          if (element.dateReturned == null) {
-            dateReturned = "";
-          } else {
-            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          }
-          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          rows += "</tr><td>" +
-            element.bookTitle + "</td><td>" +
-            element.bookCopyNr + "</td><td>" +
-            element.bookIsbn + "</td><td>" +
-            auths + "</td><td>" +
-            element.bookCopyStatus + "</td><td>" +
-            dateLoaned + "</td><td>" +
-            dateReturned + "</td><td>";
-        });
-        document.getElementById('loans-row').innerHTML = rows;
-      });
-    }
-
     function cancel(clickedId) {
-      console.log(clickedId);
       let idstr = clickedId.split("cancel");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/reservation/delete/' + idnum, {
@@ -180,8 +151,6 @@
       fetch('http://localhost:8080/reservation/user/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-          console.log(element);
-          console.log(element.authors);
           let auths = '';
           if (element.authors) {
             for (let i = 0; i < element.book.authors.length; i++) {
@@ -207,7 +176,6 @@
       fetch('http://localhost:8080/loan/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-          console.log(element);
           let authorNames = "";
           if (element.authors) {
             for (let i = 0; i < element.authors.length; i++) {

@@ -65,6 +65,11 @@
 
   <div class="container">
     <div class="row">
+      <div class="col">
+        <h3>Boeken in de bibliotheek</h3>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op titel, auteur, of tags">
       </div>
@@ -95,10 +100,7 @@
       data.forEach(element => {
         let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
         // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
-
         // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
-
-        console.log(element);
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {
           auths += element.authors[i].firstName + " " + element.authors[i].lastName

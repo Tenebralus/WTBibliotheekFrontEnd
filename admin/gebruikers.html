@@ -65,6 +65,11 @@
 
   <div class="container">
     <div class="row">
+      <div class="col">
+        <h3>Alle gebruikers</h3>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op naam of emailadres">
       </div>
@@ -121,7 +126,7 @@
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
             let delButton = ''
             if (element.emailAddress != getCookie('Email')) { //nog beter zou zijn om token te gebruiken
-              delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
+              delButton = '</td><td><button class="btn btn-outline-danger" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
             } else {
               delButton = '</td><td></td></tr>';
             }
@@ -178,9 +183,6 @@
       fetch('http://localhost:8080/user/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-          console.log(element);
-          console.log(element.active);
-          console.log(element.admin);
           let admin = "Gebruiker"
           if (element.admin == true) {
             admin = "Admin"
@@ -269,12 +271,11 @@
       let newLastName = document.getElementById('inputLastName').value;
       let newEmailAdress = document.getElementById('inputEmailAddress').value;
       let newAdminValue = document.getElementById('inputAdmin').checked;
-      if (document.getElementById('inputFirstName').value.length == 0) {
-        console.log("test");
-      }
+      //if (document.getElementById('inputFirstName').value.length == 0) {
+      //  console.log("test");
+      //}
       let idstr = clickedId.split("saveUser");
       let idnum = parseInt(idstr[1]);
-      console.log(newFirstName);
       fetch('http://localhost:8080/user/update/' + idnum, {
         method: "PUT",
         body: JSON.stringify(
