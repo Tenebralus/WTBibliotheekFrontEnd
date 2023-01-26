@@ -87,8 +87,42 @@
                 <h5 id="status"></h5>
                 <h5 id="timesLoaned"></h5>
             </div>
-            <div class="text-end"><button class="btn btn-outline-success" type="button" id="archiveButton"
-                    onclick="updateBookCopy()"></button>
+            <!-- field -->
+        </div>
+    </div>
+
+
+
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="text-end">
+                    <button class="btn btn-outline-success" type="button" id="archiveButton"
+                        onclick="updateBookCopy()">text</button>
+                </div>
+                <!--<div><select class="form-select" id="userdropdown">
+                    <option value="0">Kies gebruiker</option>;
+                </div>-->
+                <div class="text-end">
+                    <div class="row">
+                        <div class="col-6 text-end">
+                            <!--<div id="select-user-field">
+                                <select class="form-select" id="userdropdown">
+                                    <option value="0">Kies gebruiker</option>
+                            </div>-->
+                        </div>
+                        <div class="col-6 text-end">
+                            <div id="userLoanButton">
+                                <!--<button class="btn btn-outline-primary" type="button" id="userButton"
+                                    onclick="createLoan(this.id)">Uitlenen</button>-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
             <div class="container" id="currentLoan">
             </div>
@@ -140,7 +174,20 @@
                 document.getElementById("book-tags").innerText = "Tag(s): " + bookTags;
                 document.getElementById("status").innerText = "Huidige status: " + status;
                 document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;
+
+                //document.getElementById("userButton").innerText = "Uitlenen";
+                //document.getElementById("userButton").setAttribute('class', 'btn btn-outline-primary');
+                //document.getElementById("select-user-field").innerText = "Kies gebruiker";
+                //document.getElementById("select-user-field").setAttribute('class', 'form-select');
+                //document.getElementById("select-user-field").setAttribute('id', 'user' + data.id + 'dropdown');
+                //document.getElementById("userButton").setAttribute('id', 'Uitlenen' + data.bookId + " " + data.id + '');
+
+
                 let currentLoan = data.currentLoan
+                if (data.status == "available") {
+                    document.getElementById("userLoanButton").innerHTML =
+                    '<button class="btn btn-outline-primary" type="button" id="userButton" onclick="createLoan(this.id)">Uitlenen</button>';  
+                }
                 if (data.currentLoan == null) {
                     document.getElementById("currentLoan").innerHTML =
                         '<p>Geen huidige lening</p>';
@@ -169,9 +216,58 @@
                     document.getElementById("archiveButton").innerText = "Archiveer exemplaar";
                     document.getElementById("archiveButton").setAttribute('class', 'btn btn-outline-danger');
                 }
+
+
+
+
+
+
+
+
+
             })
         }
 
+        function createLoan(clickedId) {
+            let idstr = clickedId.split("Uitlenen");
+            //idnum is the id of the reservation
+            let idnum = parseInt(idstr[1]);
+            //copy is the id of the selected bookCopy
+            idstr = clickedId.split(" ");
+            let copy = parseInt(idstr[1]);
+            console.log(clickedId);
+            console.log(idstr);
+            let user = document.getElementById("user" + idnum + "dropdown").value;
+            fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
+                method: 'POST'
+            })
+                .then(alert("Boek uitgeleend."));
+            createBookCopiesTable();
+        }
+
+        function addUserField() {
+            const myAuthorForm = document.getElementById("user-list");
+            var x = document.createElement("INPUT");
+            x.setAttribute("list", "inputUserList" + userNumber);
+            x.setAttribute("id", "inputUser" + userNumber);
+            x.setAttribute("placeholder", "Gebruiker");
+            x.setAttribute("class", "form-control");
+            const newAuthorField = document.createElement("datalist");
+            newAuthorField.setAttribute("id", "inputUserList" + userNumber);
+            //newAuthorField.classList.add("col-4");
+            //newAuthorField.classList.add("mb-3");
+            fetch('http://localhost:8080/user/all').then(response => response.json()).then(data => {
+                data.forEach(element => {
+                    var option = document.createElement('option');
+                    option.setAttribute("value", element.firstName + " " + element.lastName);
+                    option.setAttribute("id", element.id);
+                    newAuthorField.appendChild(option);
+                });
+            });
+            x.appendChild(newUserField);
+            myUserForm.appendChild(x);
+            userNumber++;
+        }
 
         function getLoanHistory() {
             fetch('http://localhost:8080/loan/dto/bookcopy/' + bookCopyId).then(response => response.json()).then(data => {
