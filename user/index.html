@@ -78,7 +78,6 @@
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
       data.forEach(element => {
-        console.log(element);
         let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
         let auths = '';
         for (let i = 0; i < element.authors.length; i++) {

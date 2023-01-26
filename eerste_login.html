@@ -72,9 +72,7 @@
                     headers: {
                         'Content-Type': 'application/json'
                     }
-
                 }).then(response => response.json()).then(data => {
-                    console.log(data);
                     alert("Nieuw wachtwoord opgeslagen, je wordt nu ingelogd");
                     setCookie('Authentication', data.token);
 

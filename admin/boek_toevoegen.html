@@ -168,7 +168,6 @@
                     }
                 }
             }
-            console.log(authorsArr);
             let tagsArr = [];
             for (let i = 0; i < tagNumber; i++) {
                 if (document.getElementById('inputTag' + i).value.length != 0) {
@@ -187,7 +186,6 @@
                     */
                 }
             }
-            console.log(tagsArr);
             fetch('http://localhost:8080/book/create', {
                 method: 'POST',
                 body: JSON.stringify(

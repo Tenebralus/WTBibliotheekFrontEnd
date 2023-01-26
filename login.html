@@ -59,52 +59,42 @@
             </div>
         </div>
     </div>
-</body>
 
-
-<script>
-    function login() {
-        fetch('http://localhost:8080/user/login', {
-            method: 'POST',
-            body: JSON.stringify(
-                {
-                    email: document.getElementById('inputEmail').value,
-                    password: document.getElementById('inputPassword').value
+    <script>
+        function login() {
+            fetch('http://localhost:8080/user/login', {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        email: document.getElementById('inputEmail').value,
+                        password: document.getElementById('inputPassword').value
+                    }
+                ),
+                headers: {
+                    'Content-Type': 'application/json'
                 }
-            ),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => response.json()).then(data => {
-            if (data.success) {
-
-                console.log(data.token);
-
-                if (data.firstLogin) {
-                    setCookie('Email', document.getElementById('inputEmail').value);
-                    alert("Dit is je eerste login, pas je wachtwoord aan.");
-                    return window.location.href = 'eerste_login.html';
-                }
-
-                setCookie("Authentication", data.token);
-
-
-                if (data.admin) {
-                    window.location.href = 'admin/index.html';
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    if (data.firstLogin) {
+                        setCookie('Email', document.getElementById('inputEmail').value);
+                        alert("Dit is je eerste login, pas je wachtwoord aan.");
+                        return window.location.href = 'eerste_login.html';
+                    }
+                    setCookie("Authentication", data.token);
+                    if (data.admin) {
+                        window.location.href = 'admin/index.html';
+                    }
+                    else {
+                        window.location.href = 'user/index.html';
+                    }
                 }
                 else {
-                    window.location.href = 'user/index.html';
+                    alert("Combinatie van email en wachtwoord niet gevonden");
                 }
-            }
-            else {
-                alert("Combinatie van email en wachtwoord niet gevonden");
-            }
+            });
+        }
+    </script>
 
-
-
-        });
-    }
-
-</script>
+</body>
 
 </html>
