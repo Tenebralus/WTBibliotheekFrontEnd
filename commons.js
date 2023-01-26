@@ -90,5 +90,42 @@ function createReservation(clickedId) {
       } else {
         return alert("Er is iets mis gegaan.");
       }
+    })
+  }
+
+  function createLoanTable() {
+    fetch('http://localhost:8080/loan/dto/user', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Email': getCookie('Email')
+    }}).then(response => response.json()).then(data => {
+      let rows = '';
+      data.forEach(element => {
+        let authorNames = "";
+        for (let i = 0; i < element.authors.length; i++) {
+          authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+          if (i < element.authors.length - 1) {
+            authorNames += ", ";
+          }
+        }
+        //do not want to see null but empty space
+        let dateReturned = "";
+        if (element.dateReturned == null) {
+          dateReturned = '';
+        } else {
+          dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+        }
+        let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+        rows +=
+          "<tr><td>" + element.bookTitle + "</td>" +
+          "<td>" + element.bookCopyNr + "</td>" +
+          "<td>" + element.bookIsbn + "</td>" +
+          "<td>" + authorNames + "</td>" +
+          "<td>" + element.bookCopyStatus + "</td>" +
+          "<td>" + dateLoaned + "</td>" +
+          "<td>" + dateReturned + "</td>";
+      });
+      document.getElementById('loans-row').innerHTML = rows;
     });
-}
+  }
