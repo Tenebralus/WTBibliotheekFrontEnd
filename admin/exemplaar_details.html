@@ -214,7 +214,22 @@
                 }
 
 
-
+                userCounter = 0;
+                fetch('http://localhost:8080/user/all', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authentication': getCookie('Authentication')
+                    }
+                })
+                    .then(response => response.json()).then(data => {
+                        console.log(data);
+                        data.forEach(element => {
+                            userCounter++;
+                            let userString = element.firstName + " " + element.lastName;
+                            usernameCurrentLoan += '<option value="' + element.id + '">' + userString + '</option>';
+                        })
+                    });
 
 
 
