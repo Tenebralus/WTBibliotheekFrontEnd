@@ -176,7 +176,7 @@
                             document.getElementById("user-select").innerHTML =
                                 '<input list="userDataList" id="loanBookUser" name="loanBook">'+userOptions;
                             document.getElementById("userLoanButton").innerHTML =
-                                '<button class="btn btn-outline-primary" type="button" id="userButton" onclick="createLoan(this.id)">Uitlenen</button>';
+                                '<button class="btn btn-outline-primary" type="button" id="loanButttonSave" onclick="makeLoan(${data.bookCopyDetailsDTOs[i].id },${ data.bookCopyDetailsDTOs[i].status })">Uitlenen</button>';
                         }
                         if (data.currentLoan == null) {
                             document.getElementById("currentLoan").innerHTML =
