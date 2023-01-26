@@ -144,10 +144,16 @@ function createReservation(clickedId) {
           .then(data => {
             if(data == admin)
             {
-              window.location.href = adminPage
+              if(adminPage != "")
+              {
+                window.location.href = adminPage
+              }
             }
             else if (data == user){
-              window.location.href = userPage
+              if(userPage != "")
+              {
+                window.location.href = userPage
+              }
             }
             else
             {

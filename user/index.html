@@ -80,6 +80,8 @@
   </div>
 
   <script>
+    InitializePage("" ,"../admin/index.html");
+
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
       let rows = '';
       data.forEach(element => {
