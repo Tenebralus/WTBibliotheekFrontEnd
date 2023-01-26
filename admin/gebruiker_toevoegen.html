@@ -102,9 +102,9 @@
       </div>
     </div>
     <div class="row">
-      <div class="col">
+      <!--<div class="col">
         <p id='done' class="user-succes" style='display: none'>Gebruiker toegevoegd!</p>
-      </div>
+      </div>-->
       <div class="col text-end">
         <button class="btn btn-success" type="button" onclick="createUser()">Toevoegen</button>
       </div>
@@ -112,6 +112,7 @@
   </div>
 
   <script>
+    //window.onload = createUser();
     function createUser() {
       // read fields
       let firstNameElementValue = document.getElementById('firstName').value;
@@ -137,12 +138,14 @@
         }
       })
         .then(() => {
-          var text = document.getElementById("done");
-          if (text.style.display === "none") {
-            text.style.display = "block";
-          } else {
-            text.style.display = "none";
-          }
+          alert("Gebruiker toegevoegd!");
+          location.reload();
+          //var text = document.getElementById("done");
+          //if (text.style.display === "none") {
+          //  text.style.display = "block";
+          //} else {
+          //  text.style.display = "none";
+          //}
         })
     }
   </script>
