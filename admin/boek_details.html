@@ -108,7 +108,7 @@
     <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
   </div>
   <div></div>
-
+  
   <script>
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
@@ -116,8 +116,28 @@
     const bookCopyId = urlParams.get('bookcopy');
     window.onload = createBookCopiesTable();
 
+    let loanId = null;
+
     function createBookCopiesTable() {
       fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
+        fetch("http://localhost:8080/user/all/", {
+              method: "GET",
+              headers: {
+                'Content-Type': 'application/json',
+                'Authentication': getCookie('Authentication')
+              }
+            })
+            .then(response => response.json()).then(usersData => {
+              let userOptions = '<datalist id="userDataList">';
+
+              usersData.forEach(element => {
+                    console.log(element.firstName);
+                    userOptions += `<option value="${element.firstName + " " + element.lastName}">`
+              });
+              userOptions += '</datalist>';
+          
+        
+
         let rows = '';
         let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
         let bookAuthors = '';
@@ -157,55 +177,51 @@
             }
           }
           text = '';
+          let loanButtonHTML = ""
           if (data.bookCopyDetailsDTOs[i].status == "archived") {
             text = "Beschikbaar stellen";
             updateButtonHTML = '<button class="btn btn-outline-secondary" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           } else {
             text = "Archiveer exemplaar";
+
             updateButtonHTML = '<button class="btn btn-outline-danger" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
+            /*if (data.bookCopyDetailsDTOs[i].status == "available"){
+              loanButtonHTML = '<button class="btn btn-outline-success" type="button" id="loanButtton' + data.bookCopyDetailsDTOs[i].id + '"  onclick="loanBookDateList(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + "Leen exemplaar uit" + ' </button>';
+            }*/
           }
           let returnButtonHTML = '';
           //let userDropDown = '';
           if (data.bookCopyDetailsDTOs[i].status == "loaned") {
             returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
           } else if (data.bookCopyDetailsDTOs[i].status == "available") {
-            usernameCurrentLoan = '<select class="form-select" id="user' + data.bookCopyDetailsDTOs[i].id + 'dropdown"><option value ="0">Kies gebruiker</option>';
-            returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="Uitlenen' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="createLoan(this.id)">Uitlenen</button>'
+            //usernameCurrentLoan = '<select class="form-select" id="user' + data.bookCopyDetailsDTOs[i].id + 'dropdown"><option value ="0">Kies gebruiker</option>';
+            usernameCurrentLoan = '<input list="userDataList" id="loanBookUser" name="loanBook">';
+            returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="loanButttonSave' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="makeLoan(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')">Uitlenen</button>'
           }
 
+          /*let loanInputHTML = '';
+          if(loanId != null && loanId == data.bookCopyDetailsDTOs[i].id){
+            //loanInputHTML = '<input list="userDataList" id="loanBookUser" name="loanBook">';
+            //loanButtonHTML = '<button class="btn btn-outline-success" type="button" id="loanButttonSave"  onclick="makeLoan(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + "Leen uit" + ' </button>';
+            //console.log(userOptions);
+            
 
-          userCounter = 0;
-          fetch('http://localhost:8080/user/all', {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authentication': getCookie('Authentication')
-            }
-          })
-            .then(response => response.json()).then(data => {
-              console.log(data);
-              data.forEach(element => {
-                userCounter++;
-                let userString = element.firstName + " " + element.lastName;
-                usernameCurrentLoan += '<option value="' + element.id + '">' + userString + '</option>';
-                console.log(usernameCurrentLoan);
-              })
-            });
-            usernameCurrentLoan += '</select>';
-
+          }*/
 
           //let updateButtonHTML = '<button class="btn btn-outline-success" type="button" id="BookCopyId' + data.bookCopyDetailsDTOs[i].id + '"  onclick="updateBookcopy(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')" >' + text + ' </button>';
           rows += "<tr><td>" +
             '<a href=exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
             data.bookCopyDetailsDTOs[i].status + "</td><td>" +
             dateLoaned + "</td><td>" +
-            usernameCurrentLoan + "</td><td>" +
+            usernameCurrentLoan + userOptions + "</td><td>" +
             //userDropDown + "</td><td>" + 
             returnButtonHTML + "</td><td>" +
             updateButtonHTML + "</td>" +
             "</tr>";
         }
+
         document.getElementById('table-bookcopies').innerHTML = rows;
+      })
       });
     }
 
@@ -323,18 +339,7 @@
       let currentStatus = (status)
       if (currentStatus == "loaned") {
         alert('Exemplaar is nog uitgeleend, je kan het niet archiveren');
-        /*const response = confirm('Exemplaar is nog uitgeleend, weet je zeker dat je het exemplaar wil archiveren');
-        if (response) {
-          fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
-            method: "PUT"
-          })
-            .then(() => {
-              alert('Exemplaar is gearchiveerd');
-              createBookCopiesTable();
-            });
-        } else {
-          alert('Exemplaar ongewijzigd');
-        }*/
+        
       } else if (currentStatus == "archived") {
         fetch('http://localhost:8080/bookcopy/archive/' + bookCopyId, {
           method: "PUT"
@@ -395,6 +400,39 @@
         });
         document.getElementById('loanHistory').innerHTML = tableTitle + searchBar + tableHead + rows;
       });
+    }
+
+    function loanBookDateList(bookCopyId, status){
+      
+      loanId = bookCopyId;
+      createBookCopiesTable();
+    }
+
+      function makeLoan(bookCopyId, status) {
+      
+      let name = document.getElementById("loanBookUser").value;
+      if (!!name) {
+        let newFirstName = name.split(" ")[0];
+        let newLastName = name.split(" ")[1];
+        fetch('http://localhost:8080/loan/createNew', {
+          method: "POST",
+          body: JSON.stringify(
+            {
+              firstName: newFirstName,
+              lastName: newLastName,
+              bookCopyId: bookCopyId
+            }
+          ),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(() => {
+            location.reload();
+          });
+      }
+      console.log(bookCopyId);
+      
     }
   </script>
 
