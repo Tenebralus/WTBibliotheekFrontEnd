@@ -264,7 +264,7 @@ function searchIndex() {
         }
       })
       rows += "</tr><td>" +
-        '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
+        urlImage + "</tr><td>" +
         element.title + "</td><td>" +
         element.isbn + "</td><td>" +
         auths + "</td><td>" +
