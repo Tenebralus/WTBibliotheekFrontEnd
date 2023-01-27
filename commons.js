@@ -233,7 +233,7 @@ function createReservation(clickedId) {
             }
           }
         }
-        let dateReserved = new Date(element.reservationDate).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+        let dateReserved = new Date(element.dateReserved).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
         rows += "</tr><td>" +
           element.book.title + "</td><td>" +
           auths + "</td><td>" +
@@ -244,53 +244,115 @@ function createReservation(clickedId) {
     });
   }
 
-  // function searchLoans() {
-  //   let keyword = document.getElementById('searchField').value;
-  //   if (!keyword) {
-  //     return createReservationTable();
-  //   }
-  //   fetch('http://localhost:8080/loan/search/user/' + keyword, {
-  //   method: 'GET',
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'token': getCookie('Authentication')
-  //   }
-  // }).then(response => response.json()).then(data => {
-  //     let rows = '';
-  //     data.forEach(element => {
-  //       let authorNames = "";
-  //         if (element.authors) {
-  //           for (let i = 0; i < element.authors.length; i++) {
-  //             authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
-  //             if (i < element.authors.length - 1) {
-  //               authorNames += ", ";
-  //             }
-  //           }
-  //         }
-  //         //do not want to see null but empty space
-  //         let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-  //         let extra = ''
-  //         if (element.bookCopyStatus == "loaned") {
-  //           extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
-  //         } else {
-  //           extra = '';
-  //         }
-  //         dateReturned = "";
-  //         if (element.dateReturned == null) {
-  //           dateReturned = extra;
-  //         } else {
-  //           dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-  //         }
-  //         rows +=
-  //           "<tr><td>" + element.bookTitle + "</td>" +
-  //           "<td>" + element.bookCopyNr + "</td>" +
-  //           "<td>" + element.bookIsbn + "</td>" +
-  //           "<td>" + authorNames + "</td>" +
-  //           "<td>" + element.bookCopyStatus + "</td>" +
-  //           "<td>" + dateLoaned + "</td>" +
-  //           "<td>" + dateReturned + "</td></tr>";
-  //     });
-  //     document.getElementById('loans-row-current').innerHTML = rows;
-  //   });
-  // }
+  function searchLoansCurrent() {
+    let keyword = document.getElementById('searchField').value;
+    if (!keyword) {
+      return createLoanTableCurrent();
+    }
+    fetch('http://localhost:8080/loan/search/user/' + keyword, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'token': getCookie('Authentication')
+    }
+  }).then(response => response.json()).then(data => {
+      let rows = '';
+      data.forEach(element => {
+        let authorNames = "";
+          if (element.authors) {
+            for (let i = 0; i < element.authors.length; i++) {
+              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+              if (i < element.authors.length - 1) {
+                authorNames += ", ";
+              }
+            }
+          }
+          //do not want to see null but empty space
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          let extra = ''
+          // if (element.bookCopyStatus == "loaned") {
+          //   extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
+          // } else {
+          //   extra = '';
+          // }
+          // dateReturned = "";
+          if (element.dateReturned == null) {
+            // dateReturned = extra;
+            rows +=
+            "<tr><td>" + element.bookTitle + "</td>" +
+            "<td>" + element.bookCopyNr + "</td>" +
+            "<td>" + element.bookIsbn + "</td>" +
+            "<td>" + authorNames + "</td>" +
+            "<td>" + element.bookCopyStatus + "</td>" +
+            "<td>" + dateLoaned + "</td></tr>";
+          } 
+          // else {
+          //   dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          // }
+          // rows +=
+          //   "<tr><td>" + element.bookTitle + "</td>" +
+          //   "<td>" + element.bookCopyNr + "</td>" +
+          //   "<td>" + element.bookIsbn + "</td>" +
+          //   "<td>" + authorNames + "</td>" +
+          //   "<td>" + element.bookCopyStatus + "</td>" +
+          //   "<td>" + dateLoaned + "</td>" +
+          //   "<td>" + dateReturned + "</td></tr>";
+      });
+      document.getElementById('loans-row-current').innerHTML = rows;
+    });
+  }
+
+  function searchLoansHistory() {
+    let keyword = document.getElementById('searchField3').value;
+    if (!keyword) {
+      return createLoanTableHistory();
+    }
+    fetch('http://localhost:8080/loan/search/user/' + keyword, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'token': getCookie('Authentication')
+    }
+  }).then(response => response.json()).then(data => {
+      let rows = '';
+      data.forEach(element => {
+        let authorNames = "";
+          if (element.authors) {
+            for (let i = 0; i < element.authors.length; i++) {
+              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+              if (i < element.authors.length - 1) {
+                authorNames += ", ";
+              }
+            }
+          }
+          //do not want to see null but empty space
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          dateReturned = "";
+          if (element.dateReturned != null) {
+            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            rows +=
+            "<tr><td>" + element.bookTitle + "</td>" +
+            "<td>" + element.bookCopyNr + "</td>" +
+            "<td>" + element.bookIsbn + "</td>" +
+            "<td>" + authorNames + "</td>" +
+            "<td>" + element.bookCopyStatus + "</td>" +
+            "<td>" + dateLoaned + "</td>" +
+            "<td>" + dateReturned + "</td></tr>";
+          } 
+          // else {
+          //   dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          // }
+          // rows +=
+          //   "<tr><td>" + element.bookTitle + "</td>" +
+          //   "<td>" + element.bookCopyNr + "</td>" +
+          //   "<td>" + element.bookIsbn + "</td>" +
+          //   "<td>" + authorNames + "</td>" +
+          //   "<td>" + element.bookCopyStatus + "</td>" +
+          //   "<td>" + dateLoaned + "</td>" +
+          //   "<td>" + dateReturned + "</td></tr>";
+      });
+      document.getElementById('loans-row-history').innerHTML = rows;
+    });
+  }
+
 
