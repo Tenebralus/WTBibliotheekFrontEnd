@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reserveringen</title>
+  <link rel="icon" href="../images/favicon.ico">
+
+  <script type="text/javascript" src="../commons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="../style.css" rel="stylesheet">
+
+  <style>
+  </style>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              Account
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+            </ul>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+              data-bs-toggle="dropdown" aria-expanded="false">
+              Admin
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <li><a class="dropdown-item" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+              <li><a class="dropdown-item active" href="../admin/reserveringen.html">Reserveringen</a></li>
+              <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+              <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
+            </ul>
+          </li>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <script>
+            logInOutButton(document.getElementById('logout'))
+          </script>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>Openstaande reserveringen</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of gebruiker">
+      </div>
+      <div class="col">
+        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Gebruiker</th>
+          <th>Datum</th>
+          <th>Beschikbare exemplaren</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="book-row">
+      </tbody>
+    </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page"></div>
+      <div class="col-2 text-center" id="current-page"></div>
+      <div class="col-5 text-left" id="next-page"></div>
+    </div>
+    <div class="row" id="page-info"></div>
+  </div>
+  </div>
+
+  <script>
+    InitializePage("../user/index.html", "");
+    let currentPage = 1;
+    window.onload = createTable(currentPage);
+
+    function createTable(page) {
+      fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
+        let rows = '';
+        let pageData = pageSelector(data);
+        pageData.forEach(element => {
+          //Prevents errors if no user is registered to a reservation
+          let userName = ""
+          if (element.firstName && element.lastName) {
+            userName = element.firstName + " " + element.lastName
+          }
+          //Generates the list of available copies, or grays out if none
+          let copyDropDown = '<select class="form-select" id="reservation' + element.id + 'dropdown"><option value ="0">Selecteer exemplaar</option>';
+          let copyCounter = 0;
+          let buttonHtml = '<button class="btn btn-outline-primary" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button>';
+          let dateReserved = new Date(element.reservationDate).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          element.bookcopies.forEach(copy => {
+            if (copy.status == "available") {
+              copyCounter++;
+              let bookCopyString = element.bookId + "." + copy.bookCopyNr;
+              copyDropDown += '<option value="' + copy.id + '">' + bookCopyString + '</option>';
+            }
+          })
+          if (copyCounter == 0) {
+            copyDropDown = '<p class="text-center" style="color:gray;">Geen exemplaren beschikbaar</p>';
+            buttonHtml = ''
+          }
+          //Generates HTML per row
+          rows += "<tr><td>" + element.bookTitle + "</td><td>" + userName + "</td><td>" + dateReserved + '</td><td>' + copyDropDown + '</td><td>' + buttonHtml + '</td></tr>'
+        });
+        document.getElementById('book-row').innerHTML = rows;
+      });
+    }
+
+    function nextPage() {
+      createTable(currentPage + 1)
+      currentPage++;
+    }
+
+    function previousPage() {
+      createTable(currentPage - 1)
+      currentPage--;
+    }
+
+    function createLoan(clickedId) {
+      let idstr = clickedId.split("loan");
+      //idnum is the id of the reservation
+      let idnum = parseInt(idstr[1]);
+      //copy is the id of the selected bookCopy
+      let copy = document.getElementById("reservation" + idnum + "dropdown").value;
+      if (copy != 0) {
+        fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
+          method: 'POST'
+        })
+          .then(alert("Boek uitgeleend."));
+        createTable();
+      } else {
+        alert("Selecteer een exemplaar");
+      }
+    }
+
+    function search() {
+      let keyword = document.getElementById('searchField').value;
+      if (!keyword) {
+        return createTable(1);
+      }
+      fetch('http://localhost:8080/reservation/search/' + keyword).then(response => response.json()).then(data => {
+        let rows = '';
+        data.forEach(element => {
+          //Prevents errors if no user is registered to a reservation
+          let userName = ""
+          if (element.firstName && element.lastName) {
+            userName = element.firstName + " " + element.lastName
+          }
+          //Generates the list of available copies, or grays out if none
+          let copyDropDown = '<select class="form-select" id="reservation' + element.id + 'dropdown"><option value ="0">Selecteer exemplaar</option>';
+          let copyCounter = 0;
+          let buttonHtml = '<button class="btn btn-outline-success" type="button" id="loan' + element.id + '" onclick="createLoan(this.id)">Uitlenen</button>';
+          let dateReserved = new Date(element.reservationDate).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          element.bookcopies.forEach(copy => {
+            if (copy.status == "available") {
+              copyCounter++;
+              let bookCopyString = element.bookId + "." + copy.bookCopyNr;
+              copyDropDown += '<option value="' + copy.id + '">' + bookCopyString + '</option>';
+            }
+          })
+          if (copyCounter == 0) {
+            copyDropDown = '<p class="text-center" style="color:gray;">Geen exemplaren beschikbaar</p>';
+            buttonHtml = ''
+          }
+          //Generates HTML per row
+          rows += "<tr><td>" + element.bookTitle + "</td><td>" + userName + "</td><td>" + dateReserved + '</td><td>' + copyDropDown + '</td><td>' + buttonHtml + '</td></tr>'
+        });
+        document.getElementById('book-row').innerHTML = rows;
+      });
+    }
+  </script>
+
+</body>
+
+</html>

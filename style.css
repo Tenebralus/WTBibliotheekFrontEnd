@@ -1,0 +1,37 @@
+body {
+  margin-top: 80px;
+  font-family: "EuclidSquare", "Calibri";
+}
+
+#logout {
+  position: absolute;
+  right: 5%;
+}
+
+.btn-outline-success {
+  color: #008200 !important;
+  border-color: #008200 !important;
+}
+
+.btn-outline-success:hover,
+.btn-outline-success:active,
+.btn-outline-success:visited {
+  color: #fff !important;
+  background-color: #00e600 !important;
+  border-color: #00e600 !important;
+}
+
+div {
+  padding-bottom: 10px;
+  padding-top: 10px;
+}
+
+#forgotPassword {
+  font-size: small;
+}
+
+.user-succes {
+  font-size: 1.2rem;
+  color: rgb(5, 173, 5);
+  font-weight: 500;
+}

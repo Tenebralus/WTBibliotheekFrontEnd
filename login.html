@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" href="images/favicon.ico">
+
+    <script type="text/javascript" src="commons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../style.css" rel="stylesheet">
+
+    <style>
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <a class="navbar-brand" href="#"><img src='images/WT-Basislogo-RGB.png' width="200"></a>
+                </div>
+                <div class="col-12 col-md-6">
+                    <ul class="nav-item text-center">
+                        <h1 class="">WTBibliotheek</h1>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="inputEmail" class="form-label">Emailadres</label>
+                    <input type="email" class="form-control" id="inputEmail" placeholder="naam@workingtalent.nl">
+                </div>
+            </div>
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="inputPassword" class="form-label">Wachtwoord</label>
+                    <input type="password" class="form-control" id="inputPassword" placeholder="Wachtwoord">
+                </div>
+            </div>
+            <div class="col-6">
+                <a href="wachtwoord_vergeten.html" id="forgotPassword">Wachtwoord vergeten?</a>
+            </div>
+            <div class="col-6 text-end">
+                <button class="btn btn-success" type="button" id="loginbutton" onclick="login()">Log in</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function login() {
+            fetch('http://localhost:8080/user/login', {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        email: document.getElementById('inputEmail').value,
+                        password: document.getElementById('inputPassword').value
+                    }
+                ),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    if (data.firstLogin) {
+                        setCookie('Email', document.getElementById('inputEmail').value);
+                        alert("Dit is je eerste login, pas je wachtwoord aan.");
+                        return window.location.href = 'eerste_login.html';
+                    }
+                    setCookie("Authentication", data.token);
+                    if (data.admin) {
+                        window.location.href = 'admin/index.html';
+                    }
+                    else {
+                        window.location.href = 'user/index.html';
+                    }
+                }
+                else {
+                    alert("Combinatie van email en wachtwoord niet gevonden");
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>

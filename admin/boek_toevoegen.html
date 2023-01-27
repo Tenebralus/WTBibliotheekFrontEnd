@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boek toevoegen</title>
+    <link rel="icon" href="../images/favicon.ico">
+
+    <script type="text/javascript" src="../commons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../style.css" rel="stylesheet">
+
+    <style>
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="../admin/index.html">Reserveren</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Account
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="../admin/settings.html">Settings</a></li>
+                            <li><a class="dropdown-item" href="../admin/leningen_van_mij.html">Leningen</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Admin
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item active" href="../admin/bibliotheek.html">Bibliotheek</a></li>
+                            <li><a class="dropdown-item" href="../admin/reserveringen.html">Reserveringen</a></li>
+                            <li><a class="dropdown-item" href="../admin/leningen_van_iedereen.html">Leningen</a></li>
+                            <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
+                        </ul>
+                    </li>
+                    <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log
+                        uit</button>
+                    <script>
+                        logInOutButton(document.getElementById('logout'))
+                    </script>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h3>Boek toevoegen</h3>
+            </div>
+        </div>
+        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur
+                toevoegen</button></a>
+        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag
+                toevoegen</button></a>
+        <div class="row">
+            <div class="col-4">
+                <div class="mb-3">
+                    <label for="inputBookTitle" class="form-label">Titel</label>
+                    <input type="text" class="form-control" id="inputBookTitle" placeholder="Titel">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="mb-3">
+                    <label for="inputIsbn" class="form-label">ISBN</label>
+                    <input type="text" class="form-control" id="inputIsbn" placeholder="111111-1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="mb-3">
+                    <fieldset class="inputs-set" id="author-list" class="input-field">
+                        <label for="inputBookTitle" class="form-label">Auteur(s)</label>
+                        <br>
+
+                        <body onLoad="loadFields();"></body>
+                        <!-- </input> -->
+                    </fieldset>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="mb-3">
+                    <fieldset class="inputs-set" id="tag-list" class="input-field">
+                        <label for="inputBookTitle" class="form-label">Tag(s)</label>
+                        <br>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="mb-3">
+                    <button class="btn btn-secondary" type="button" id="extraAuthor" onclick="addAuthorField()">+ Extra
+                        auteur</button>
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="mb-3">
+                    <button class="btn btn-secondary" type="button" id="extraTag" onclick="addTagField()">+ Extra
+                        tag</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-outline-success" type="button" id="addBook"
+                    onclick="createBookAndNext()">Toevoegen</button>
+                <!-- <button class="btn btn-outline-success" type="button" id="addBookAndNext" onclick="createBookAndNext()">Toevoegen en volgende</button> -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        InitializePage("../user/index.html", "");
+        let authorNumber = 0;
+        let tagNumber = 0;
+
+        function loadFields() {
+            addAuthorField();
+            addTagField();
+        }
+
+        async function createBook() {
+            let newBookTitle = document.getElementById('inputBookTitle').value;
+            let newIsbn = document.getElementById('inputIsbn').value;
+            if (newBookTitle.length == 0 || newIsbn.length == 0) {
+                alert("Voer een titel en isbn in")
+                return;
+            }
+            let authorsArr = [];
+            for (let i = 0; i < authorNumber; i++) {
+                await searchAuthorId().then(data => {
+                    data.forEach(element => {
+                        compareString = element.firstName + " " + element.lastName;
+                        if (compareString.localeCompare(document.getElementById('inputAuthor' + i).value) == 0) {
+                            authorId = element.id;
+                        }
+                    });
+                });
+                if (document.getElementById('inputAuthor' + i).value.length != 0 && typeof authorId !== 'undefined') {
+                    if (!authorsArr.find(element => { if (element.id == authorId) { return true } })) {
+                        authorsArr.push({ "id": authorId });
+                    }
+                }
+            }
+            let tagsArr = [];
+            for (let i = 0; i < tagNumber; i++) {
+                if (document.getElementById('inputTag' + i).value.length != 0) {
+                    await searchTagId(document.getElementById('inputTag' + i).value).then(data => {
+                        if (typeof data[0] !== 'undefined') {
+                            tagId = data[0].id;
+                            if (!tagsArr.find(element => { if (element.id == tagId) { return true } })) {
+                                tagsArr.push({ "id": tagId });
+                            }
+                        }
+                    });
+                }
+            }
+            fetch('http://localhost:8080/book/create', {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        title: newBookTitle,
+                        isbn: newIsbn,
+                        authors: authorsArr,
+                        tags: tagsArr
+                    }
+                ),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(() => {
+                    alert('Boek is opgeslagen');
+                    //location.reload;
+                })
+        }
+
+        //function createBookAndDone() {
+        //    createBook();
+        //    window.location = 'bibliotheek.html';
+        //}
+        function createBookAndNext() {
+            createBook();
+            document.getElementById('inputBookTitle').value = "";
+            document.getElementById('inputIsbn').value = "";
+        }
+
+        async function searchAuthorId() {
+            const response = await fetch('http://localhost:8080/author/all');
+            const authorIdResponse = await response.json();
+            return authorIdResponse;
+        }
+
+        async function searchTagId(searchName) {
+            const response = await fetch('http://localhost:8080/tag/name/' + searchName);
+            const TagIdResponse = await response.json();
+            return TagIdResponse;
+        }
+
+        function addAuthorField() {
+            const myAuthorForm = document.getElementById("author-list");
+            var x = document.createElement("INPUT");
+            x.setAttribute("list", "inputAuthorList" + authorNumber);
+            x.setAttribute("id", "inputAuthor" + authorNumber);
+            x.setAttribute("placeholder", "Auteur");
+            x.setAttribute("class", "form-control");
+            const newAuthorField = document.createElement("datalist");
+            newAuthorField.setAttribute("id", "inputAuthorList" + authorNumber);
+            newAuthorField.classList.add("col-4");
+            newAuthorField.classList.add("mb-3");
+            fetch('http://localhost:8080/author/all').then(response => response.json()).then(data => {
+                data.forEach(element => {
+                    var option = document.createElement('option');
+                    option.setAttribute("value", element.firstName + " " + element.lastName);
+                    option.setAttribute("id", element.id);
+                    newAuthorField.appendChild(option);
+                });
+            });
+            x.appendChild(newAuthorField);
+            myAuthorForm.appendChild(x);
+            authorNumber++;
+        }
+
+        function addTagField() {
+            const myTagForm = document.getElementById("tag-list");
+            var x = document.createElement("INPUT");
+            x.setAttribute("list", "inputTagList" + tagNumber);
+            x.setAttribute("id", "inputTag" + tagNumber);
+            x.setAttribute("placeholder", "Tag");
+            x.setAttribute("class", "form-control");
+            const newTagField = document.createElement("datalist");
+            newTagField.setAttribute("id", "inputTagList" + tagNumber);
+            newTagField.classList.add("col-4");
+            newTagField.classList.add("mb-3");
+            fetch('http://localhost:8080/tag/all').then(response => response.json()).then(data => {
+                data.forEach(element => {
+                    var option = document.createElement('option');
+                    option.setAttribute("value", element.name);
+                    option.setAttribute("id", element.id);
+                    newTagField.appendChild(option);
+                });
+            });
+            x.appendChild(newTagField);
+            myTagForm.appendChild(x);
+            tagNumber++;
+        }
+    </script>
+
+</body>
+
+</html>

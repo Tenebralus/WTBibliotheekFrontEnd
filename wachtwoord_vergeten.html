@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="icon" href="images/favicon.ico">
+
+    <script type="text/javascript" src="commons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="../style.css" rel="stylesheet">
+
+    <style>
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <a class="navbar-brand" href="#"><img src='images/WT-Basislogo-RGB.png' width="200"></a>
+                </div>
+                <div class="col-12 col-md-6">
+                    <ul class="nav-item text-center">
+                        <h1 class="">WTBibliotheek</h1>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row">
+            <h3>Wachtwoord vergeten</h3>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="input-email" class="form-label">Emailadres</label>
+                    <input type="email" class="form-control disabled" id="input-email"
+                        placeholder="naam@workingtalent.nl">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-success" type="button" id="email-button" onclick="sendEmail()">Verzend
+                    mail</button>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5" id="code-invoer" style="display: none;">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="input-code" class="form-label">Voer de verificatiecode in</label>
+                    <input type="code" class="form-control disabled" id="input-code" placeholder="code">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-success" type="button" id="code-button"
+                    onclick="submitVerificationCode()">Bevestig
+                    code</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let code;
+
+        // Verstuurt mail met code als het email adres in het systeem staat
+        function sendEmail() {
+            fetch('http://localhost:8080/sendemail', {
+                method: 'POST',
+                body: JSON.stringify(
+                    {
+                        receiver: document.getElementById('input-email').value
+                    }
+                ), headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.status === 500) {
+                    alert("Email kon niet worden verzonden, probeer het later nog eens");
+                }
+                else {
+                    return response.json();
+                }
+            }).then(data => {
+                if (data.success) {
+                    code = data.verificationCode;
+                    document.getElementById('code-invoer').style.display = "block";
+                }
+                else {
+                    alert("Dit emailadres staat niet geregistreerd in de bibliotheek");
+                }
+            });
+        }
+
+        function submitVerificationCode() {
+            if (document.getElementById('input-code').value == code) {
+                setCookie('Email', document.getElementById('input-email').value);
+                window.location.href = 'eerste_login.html';
+            } else {
+                alert("Verificatiecode onjuist");
+            }
+        }
+    </script>
+</body>
+
+</html>
