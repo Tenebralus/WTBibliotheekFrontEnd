@@ -158,6 +158,7 @@ function pageSelector(data) {
 
   let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
   return pageData;
+}
 
   function createIndexTable(page) {
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
