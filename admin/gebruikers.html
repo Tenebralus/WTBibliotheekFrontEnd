@@ -123,7 +123,7 @@
             let status = "Actief"
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
             let delButton = ''
-            if (element.emailAddress != getCookie('Email')) { //nog beter zou zijn om token te gebruiken
+            if (element.token != getCookie('Authentication')) { //nog beter zou zijn om token te gebruiken
               delButton = '</td><td><button class="btn btn-outline-danger" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
             } else {
               delButton = '</td><td></td></tr>';
@@ -248,7 +248,7 @@
                 "</td><td>" + dateAccountDeleted +
                 '</td><td>' + status +
                 "</td><td>"
-              if (element.emailAddress != getCookie('Email')) {
+              if (element.token != getCookie('Authentication')) {
                 rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin + "</td><td>";
               } else {
                 rows += "</td><td>";
