@@ -92,18 +92,28 @@
       <tbody id="book-row">
       </tbody>
     </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page"></div>
+      <div class="col-2 text-center" id="current-page"></div>
+      <div class="col-5 text-left" id="next-page"></div>
+    </div>
+    <div class="row" id="page-info"></div>
   </div>
   </div>
 
   <script>
     InitializePage("../user/index.html" ,"");
 
-    window.onload = createTable();
+    let currentPage = 1;
+    window.onload = createTable(currentPage);
 
-    function createTable() {
+    function createTable(page) {
       fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
         let rows = '';
-        data.forEach(element => {
+
+        let pageData = pageSelector(data);
+
+        pageData.forEach(element => {
           //Prevents errors if no user is registered to a reservation
           let userName = ""
           if (element.firstName && element.lastName) {
@@ -132,6 +142,16 @@
       });
     }
 
+    function nextPage() {
+      createTable(currentPage + 1)
+      currentPage++;
+    }
+
+    function previousPage() {
+      createTable(currentPage - 1)
+      currentPage--;
+    }
+
     function createLoan(clickedId) {
       let idstr = clickedId.split("loan");
       //idnum is the id of the reservation
@@ -153,6 +173,9 @@
 
     function search() {
       let keyword = document.getElementById('searchField').value;
+      if (!keyword) {
+        return createTable(1);
+      }
       fetch('http://localhost:8080/reservation/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {

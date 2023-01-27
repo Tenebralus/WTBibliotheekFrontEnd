@@ -79,8 +79,7 @@
         <button class="btn btn-outline-success" type="button" onclick="searchCurrentLoans()">Zoek</button>
       </div>
     </div>
-  </div>
-  <div class="container">
+
     <table class="table">
       <thead>
         <tr>
@@ -112,8 +111,7 @@
         <button class="btn btn-outline-success" type="button" onclick="searchOldLoans()">Zoek</button>
       </div>
     </div>
-  </div>
-  <div class="container">
+
     <table class="table">
       <thead>
         <tr>
@@ -128,18 +126,27 @@
       </thead>
       <tbody id="old-loans-row"></tbody>
     </table>
+
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page"></div>
+      <div class="col-2 text-center" id="current-page"></div>
+      <div class="col-5 text-left" id="next-page"></div>
+    </div>
+    <div class="row" id="page-info"></div>
   </div>
 
   <script>
     InitializePage("../user/index.html" ,"");
 
-    window.onload = createOldLoansTable();
+    let currentPage = 1;
+
+    window.onload = createOldLoansTable(currentPage);
     window.onload = createCurrentLoansTable();
 
     function createCurrentLoansTable() {
       fetch('http://localhost:8080/loan/dto/all/current').then(response => response.json()).then(data => {
         let rows = '';
-        data.sort(function(a, b) {
+        data.sort(function (a, b) {
           if (a.dateLoaned < b.dateLoaned) {
             return -1;
           }
@@ -175,10 +182,21 @@
       });
     }
 
-    function createOldLoansTable() {
+
+    function nextPage() {
+      createOldLoansTable(currentPage + 1)
+      currentPage++;
+    }
+
+    function previousPage() {
+      createOldLoansTable(currentPage - 1)
+      currentPage--;
+    }
+
+    function createOldLoansTable(page) {
       fetch('http://localhost:8080/loan/dto/all/old').then(response => response.json()).then(data => {
         let rows = '';
-        data.sort(function(a, b) {
+        data.sort(function (a, b) {
           if (a.dateReturned < b.dateReturned) {
             return 1;
           }
@@ -187,7 +205,10 @@
           }
           return 0
         });
-        data.forEach(element => {
+
+        let pageData = pageSelector(data);
+
+        pageData.forEach(element => {
           let authorNames = "";
           for (let i = 0; i < element.authors.length; i++) {
             authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
@@ -278,7 +299,7 @@
     function searchOldLoans() {
       let keyword = document.getElementById('old-loans-search-field').value;
       if (!keyword) {
-        return createOldLoansTable();
+        return createOldLoansTable(1);
       }
       fetch('http://localhost:8080/loan/search/old', {
         method: "POST",
@@ -291,32 +312,32 @@
           'Content-Type': 'application/json'
         }
       })
-      .then(response => response.json()).then(data => {
-        let rows = '';
-        data.forEach(element => {
-          let authorNames = "";
-          if (element.authors) {
-            for (let i = 0; i < element.authors.length; i++) {
-              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
-              if (i < element.authors.length - 1) {
-                authorNames += ", ";
+        .then(response => response.json()).then(data => {
+          let rows = '';
+          data.forEach(element => {
+            let authorNames = "";
+            if (element.authors) {
+              for (let i = 0; i < element.authors.length; i++) {
+                authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+                if (i < element.authors.length - 1) {
+                  authorNames += ", ";
+                }
               }
             }
-          }
-          //do not want to see null but empty space
-          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          let dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          rows +=
-            "<tr><td>" + element.bookTitle + "</td>" +
-            "<td>" + element.bookCopyNr + "</td>" +
-            "<td>" + element.bookIsbn + "</td>" +
-            "<td>" + authorNames + "</td>" +
-            "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
-            "<td>" + dateLoaned + "</td>" +
-            "<td>" + dateReturned + "</td></tr>";
+            //do not want to see null but empty space
+            let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            let dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            rows +=
+              "<tr><td>" + element.bookTitle + "</td>" +
+              "<td>" + element.bookCopyNr + "</td>" +
+              "<td>" + element.bookIsbn + "</td>" +
+              "<td>" + authorNames + "</td>" +
+              "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+              "<td>" + dateLoaned + "</td>" +
+              "<td>" + dateReturned + "</td></tr>";
+          });
+          document.getElementById('old-loans-row').innerHTML = rows;
         });
-        document.getElementById('old-loans-row').innerHTML = rows;
-      });
     }
   </script>
 

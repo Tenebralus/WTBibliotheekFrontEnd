@@ -181,7 +181,7 @@
               if (data.bookCopyDetailsDTOs[i].status == "loaned") {
                 returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
               } else if (data.bookCopyDetailsDTOs[i].status == "available") {
-                usernameCurrentLoan = '<input list="userDataList" id="loanBookUser" name="loanBook">';
+                usernameCurrentLoan = '<input list="userDataList" id="loanBookUser'+data.bookCopyDetailsDTOs[i].id+'" name="loanBook">';
                 returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="loanButttonSave' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="makeLoan(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')">Uitlenen</button>'
               }
               rows += "<tr><td>" +
@@ -251,7 +251,7 @@
         })
         .then(() => {
           alert('Exemplaar is ingeleverd');
-          createLoanTable();
+          location.reload();
         })
     }
 
@@ -370,10 +370,15 @@
     }
 
     function makeLoan(bookCopyId, status) {
-      let name = document.getElementById("loanBookUser").value;
-      if (!!name) {
+      console.log("text");
+      let name = document.getElementById("loanBookUser"+bookCopyId).value;
+      console.log(name);
+      if (name) {
+        console.log("text1");
         let newFirstName = name.split(" ")[0];
         let newLastName = name.split(" ")[1];
+        console.log(newFirstName);
+        console.log(newLastName);
         fetch('http://localhost:8080/loan/createNew', {
           method: "POST",
           body: JSON.stringify(
@@ -388,6 +393,7 @@
           }
         })
           .then(() => {
+            console.log("text3");
             location.reload();
           });
       }
