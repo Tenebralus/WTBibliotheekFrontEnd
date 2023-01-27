@@ -52,7 +52,7 @@
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-success" type="button" id="email-button" onclick="email()">Verzend mail</button>
+                <button class="btn btn-success" type="button" id="email-button" onclick="SendEmail()">Verzend mail</button>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-success" type="button" id="code-button" onclick="codeSubmit()">Bevestig
+                <button class="btn btn-success" type="button" id="code-button" onclick="SubmitVerificationCode()">Bevestig
                     code</button>
             </div>
         </div>
@@ -76,9 +76,8 @@
     <script>
 
         let code;
-        function email() {
-            document.getElementById('code-invoer').style.display = "block";
-            // Verstuurt mail met code
+        // Verstuurt mail met code als het email adres in het systeem staat
+        function SendEmail() {     
             fetch('http://localhost:8080/sendemail', {
                 method: 'POST',
                 body: JSON.stringify(
@@ -96,31 +95,18 @@
                     return response.json();
                 }
             }).then(data => {
-                code = data.verificationCode;
+                if(data.success)
+                {
+                    code = data.verificationCode;
+                    document.getElementById('code-invoer').style.display = "block";
+                }
+                else{
+                    alert("Dit emailadres staat niet geregistreerd in de bibliotheek");
+                }
             });
         }
 
-        function GenerateEmailList() {
-            const emails = [];
-            fetch('http://localhost:8080/user/all', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(response => response.json()).then(data => {
-                if (data != null) {
-                    let i = 0;
-                    data.forEach(element => {
-                        emails[i] = element.emailAddress;
-                        i++;
-                    });
-                }
-            });
-
-            return emails;
-        }
-
-        function codeSubmit() {
+        function SubmitVerificationCode() {
             if (document.getElementById('input-code').value == code) {
                 setCookie('Email', document.getElementById('input-email').value);
                 window.location.href = 'eerste_login.html';
