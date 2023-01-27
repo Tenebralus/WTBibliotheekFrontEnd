@@ -51,7 +51,7 @@
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-success" type="button" id="email-button" onclick="SendEmail()">Verzend
+                <button class="btn btn-success" type="button" id="email-button" onclick="sendEmail()">Verzend
                     mail</button>
             </div>
         </div>
@@ -68,7 +68,7 @@
         <div class="row">
             <div class="col text-end">
                 <button class="btn btn-success" type="button" id="code-button"
-                    onclick="SubmitVerificationCode()">Bevestig
+                    onclick="submitVerificationCode()">Bevestig
                     code</button>
             </div>
         </div>
@@ -78,7 +78,7 @@
         let code;
 
         // Verstuurt mail met code als het email adres in het systeem staat
-        function SendEmail() {
+        function sendEmail() {
             fetch('http://localhost:8080/sendemail', {
                 method: 'POST',
                 body: JSON.stringify(
@@ -106,7 +106,7 @@
             });
         }
 
-        function SubmitVerificationCode() {
+        function submitVerificationCode() {
             if (document.getElementById('input-code').value == code) {
                 setCookie('Email', document.getElementById('input-email').value);
                 window.location.href = 'eerste_login.html';
