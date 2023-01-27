@@ -80,35 +80,28 @@
     </div>
     <div class="container">
         <div class="row">
-            <div class="col">
+            <div class="col-4">
                 <h5 id="bookTitle"></h5>
                 <h5 id="book-tags"></h5>
                 <h5 id="book-authors"></h5>
                 <h5 id="status"></h5>
                 <h5 id="timesLoaned"></h5>
             </div>
+            <div class="col-4">
+                <div id="user-select"></div>
+                <div id="userLoanButton"></div>
+            </div>
+            <div class="col-4">
+                <button class="btn btn-outline-success" type="button" id="archiveButton"
+                        onclick="updateBookCopy()">text
+                </button>
+            </div>
             <!-- field -->
         </div>
     </div>
     <div class="container">
-        <div class="row">
-            <div class="col">
-                <div class="text-end">
-                    <button class="btn btn-outline-success" type="button" id="archiveButton"
-                        onclick="updateBookCopy()">text</button>
-                </div>
-                <div class="row">
-                    <div class="col-6 text-end">
-                        <div id="user-select"></div>
-                    </div>
-                    <div class="col-6 ">
-                        <div id="userLoanButton"></div>
-                    </div>
-                </div>
-            </div>
             <div class="container" id="currentLoan">
             </div>
-        </div>
     </div>
     <div class="container" id="loanHistory">
         <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
