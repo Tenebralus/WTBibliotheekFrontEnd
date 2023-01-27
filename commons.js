@@ -422,7 +422,7 @@ function createIndexTable(page) {
     let pageData = pageSelector(data);
 
     pageData.forEach(element => {
-      let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
+      let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';//'<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
       // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
       // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
       let auths = '';
@@ -465,7 +465,7 @@ function searchIndex() {
   }
   fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
     let rows = '';
-    let urlImage = '<img src=' + data.urlImage + ' style="width: 45px; height: 60px"/>';
+    let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + data.isbn + '.jpg style="width: 45px; height: 60px"/>';//'<img src=' + data.urlImage + ' style="width: 45px; height: 60px"/>';
     data.forEach(element => {
       let auths = '';
       for (let i = 0; i < element.authors.length; i++) {
@@ -488,7 +488,7 @@ function searchIndex() {
         }
       })
       rows += "</tr><td>" +
-        '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
+        urlImage + "</tr><td>" +
         element.title + "</td><td>" +
         element.isbn + "</td><td>" +
         auths + "</td><td>" +

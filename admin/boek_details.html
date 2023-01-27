@@ -135,7 +135,8 @@
             });
             userOptions += '</datalist>';
             let rows = '';
-            let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
+            console.log(data);
+            let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + data.bookIsbn + '.jpg style="width: 45px; height: 60px"/>'; //data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
             let bookAuthors = '';
             for (let i = 0; i < data.bookAuthors.length; i++) {
               bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
@@ -152,7 +153,7 @@
                 }
               }
             }
-            document.getElementById('image').innerHTML = '<img src=' + urlImage + ' style="width: 135px; height: 180px"/>';
+            document.getElementById('image').innerHTML = urlImage;
             document.getElementById('book-title').innerHTML = "Titel: " + data.bookTitle;
             document.getElementById('book-author').innerHTML = "Auteur(s): " + bookAuthors;
             document.getElementById('book-isbn').innerHTML = "ISBN: " + data.bookIsbn;

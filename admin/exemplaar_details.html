@@ -148,7 +148,7 @@
                         let timesLoaned = data.timesLoaned;
                         let bookQueryString = '?book=' + bookId;
                         document.getElementById("backButton").innerHTML = '<a href="boek_details.html' + bookQueryString + '"" class="btn btn-success">Terug naar boek</a>';
-                        let urlImage = data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
+                        let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + data.bookIsbn + '.jpg style="width: 45px; height: 60px"/>'; //data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";  //<img src="" />
                         let bookAuthors = '';
                         if (!!data.bookAuthors) {
                             for (let i = 0; i < data.bookAuthors.length; i++) {
@@ -167,7 +167,7 @@
                                 }
                             }
                         }
-                        document.getElementById("image").innerHTML = '<img src=' + urlImage + ' style="width: 90px; height: 120px"/>';
+                        document.getElementById("image").innerHTML = urlImage;
                         document.getElementById("bookTitle").innerText = "Titel: " + title + ' (' + bookId + '.' + bookCopyNr + ')';
                         document.getElementById("book-authors").innerText = "Auteur(s): " + bookAuthors;
                         document.getElementById("book-tags").innerText = "Tag(s): " + bookTags;

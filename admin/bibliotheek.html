@@ -113,7 +113,7 @@
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
-          let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
+          let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
 
           // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
           // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
