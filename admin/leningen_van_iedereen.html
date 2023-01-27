@@ -55,7 +55,7 @@
               <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
@@ -64,18 +64,22 @@
   </nav>
 
   <div class="container">
-    <h3>Leningen</h3>
     <div class="row">
-      <div class="col-4">
-        <input class="form-control me-2" type="search" id="searchField"
-          placeholder="Zoek op boektitel, auteur, status of gebruiker">
-      </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+        <h3>Huidige Leningen</h3>
       </div>
     </div>
-  </div>
-  <div class="container">
+
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control me-2" type="search" id="current-loans-search-field"
+          placeholder="Zoek op boektitel, auteur, of gebruiker">
+      </div>
+      <div class="col">
+        <button class="btn btn-outline-success" type="button" onclick="searchCurrentLoans()">Zoek</button>
+      </div>
+    </div>
+
     <table class="table">
       <thead>
         <tr>
@@ -83,23 +87,128 @@
           <th>Exemplaar</th>
           <th>ISBN</th>
           <th>Auteur(s)</th>
-          <th>Status</th>
+          <th>Gebruiker</th>
+          <th>Datum van uitlenen</th>
+          <th>Inleveren</th>
+        </tr>
+      </thead>
+      <tbody id="current-loans-row"></tbody>
+    </table>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>Beëindigde Leningen</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control me-2" type="search" id="old-loans-search-field"
+          placeholder="Zoek op boektitel, auteur, of gebruiker">
+      </div>
+      <div class="col">
+        <button class="btn btn-outline-success" type="button" onclick="searchOldLoans()">Zoek</button>
+      </div>
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Exemplaar</th>
+          <th>ISBN</th>
+          <th>Auteur(s)</th>
           <th>Gebruiker</th>
           <th>Datum van uitlenen</th>
           <th>Datum van teruggave</th>
         </tr>
       </thead>
-      <tbody id="book-row"></tbody>
+      <tbody id="old-loans-row"></tbody>
     </table>
+
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page"></div>
+      <div class="col-2 text-center" id="current-page"></div>
+      <div class="col-5 text-left" id="next-page"></div>
+    </div>
+    <div class="row" id="page-info"></div>
   </div>
 
   <script>
-    window.onload = createLoanTable();
+    InitializePage("../user/index.html" ,"");
 
-    function createLoanTable() {
-      fetch('http://localhost:8080/loan/dto').then(response => response.json()).then(data => {
+    let currentPage = 1;
+
+    window.onload = createOldLoansTable(currentPage);
+    window.onload = createCurrentLoansTable();
+
+    function createCurrentLoansTable() {
+      fetch('http://localhost:8080/loan/dto/all/current').then(response => response.json()).then(data => {
         let rows = '';
+        data.sort(function (a, b) {
+          if (a.dateLoaned < b.dateLoaned) {
+            return -1;
+          }
+          if (a.dateLoaned > b.dateLoaned) {
+            return 1
+          }
+          return 0
+        });
         data.forEach(element => {
+          let authorNames = "";
+          if (element.authors) {
+            for (let i = 0; i < element.authors.length; i++) {
+              authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+              if (i < element.authors.length - 1) {
+                authorNames += ", ";
+              }
+            }
+          }
+          //do not want to see null but empty space
+          let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+          let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";;
+
+          rows +=
+            "<tr><td>" + element.bookTitle + "</td>" +
+            "<td>" + element.bookCopyNr + "</td>" +
+            "<td>" + element.bookIsbn + "</td>" +
+            "<td>" + authorNames + "</td>" +
+            "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+            "<td>" + dateLoaned + "</td>" +
+            "<td>" + returnButton + "</td></tr>";
+        });
+        document.getElementById('current-loans-row').innerHTML = rows;
+      });
+    }
+
+
+    function nextPage() {
+      createOldLoansTable(currentPage + 1)
+      currentPage++;
+    }
+
+    function previousPage() {
+      createOldLoansTable(currentPage - 1)
+      currentPage--;
+    }
+
+    function createOldLoansTable(page) {
+      fetch('http://localhost:8080/loan/dto/all/old').then(response => response.json()).then(data => {
+        let rows = '';
+        data.sort(function (a, b) {
+          if (a.dateReturned < b.dateReturned) {
+            return 1;
+          }
+          if (a.dateReturned > b.dateReturned) {
+            return -1
+          }
+          return 0
+        });
+
+        let pageData = pageSelector(data);
+
+        pageData.forEach(element => {
           let authorNames = "";
           for (let i = 0; i < element.authors.length; i++) {
             authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
@@ -109,29 +218,18 @@
           }
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          let extra = ''
-          if (element.bookCopyStatus == "loaned") {
-            extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
-          } else {
-            extra = '';
-          }
-          dateReturned = "";
-          if (element.dateReturned == null) {
-            dateReturned = extra;
-          } else {
-            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          }
+          let dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
             "<td>" + element.bookIsbn + "</td>" +
             "<td>" + authorNames + "</td>" +
-            "<td>" + element.bookCopyStatus + "</td>" +
             "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
             "<td>" + dateLoaned + "</td>" +
             "<td>" + dateReturned + "</td></tr>";
         });
-        document.getElementById('book-row').innerHTML = rows;
+        document.getElementById('old-loans-row').innerHTML = rows;
       });
     }
 
@@ -148,14 +246,29 @@
         })
         .then(() => {
           alert('Exemplaar is ingeleverd');
-          createLoanTable();
+          createCurrentLoansTable();
+          createOldLoansTable();
         })
     }
 
-    function search() {
-      let keyword = document.getElementById('searchField').value;
-      fetch('http://localhost:8080/loan/search/' + keyword).then(response => response.json()).then(data => {
+    function searchCurrentLoans() {
+      let keyword = document.getElementById('current-loans-search-field').value;
+      if (!keyword) {
+        return createCurrentLoansTable();
+      }
+      fetch('http://localhost:8080/loan/search/current', {
+        method: "POST",
+        body: JSON.stringify(
+          {
+            keyword: keyword
+          }
+        ),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(response => response.json()).then(data => {
         let rows = '';
+
         data.forEach(element => {
           let authorNames = "";
           if (element.authors) {
@@ -168,30 +281,63 @@
           }
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          let extra = ''
-          if (element.bookCopyStatus == "loaned") {
-            extra = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
-          } else {
-            extra = '';
-          }
-          dateReturned = "";
-          if (element.dateReturned == null) {
-            dateReturned = extra;
-          } else {
-            dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          }
+          let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";;
+
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
             "<td>" + element.bookIsbn + "</td>" +
             "<td>" + authorNames + "</td>" +
-            "<td>" + element.bookCopyStatus + "</td>" +
             "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
             "<td>" + dateLoaned + "</td>" +
-            "<td>" + dateReturned + "</td></tr>";
+            "<td>" + returnButton + "</td></tr>";
         });
-        document.getElementById('book-row').innerHTML = rows;
+        document.getElementById('current-loans-row').innerHTML = rows;
       });
+    }
+
+    function searchOldLoans() {
+      let keyword = document.getElementById('old-loans-search-field').value;
+      if (!keyword) {
+        return createOldLoansTable(1);
+      }
+      fetch('http://localhost:8080/loan/search/old', {
+        method: "POST",
+        body: JSON.stringify(
+          {
+            keyword: keyword
+          }
+        ),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => response.json()).then(data => {
+          let rows = '';
+          data.forEach(element => {
+            let authorNames = "";
+            if (element.authors) {
+              for (let i = 0; i < element.authors.length; i++) {
+                authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+                if (i < element.authors.length - 1) {
+                  authorNames += ", ";
+                }
+              }
+            }
+            //do not want to see null but empty space
+            let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            let dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+            rows +=
+              "<tr><td>" + element.bookTitle + "</td>" +
+              "<td>" + element.bookCopyNr + "</td>" +
+              "<td>" + element.bookIsbn + "</td>" +
+              "<td>" + authorNames + "</td>" +
+              "<td>" + element.userFirstName + " " + element.userLastName + "</td>" +
+              "<td>" + dateLoaned + "</td>" +
+              "<td>" + dateReturned + "</td></tr>";
+          });
+          document.getElementById('old-loans-row').innerHTML = rows;
+        });
     }
   </script>
 

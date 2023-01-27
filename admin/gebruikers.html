@@ -55,7 +55,7 @@
               <li><a class="dropdown-item active" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
@@ -64,6 +64,11 @@
   </nav>
 
   <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3>Alle gebruikers</h3>
+      </div>
+    </div>
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op naam of emailadres">
@@ -97,6 +102,8 @@
   </div>
 
   <script>
+    InitializePage("../user/index.html" ,"");
+
     window.onload = createUserTable();
 
     function createUserTable() {
@@ -120,11 +127,16 @@
             let status = "Actief"
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
             let delButton = ''
+
+            //console.log(element.emailAddress);
+            //console.log(getCookie('Email'));
             if (element.emailAddress != getCookie('Email')) { //nog beter zou zijn om token te gebruiken
-              delButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
+              delButton = '</td><td><button class="btn btn-outline-danger" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
             } else {
               delButton = '</td><td></td></tr>';
             }
+
+
             if (element.active == false) {
               status = "Verwijderd"
               copyButton = '</td><td></td></td>';
@@ -244,8 +256,13 @@
                 "</td><td>" + dateAccountCreated +
                 "</td><td>" + dateAccountDeleted +
                 '</td><td>' + status +
-                "</td><td>" + '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin +
-                "</td><td>" + '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
+                "</td><td>"
+              if (element.emailAddress != getCookie('Email')) {
+                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin + "</td><td>";
+              } else {
+                rows += "</td><td>";
+              }
+              rows += '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
             } else {
               rows += "<tr><td>" + element.firstName +
                 "</td><td>" + element.lastName +

@@ -91,9 +91,9 @@ function createReservation(clickedId) {
         return alert("Er is iets mis gegaan.");
       }
     })
-  }
+}
 
-  function createLoanTableCurrent() {
+function createLoanTableCurrent() {
     fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
@@ -241,10 +241,70 @@ function createReservation(clickedId) {
           '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel' + element.id + '">Annuleer</button></td></tr>';
       });
       document.getElementById('reservations-row').innerHTML = rows;
-    });
+      });
   }
 
-  function searchLoansCurrent() {
+function InitializePage(userPage, adminPage) {
+  let user = 0;
+  let admin = 1;
+  fetch('http://localhost:8080/user/usertype', {
+    method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'Authentication': getCookie("Authentication")
+    }
+  }).then(response => response.json())
+    .then(data => {
+      if (data == admin) {
+        if (adminPage != "") {
+          window.location.href = adminPage
+        }
+      }
+      else if (data == user) {
+        if (userPage != "") {
+          window.location.href = userPage
+        }
+      }
+      else {
+        window.location.href = "../login.html"
+      }
+    });
+}
+
+function pageSelector(data) {
+  document.getElementById("current-page").innerHTML = '<p>' + currentPage + '</p>';
+
+  let totalElements = data.length;
+  let elementsPerPage = 20;
+  let numPages = Math.ceil(totalElements / elementsPerPage);
+
+  if (currentPage > 1) {
+    document.getElementById("previous-page").innerHTML = '<button class="btn-success" onclick="previousPage()"><-</button>';
+  } else {
+    document.getElementById("previous-page").innerHTML = '';
+  }
+  if (numPages > currentPage) {
+    document.getElementById("next-page").innerHTML = '<button class="btn-success" onclick="nextPage()">-></button>';
+  } else {
+    document.getElementById("next-page").innerHTML = '';
+  }
+  
+  let sliceStart = 0 + ((currentPage - 1) * elementsPerPage);
+  let lastEntry;
+  if (sliceStart + 1 + elementsPerPage > totalElements) {
+    lastEntry = totalElements;
+  } else {
+    lastEntry = sliceStart + elementsPerPage;
+  }
+  document.getElementById("page-info").innerHTML = '<p>Pagina ' + currentPage + ' van ' + numPages
+    + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>';
+
+  let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
+
+  return pageData;
+}
+
+function searchLoansCurrent() {
     let keyword = document.getElementById('searchField').value;
     if (!keyword) {
       return createLoanTableCurrent();
@@ -354,5 +414,88 @@ function createReservation(clickedId) {
       document.getElementById('loans-row-history').innerHTML = rows;
     });
   }
+  
+function createIndexTable(page) {
+  fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+    let rows = '';
 
+    let pageData = pageSelector(data);
 
+    pageData.forEach(element => {
+      let urlImage = '<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
+      // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
+      // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
+      let auths = '';
+      for (let i = 0; i < element.authors.length; i++) {
+        auths += element.authors[i].firstName + " " + element.authors[i].lastName
+        if (i < element.authors.length - 1) {
+          auths += ", "
+        }
+      }
+      let tagName = '';
+      for (let i = 0; i < element.tags.length; i++) {
+        tagName += element.tags[i].name
+        if (i < element.tags.length - 1) {
+          tagName += ", "
+        }
+      }
+      let copiesAvailable = 0;
+      element.bookcopies.forEach(copy => {
+        if (copy.status == "available") {
+          copiesAvailable++
+        }
+      })
+      rows += "</tr><td>" +
+        urlImage + "</td><td>" +
+        element.title + "</td><td>" +
+        element.isbn + "</td><td>" +
+        auths + "</td><td>" +
+        tagName + "</td><td>" +
+        copiesAvailable + "</td><td>" +
+        '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve' + element.id + '">Reserveer</button></td></tr>';
+    });
+    document.getElementById('book-row').innerHTML = rows;
+  });
+}
+
+function searchIndex() {
+  let keyword = document.getElementById('searchField').value;
+  if (!keyword) {
+    return createIndexTable(1);
+  }
+  fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
+    let rows = '';
+    let urlImage = '<img src=' + data.urlImage + ' style="width: 45px; height: 60px"/>';
+    data.forEach(element => {
+      let auths = '';
+      for (let i = 0; i < element.authors.length; i++) {
+        auths += element.authors[i].firstName + " " + element.authors[i].lastName
+        if (i < element.authors.length - 1) {
+          auths += ", "
+        }
+      }
+      let tagName = '';
+      for (let i = 0; i < element.tags.length; i++) {
+        tagName += element.tags[i].name
+        if (i < element.tags.length - 1) {
+          tagName += ", "
+        }
+      }
+      let copiesAvailable = 0;
+      element.bookcopies.forEach(copy => {
+        if (copy.status == "available") {
+          copiesAvailable++
+        }
+      })
+      rows += "</tr><td>" +
+        '<img src=' + urlImage + ' style="width: 45px; height: 60px"/>' + "</tr><td>" +
+        element.title + "</td><td>" +
+        element.isbn + "</td><td>" +
+        auths + "</td><td>" +
+        tagName + "</td><td>" +
+        copiesAvailable + "</td><td>" +
+        '<button class="btn btn-outline-success" type="button" onclick="createReservation(this.id)" id="reserve' + element.id + '">Reserveer</button></td></tr>';
+    });
+    document.getElementById('book-row').innerHTML = rows;
+  });
+}

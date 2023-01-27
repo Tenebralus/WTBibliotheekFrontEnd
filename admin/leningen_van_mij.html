@@ -55,7 +55,7 @@
               <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
@@ -64,7 +64,11 @@
   </nav>
 
   <div class="container">
-    <h3>Mijn openstaande reserveringen</h3>
+    <div class="row">
+      <div class="col">
+        <h3>Mijn openstaande reserveringen</h3>
+      </div>
+    </div>
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField1" placeholder="Zoek op boektitel of auteur">
@@ -143,6 +147,8 @@
   </div>
 
   <script>
+    InitializePage("../user/index.html" ,"");
+
     window.onload = createReservationTable();
     window.onload = createLoanTableCurrent();
     window.onload = createLoanTableHistory();

@@ -55,7 +55,7 @@
               <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
@@ -64,7 +64,11 @@
   </nav>
 
   <div class="container">
-    <h3>Alle boeken in de bibliotheek</h3>
+    <div class="row">
+      <div class="col">
+        <h3>Alle boeken in de bibliotheek</h3>
+      </div>
+    </div>
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op titel, auteur, of tags">
@@ -101,7 +105,10 @@
   </div>
 
   <script>
+    InitializePage("../user/index.html", "");
+
     window.onload = createLibraryTable();
+    
     function createLibraryTable() {
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
