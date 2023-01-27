@@ -56,7 +56,7 @@
                             <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
                         </ul>
                     </li>
-                    <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log
+                    <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log
                         uit</button>
                     <script>
                         logInOutButton(document.getElementById('logout'))
@@ -174,7 +174,7 @@
                         let currentLoan = data.currentLoan
                         if (data.status == "available") {
                             document.getElementById("user-select").innerHTML =
-                                '<input list="userDataList" id="loanBookUser" name="loanBook">'+userOptions;
+                                '<input list="userDataList" id="loanBookUser" name="loanBook">' + userOptions;
                             document.getElementById("userLoanButton").innerHTML =
                                 '<button class="btn btn-outline-primary" type="button" id="loanButttonSave" onclick="makeLoan(${data.id},${data.status})">Uitlenen</button>';
                         }

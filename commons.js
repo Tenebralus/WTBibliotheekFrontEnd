@@ -91,77 +91,73 @@ function createReservation(clickedId) {
         return alert("Er is iets mis gegaan.");
       }
     })
-  }
+}
 
-  function createLoanTable() {
-    fetch('http://localhost:8080/loan/dto/user', {
+function createLoanTable() {
+  fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       'Email': getCookie('Email')
-    }}).then(response => response.json()).then(data => {
-      let rows = '';
-      data.forEach(element => {
-        let authorNames = "";
-        for (let i = 0; i < element.authors.length; i++) {
-          authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
-          if (i < element.authors.length - 1) {
-            authorNames += ", ";
-          }
+    }
+  }).then(response => response.json()).then(data => {
+    let rows = '';
+    data.forEach(element => {
+      let authorNames = "";
+      for (let i = 0; i < element.authors.length; i++) {
+        authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
+        if (i < element.authors.length - 1) {
+          authorNames += ", ";
         }
-        //do not want to see null but empty space
-        let dateReturned = "";
-        if (element.dateReturned == null) {
-          dateReturned = '';
-        } else {
-          dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-        }
-        let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-        rows +=
-          "<tr><td>" + element.bookTitle + "</td>" +
-          "<td>" + element.bookCopyNr + "</td>" +
-          "<td>" + element.bookIsbn + "</td>" +
-          "<td>" + authorNames + "</td>" +
-          "<td>" + element.bookCopyStatus + "</td>" +
-          "<td>" + dateLoaned + "</td>" +
-          "<td>" + dateReturned + "</td>";
-      });
-      document.getElementById('loans-row').innerHTML = rows;
+      }
+      //do not want to see null but empty space
+      let dateReturned = "";
+      if (element.dateReturned == null) {
+        dateReturned = '';
+      } else {
+        dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+      }
+      let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+      rows +=
+        "<tr><td>" + element.bookTitle + "</td>" +
+        "<td>" + element.bookCopyNr + "</td>" +
+        "<td>" + element.bookIsbn + "</td>" +
+        "<td>" + authorNames + "</td>" +
+        "<td>" + element.bookCopyStatus + "</td>" +
+        "<td>" + dateLoaned + "</td>" +
+        "<td>" + dateReturned + "</td>";
     });
+    document.getElementById('loans-row').innerHTML = rows;
+  });
+}
+
+function pageSelector(data) {
+  document.getElementById("current-page").innerHTML = '<p>' + currentPage + '</p>';
+  let totalElements = data.length;
+  let elementsPerPage = 20;
+  let numPages = Math.ceil(totalElements / elementsPerPage);
+  if (currentPage > 1) {
+    document.getElementById("previous-page").innerHTML = '<button class="btn-success" onclick="previousPage()"><-</button>';
+  } else {
+    document.getElementById("previous-page").innerHTML = '';
   }
-
-  function pageSelector(data) {
-    document.getElementById("current-page").innerHTML = '<p>' + currentPage + '</p>';
-
-    let totalElements = data.length;
-    let elementsPerPage = 20;
-    let numPages = Math.ceil(totalElements / elementsPerPage);
-
-    if (currentPage > 1) {
-      document.getElementById("previous-page").innerHTML = '<button class="btn-success" onclick="previousPage()"><-</button>';
-    } else {
-      document.getElementById("previous-page").innerHTML = '';
-    }
-    if (numPages > currentPage) {
-      document.getElementById("next-page").innerHTML = '<button class="btn-success" onclick="nextPage()">-></button>';
-    } else {
-      document.getElementById("next-page").innerHTML = '';
-    }
-
-    let sliceStart = 0 + ((currentPage - 1) * elementsPerPage);
-    let lastEntry;
-    if (sliceStart + 1 + elementsPerPage > totalElements) {
-      lastEntry = totalElements;
-    } else {
-      lastEntry = sliceStart + elementsPerPage;
-    }
-    document.getElementById("page-info").innerHTML = '<p>Pagina ' + currentPage + ' van ' + numPages
-      + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>';
-
-    let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
-
-    return pageData;
+  if (numPages > currentPage) {
+    document.getElementById("next-page").innerHTML = '<button class="btn-success" onclick="nextPage()">-></button>';
+  } else {
+    document.getElementById("next-page").innerHTML = '';
   }
+  let sliceStart = 0 + ((currentPage - 1) * elementsPerPage);
+  let lastEntry;
+  if (sliceStart + 1 + elementsPerPage > totalElements) {
+    lastEntry = totalElements;
+  } else {
+    lastEntry = sliceStart + elementsPerPage;
+  }
+  document.getElementById("page-info").innerHTML = '<p>Pagina ' + currentPage + ' van ' + numPages
+    + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>';
+
+  let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
+  return pageData;
 
   function createIndexTable(page) {
     fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {

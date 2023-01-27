@@ -55,7 +55,7 @@
               <li><a class="dropdown-item active" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
@@ -254,14 +254,13 @@
                 "</td><td>" + dateAccountCreated +
                 "</td><td>" + dateAccountDeleted +
                 '</td><td>' + status +
-                "</td><td>" 
-                  
-                  if (element.emailAddress != getCookie('Email')){
-                    rows +='<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin + "</td><td>";
-                  } else {
-                    rows +="</td><td>";
-                  }
-                  rows +='<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
+                "</td><td>"
+              if (element.emailAddress != getCookie('Email')) {
+                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin + "</td><td>";
+              } else {
+                rows += "</td><td>";
+              }
+              rows += '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
             } else {
               rows += "<tr><td>" + element.firstName +
                 "</td><td>" + element.lastName +
