@@ -108,16 +108,14 @@
     InitializePage("../user/index.html", "");
 
     window.onload = createLibraryTable();
-    
+
     function createLibraryTable() {
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
           let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
-
           // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
           // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
-
           let auths = '';
           let tags = '';
           for (let i = 0; i < element.authors.length; i++) {
@@ -132,7 +130,6 @@
               tags += ", "
             }
           }
-
           let copiesTotal = 0;
           let copiesAvailable = 0;
           element.bookcopies.forEach(copy => {
@@ -148,7 +145,6 @@
             '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
         });
         document.getElementById('book-row').innerHTML = rows;
-
       });
     }
 

@@ -134,7 +134,7 @@
     </div>
 
     <script>
-        InitializePage("../user/index.html" ,"");
+        InitializePage("../user/index.html", "");
         let authorNumber = 0;
         let tagNumber = 0;
 
@@ -177,11 +177,6 @@
                             }
                         }
                     });
-                    /*
-                    if(!tagsArr.find(element => {if (element.id == tagId){return true}})){
-                        tagsArr.push({"id":tagId});
-                    }
-                    */
                 }
             }
             fetch('http://localhost:8080/book/create', {

@@ -52,7 +52,8 @@
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-success" type="button" id="email-button" onclick="SendEmail()">Verzend mail</button>
+                <button class="btn btn-success" type="button" id="email-button" onclick="SendEmail()">Verzend
+                    mail</button>
             </div>
         </div>
     </div>
@@ -67,17 +68,18 @@
         </div>
         <div class="row">
             <div class="col text-end">
-                <button class="btn btn-success" type="button" id="code-button" onclick="SubmitVerificationCode()">Bevestig
+                <button class="btn btn-success" type="button" id="code-button"
+                    onclick="SubmitVerificationCode()">Bevestig
                     code</button>
             </div>
         </div>
     </div>
 
     <script>
-
         let code;
+
         // Verstuurt mail met code als het email adres in het systeem staat
-        function SendEmail() {     
+        function SendEmail() {
             fetch('http://localhost:8080/sendemail', {
                 method: 'POST',
                 body: JSON.stringify(
@@ -95,12 +97,11 @@
                     return response.json();
                 }
             }).then(data => {
-                if(data.success)
-                {
+                if (data.success) {
                     code = data.verificationCode;
                     document.getElementById('code-invoer').style.display = "block";
                 }
-                else{
+                else {
                     alert("Dit emailadres staat niet geregistreerd in de bibliotheek");
                 }
             });

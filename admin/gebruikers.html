@@ -102,8 +102,7 @@
   </div>
 
   <script>
-    InitializePage("../user/index.html" ,"");
-
+    InitializePage("../user/index.html", "");
     window.onload = createUserTable();
 
     function createUserTable() {
@@ -117,9 +116,6 @@
         .then(response => response.json()).then(data => {
           let rows = '';
           data.forEach(element => {
-            console.log(data);
-            console.log(element);
-
             let admin = "Gebruiker"
             if (element.admin == true) {
               admin = "Admin"
@@ -127,16 +123,11 @@
             let status = "Actief"
             let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></td>';
             let delButton = ''
-
-            //console.log(element.emailAddress);
-            //console.log(getCookie('Email'));
             if (element.emailAddress != getCookie('Email')) { //nog beter zou zijn om token te gebruiken
               delButton = '</td><td><button class="btn btn-outline-danger" type="button" onclick="anonUser(this.id)" id="anon' + element.id + '">Anonimiseren</button></td></tr>';
             } else {
               delButton = '</td><td></td></tr>';
             }
-
-
             if (element.active == false) {
               status = "Verwijderd"
               copyButton = '</td><td></td></td>';
@@ -283,9 +274,6 @@
       let newLastName = document.getElementById('inputLastName').value;
       let newEmailAdress = document.getElementById('inputEmailAddress').value;
       let newAdminValue = document.getElementById('inputAdmin').checked;
-      //if (document.getElementById('inputFirstName').value.length == 0) {
-      //  console.log("test");
-      //}
       let idstr = clickedId.split("saveUser");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/user/update/' + idnum, {

@@ -43,7 +43,7 @@
               <li><a class="dropdown-item active" href="../user/leningen.html">Leningen</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-danger" type="button" id='logout'  onclick="logOut()">Log uit</button>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
       </div>
     </div>
   </nav>
@@ -133,12 +133,10 @@
 
 
   <script>
-    InitializePage("" ,"../admin/index.html");
-
+    InitializePage("", "../admin/index.html");
     window.onload = createReservationTable();
     window.onload = createLoanTableCurrent();
     window.onload = createLoanTableHistory();
-
 
     function cancel(clickedId) {
       let idstr = clickedId.split("cancel");

@@ -69,7 +69,6 @@
         <h3>Huidige Leningen</h3>
       </div>
     </div>
-
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="current-loans-search-field"
@@ -79,7 +78,6 @@
         <button class="btn btn-outline-success" type="button" onclick="searchCurrentLoans()">Zoek</button>
       </div>
     </div>
-
     <table class="table">
       <thead>
         <tr>
@@ -95,7 +93,6 @@
       <tbody id="current-loans-row"></tbody>
     </table>
   </div>
-
   <div class="container">
     <div class="row">
       <div class="col">
@@ -111,7 +108,6 @@
         <button class="btn btn-outline-success" type="button" onclick="searchOldLoans()">Zoek</button>
       </div>
     </div>
-
     <table class="table">
       <thead>
         <tr>
@@ -126,7 +122,6 @@
       </thead>
       <tbody id="old-loans-row"></tbody>
     </table>
-
     <div class="row">
       <div class="col-5 text-end" id="previous-page"></div>
       <div class="col-2 text-center" id="current-page"></div>
@@ -136,10 +131,8 @@
   </div>
 
   <script>
-    InitializePage("../user/index.html" ,"");
-
+    InitializePage("../user/index.html", "");
     let currentPage = 1;
-
     window.onload = createOldLoansTable(currentPage);
     window.onload = createCurrentLoansTable();
 
@@ -168,7 +161,6 @@
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";;
-
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
@@ -205,9 +197,7 @@
           }
           return 0
         });
-
         let pageData = pageSelector(data);
-
         pageData.forEach(element => {
           let authorNames = "";
           for (let i = 0; i < element.authors.length; i++) {
@@ -219,7 +209,6 @@
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           let dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
@@ -282,7 +271,6 @@
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";;
-
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +

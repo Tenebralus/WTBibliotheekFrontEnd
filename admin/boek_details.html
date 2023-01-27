@@ -110,15 +110,14 @@
   <div></div>
 
   <script>
-    InitializePage("../user/index.html" ,"");
-
+    InitializePage("../user/index.html", "");
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const bookId = urlParams.get('book');
     const bookCopyId = urlParams.get('bookcopy');
     let loanId = null;
     window.onload = createBookCopiesTable();
-
+    
     function createBookCopiesTable() {
       fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
         fetch("http://localhost:8080/user/all/", {

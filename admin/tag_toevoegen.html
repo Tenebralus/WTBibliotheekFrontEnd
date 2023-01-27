@@ -100,9 +100,9 @@
     </div>
 
     <script>
-        InitializePage("../user/index.html" ,"");
-
+        InitializePage("../user/index.html", "");
         window.onload = createTagTable();
+
         function createTag() {
             fetch('http://localhost:8080/tag/create', {
                 method: 'POST',

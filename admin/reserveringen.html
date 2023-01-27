@@ -102,17 +102,14 @@
   </div>
 
   <script>
-    InitializePage("../user/index.html" ,"");
-
+    InitializePage("../user/index.html", "");
     let currentPage = 1;
     window.onload = createTable(currentPage);
 
     function createTable(page) {
       fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
         let rows = '';
-
         let pageData = pageSelector(data);
-
         pageData.forEach(element => {
           //Prevents errors if no user is registered to a reservation
           let userName = ""
@@ -158,8 +155,6 @@
       let idnum = parseInt(idstr[1]);
       //copy is the id of the selected bookCopy
       let copy = document.getElementById("reservation" + idnum + "dropdown").value;
-      console.log(clickedId);
-      console.log(copy);
       if (copy != 0) {
         fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
           method: 'POST'
