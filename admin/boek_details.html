@@ -135,7 +135,7 @@
             userOptions += '</datalist>';
             let rows = '';
             console.log(data);
-            let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + data.bookIsbn + '.jpg style="width: 45px; height: 60px"/>'; //data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
+            let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + data.bookIsbn + '.jpg style="width: 135px; height: 180px"/>'; //data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
             let bookAuthors = '';
             for (let i = 0; i < data.bookAuthors.length; i++) {
               bookAuthors += data.bookAuthors[i].firstName + " " + data.bookAuthors[i].lastName;
@@ -228,8 +228,6 @@
       //copy is the id of the selected bookCopy
       idstr = clickedId.split(" ");
       let copy = parseInt(idstr[1]);
-      console.log(clickedId);
-      console.log(idstr);
       let user = document.getElementById("user" + idnum + "dropdown").value;
       fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
         method: 'POST'
