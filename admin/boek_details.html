@@ -55,7 +55,7 @@
               <li><a class="dropdown-item" href="../admin/gebruikers.html">Gebruikers</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-success" type="button" id='logout' onclick="logOut()">Log uit</button>
+          <button class="btn btn-outline-danger" type="button" id='logout' onclick="logOut()">Log uit</button>
           <script>
             logInOutButton(document.getElementById('logout'))
           </script>
@@ -181,7 +181,7 @@
               if (data.bookCopyDetailsDTOs[i].status == "loaned") {
                 returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
               } else if (data.bookCopyDetailsDTOs[i].status == "available") {
-                usernameCurrentLoan = '<input list="userDataList" id="loanBookUser'+data.bookCopyDetailsDTOs[i].id+'" name="loanBook">';
+                usernameCurrentLoan = '<input list="userDataList" id="loanBookUser' + data.bookCopyDetailsDTOs[i].id + '" name="loanBook">';
                 returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="loanButttonSave' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="makeLoan(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')">Uitlenen</button>'
               }
               rows += "<tr><td>" +
@@ -371,7 +371,7 @@
 
     function makeLoan(bookCopyId, status) {
       console.log("text");
-      let name = document.getElementById("loanBookUser"+bookCopyId).value;
+      let name = document.getElementById("loanBookUser" + bookCopyId).value;
       console.log(name);
       if (name) {
         console.log("text1");
