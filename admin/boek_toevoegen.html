@@ -195,13 +195,14 @@
             })
                 .then(() => {
                     alert('Boek is opgeslagen');
+                    location.reload;
                 })
         }
 
-        function createBookAndDone() {
-            createBook();
-            window.location = 'bibliotheek.html';
-        }
+        //function createBookAndDone() {
+        //    createBook();
+        //    window.location = 'bibliotheek.html';
+        //}
         function createBookAndNext() {
             createBook();
             document.getElementById('inputBookTitle').value = "";
