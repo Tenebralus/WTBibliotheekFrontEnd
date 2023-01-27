@@ -102,7 +102,7 @@ function createLoanTableCurrent() {
     }
   }).then(response => response.json()).then(data => {
     data = data.sort((a, b) => {
-      return new Date(b.dateLoaned) - new Date(a.dateLoaned);
+      return new Date(a.dateLoaned) - new Date(b.dateLoaned);
     });
     let rows = '';
     data.forEach(element => {
@@ -122,7 +122,6 @@ function createLoanTableCurrent() {
           "<td>" + element.bookCopyNr + "</td>" +
           "<td>" + element.bookIsbn + "</td>" +
           "<td>" + authorNames + "</td>" +
-          "<td>" + element.bookCopyStatus + "</td>" +
           "<td>" + dateLoaned + "</td>";
       }
       // else {
@@ -144,7 +143,7 @@ function createLoanTableHistory() {
     }
   }).then(response => response.json()).then(data => {
     data = data.sort((a, b) => {
-      return new Date(a.dateLoaned) - new Date(b.dateLoaned);
+      return new Date(b.dateReturned) - new Date(a.dateReturned);
     });
     let rows = '';
     data.forEach(element => {
@@ -165,7 +164,6 @@ function createLoanTableHistory() {
           "<td>" + element.bookCopyNr + "</td>" +
           "<td>" + element.bookIsbn + "</td>" +
           "<td>" + authorNames + "</td>" +
-          "<td>" + element.bookCopyStatus + "</td>" +
           "<td>" + dateLoaned + "</td>" +
           "<td>" + dateReturned + "</td>";
       }
