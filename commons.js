@@ -98,7 +98,7 @@ function createLoanTable() {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      'Email': getCookie('Email')
+      'Authentication': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
     let rows = '';
