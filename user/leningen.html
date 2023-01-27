@@ -43,7 +43,7 @@
               <li><a class="dropdown-item active" href="../user/leningen.html">Leningen</a></li>
             </ul>
           </li>
-          <button class="btn btn-outline-danger" type="button" id='logout'>Log uit</button>
+          <button class="btn btn-outline-success" type="button" id='logout'  onclick="logOut()">Log uit</button>
       </div>
     </div>
   </nav>
@@ -59,7 +59,7 @@
         <input class="form-control me-2" type="search" id="searchField1" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="search1()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchReservations()">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -72,23 +72,17 @@
         </tr>
       </thead>
       <tbody id="reservations-row">
-        <tr>
-          <td>Jip en janneke</td>
-          <td>Auteur1</td>
-          <td>11-1-2023</td>
-          <td><button class="btn btn-outline-success" type="button" onclick="cancel(this.id)">Annuleren</button></td>
-        </tr>
       </tbody>
     </table>
   </div>
   <div class="container">
-    <h3>Leningen</h3>
+    <h3>Mijn huidige leningen</h3>
     <div class="row">
       <div class="col-4">
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchLoansCurrent()">Zoek</button>
       </div>
     </div>
   </div>
@@ -102,41 +96,49 @@
           <th>Auteur</th>
           <th>Status</th>
           <th>Datum van uitlenen</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="loans-row-current"></tbody>
+    </table>
+  </div>
+  <div class="container">
+    <h3>Mijn beëindigde leningen</h3>
+    <div class="row">
+      <div class="col-4">
+        <input class="form-control me-2" type="search" id="searchField3" placeholder="Zoek op boektitel of auteur">
+      </div>
+      <div class="col">
+        <button class="btn btn-outline-success" type="button" onclick="searchLoansHistory()">Zoek</button>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Titel</th>
+          <th>Exemplaar</th>
+          <th>ISBN</th>
+          <th>Auteur(s)</th>
+          <th>Status</th>
+          <th>Datum van uitlenen</th>
           <th>Datum van teruggave</th>
           <th></th>
         </tr>
       </thead>
-      <tbody id="loans-row"></tbody>
+      <tbody id="loans-row-history"></tbody>
     </table>
   </div>
+
 
   <script>
     InitializePage("" ,"../admin/index.html");
 
     window.onload = createReservationTable();
-    window.onload = createLoanTable();
+    window.onload = createLoanTableCurrent();
+    window.onload = createLoanTableHistory();
 
-    function createReservationTable() {
-      fetch('http://localhost:8080/reservation/all').then(response => response.json()).then(data => {
-        let rows = '';
-        data.forEach(element => {
-          let auths = '';
-          for (let i = 0; i < element.book.authors.length; i++) {
-            auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
-            if (i < element.book.authors.length - 1) {
-              auths += ", "
-            }
-          }
-          let dateReserved = new Date(element.dateReserved).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          rows += "</tr><td>" +
-            element.book.title + "</td><td>" +
-            auths + "</td><td>" +
-            dateReserved + "</td><td>" +
-            '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel' + element.id + '">Annuleer</button></td></tr>';
-        });
-        document.getElementById('reservations-row').innerHTML = rows;
-      });
-    }
 
     function cancel(clickedId) {
       let idstr = clickedId.split("cancel");
@@ -146,31 +148,6 @@
       })
         .then(alert("Reservering geannuleerd"));
       createReservationTable();
-    }
-
-    function search1() {
-      let keyword = document.getElementById('searchField1').value;
-      fetch('http://localhost:8080/reservation/user/search/' + keyword).then(response => response.json()).then(data => {
-        let rows = '';
-        data.forEach(element => {
-          let auths = '';
-          if (element.authors) {
-            for (let i = 0; i < element.book.authors.length; i++) {
-              auths += element.book.authors[i].firstName + " " + element.book.authors[i].lastName
-              if (i < element.book.authors.length - 1) {
-                auths += ", "
-              }
-            }
-          }
-          let dateReserved = new Date(element.reservationDate).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          rows += "</tr><td>" +
-            element.book.title + "</td><td>" +
-            auths + "</td><td>" +
-            dateReserved + "</td><td>" +
-            '<button class="btn btn-outline-success" type="button" onclick="cancel(this.id)" id="cancel' + element.id + '">Annuleer</button></td></tr>';
-        });
-        document.getElementById('reservations-row').innerHTML = rows;
-      });
     }
 
     function search() {
