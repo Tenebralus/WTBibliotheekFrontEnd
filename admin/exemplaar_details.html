@@ -178,7 +178,7 @@
                             document.getElementById("user-select").innerHTML =
                                 '<input list="userDataList" id="loanBookUser" name="loanBook">' + userOptions;
                             document.getElementById("userLoanButton").innerHTML =
-                                '<button class="btn btn-outline-primary" type="button" id="loanButttonSave" onclick="makeLoan(${data.id},${data.status})">Uitlenen</button>';
+                                '<button class="btn btn-outline-primary" type="button" id="loanButttonSave" onclick="makeLoan('+data.id+')">Uitlenen</button>';
                         }
                         if (data.currentLoan == null) {
                             document.getElementById("currentLoan").innerHTML =
@@ -217,7 +217,7 @@
             createBookCopiesTable();
         }
 
-        function makeLoan(bookCopyId, status) {
+        function makeLoan(bookCopyId) {
             let name = document.getElementById("loanBookUser").value;
             if (!!name) {
                 let newFirstName = name.split(" ")[0];
@@ -241,7 +241,7 @@
             }
         }
 
-        function createLoan(clickedId) {
+        /*function createLoan(clickedId) {
             let idstr = clickedId.split("Uitlenen");
             //idnum is the id of the reservation
             let idnum = parseInt(idstr[1]);
@@ -256,9 +256,9 @@
             })
                 .then(alert("Boek uitgeleend."));
             createBookCopiesTable();
-        }
+        }*/
 
-        function addUserField() {
+        /*function addUserField() {
             const myAuthorForm = document.getElementById("user-list");
             var x = document.createElement("INPUT");
             x.setAttribute("list", "inputUserList" + userNumber);
@@ -280,7 +280,7 @@
             x.appendChild(newUserField);
             myUserForm.appendChild(x);
             userNumber++;
-        }
+        }*/
 
         function getLoanHistory() {
             fetch('http://localhost:8080/loan/dto/bookcopy/' + bookCopyId).then(response => response.json()).then(data => {
