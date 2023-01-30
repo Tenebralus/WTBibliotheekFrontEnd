@@ -338,7 +338,6 @@ function searchLoansCurrent() {
           "<td>" + element.bookCopyNr + "</td>" +
           "<td>" + element.bookIsbn + "</td>" +
           "<td>" + authorNames + "</td>" +
-          "<td>" + element.bookCopyStatus + "</td>" +
           "<td>" + dateLoaned + "</td></tr>";
       }
     });
