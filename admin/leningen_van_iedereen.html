@@ -270,7 +270,7 @@
           }
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";;
+          let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
