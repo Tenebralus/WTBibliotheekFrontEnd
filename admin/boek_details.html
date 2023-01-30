@@ -130,7 +130,9 @@
           .then(response => response.json()).then(usersData => {
             let userOptions = '<datalist id="userDataList">';
             usersData.forEach(element => {
-              userOptions += `<option value="${element.firstName + " " + element.lastName}">`
+              if(element.firstName + " " + element.lastName != "anon anon"){
+                userOptions += `<option value="${element.firstName + " " + element.lastName}">`
+              }
             });
             userOptions += '</datalist>';
             let rows = '';
