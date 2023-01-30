@@ -99,13 +99,21 @@
       </thead>
       <tbody id="book-row"></tbody>
     </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page1"></div>
+      <div class="col-2 text-center" id="current-page1"></div>
+      <div class="col-5 text-left" id="next-page1"></div>
+    </div>
+    <div class="row" id="page-info1"></div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
-    window.onload = createUserTable();
+    let currentPage = 1;
+    window.onload = createUserTable(currentPage);
 
-    function createUserTable() {
+
+    function createUserTable(page) {
       fetch('http://localhost:8080/user/all', {
         method: 'GET',
         headers: {
@@ -115,7 +123,8 @@
       })
         .then(response => response.json()).then(data => {
           let rows = '';
-          data.forEach(element => {
+          let pageData = pageSelector(data, page, 1);
+          pageData.forEach(element => {
             let admin = "Gebruiker"
             if (element.admin == true) {
               admin = "Admin"
@@ -149,6 +158,16 @@
           });
           document.getElementById('book-row').innerHTML = rows;
         });
+    }
+
+    function nextPage1() {
+      createUserTable(currentPage + 1)
+      currentPage++;
+    }
+
+    function previousPage1() {
+      createUserTable(currentPage - 1)
+      currentPage--;
     }
 
     function anonUser(clickedId) {

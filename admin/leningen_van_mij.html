@@ -89,6 +89,12 @@
       <tbody id="reservations-row">
       </tbody>
     </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page1"></div>
+      <div class="col-2 text-center" id="current-page1"></div>
+      <div class="col-5 text-left" id="next-page1"></div>
+    </div>
+    <div class="row" id="page-info1"></div>
   </div>
   <div class="container">
     <h3>Mijn huidige leningen</h3>
@@ -115,6 +121,12 @@
       </thead>
       <tbody id="loans-row-current"></tbody>
     </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page2"></div>
+      <div class="col-2 text-center" id="current-page2"></div>
+      <div class="col-5 text-left" id="next-page2"></div>
+    </div>
+    <div class="row" id="page-info2"></div>
   </div>
   <div class="container">
     <h3>Mijn beëindigde leningen</h3>
@@ -142,13 +154,52 @@
       </thead>
       <tbody id="loans-row-history"></tbody>
     </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page3"></div>
+      <div class="col-2 text-center" id="current-page3"></div>
+      <div class="col-5 text-left" id="next-page3"></div>
+    </div>
+    <div class="row" id="page-info3"></div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
-    window.onload = createReservationTable();
-    window.onload = createLoanTableCurrent();
-    window.onload = createLoanTableHistory();
+    let currentReservationPage = 1;
+    window.onload = createReservationTable(currentReservationPage);
+    let currentCurrentLoanPage = 1;
+    window.onload = createLoanTableCurrent(currentCurrentLoanPage);
+    let currentHistoryLoanPage = 1;
+    window.onload = createLoanTableHistory(currentHistoryLoanPage);
+
+    function nextPage1() {
+      createReservationTable(currentReservationPage + 1)
+      currentReservationPage++;
+    }
+
+    function previousPage1() {
+      createReservationTable(currentReservationPage - 1)
+      currentReservationPage--;
+    }
+
+    function nextPage2() {
+      createLoanTableCurrent(currentCurrentLoanPage + 1)
+      currentCurrentLoanPage++;
+    }
+
+    function previousPage2() {
+      createLoanTableCurrent(currentCurrentLoanPage - 1)
+      currentCurrentLoanPage--;
+    }
+
+    function nextPage3() {
+      createLoanTableHistory(currentHistoryLoanPage + 1)
+      currentHistoryLoanPage++;
+    }
+
+    function previousPage3() {
+      createLoanTableHistory(currentHistoryLoanPage - 1)
+      currentHistoryLoanPage--;
+    }
 
     function cancel(clickedId) {
       let idstr = clickedId.split("cancel");
@@ -157,7 +208,7 @@
         method: "DELETE"
       })
         .then(alert("Reservering geannuleerd"));
-      createReservationTable();
+      createReservationTable(currentReservationPage);
     }
 
     function search() {
