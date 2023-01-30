@@ -88,7 +88,7 @@
         <table class="table">
           <thead>
             <tr>
-              <!-- <th id="image"></th> -->
+              <th></th>
               <th>Titel</th>
               <th>ISBN</th>
               <th>Auteur</th>
@@ -149,7 +149,7 @@
           let bookId = element.id;
           let bookQueryString = '?book=' + bookId;
           let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
-          rows += "<tr><td>" + urlImage + "<br>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+          rows += "<tr><td>" + urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
             '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
         });
         document.getElementById('book-row').innerHTML = rows;
@@ -182,6 +182,7 @@
               authorOptions += `<option value="${element.firstName} ${element.lastName}">`
             });
             data.forEach(element => {
+              let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
               let copiesTotal = 0;
               let copiesAvailable = 0;
               element.bookcopies.forEach(copy => {
@@ -204,14 +205,18 @@
                 // add button to add tag
                 // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
                 // Create rows of the table with auths
-                rows += "<tr><td>" +
+                rows += "<tr><td>" + urlImage + "</td><td>" +
                   "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
                   "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/></td><td>" +
                   auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList' class='form-control' placeholder='Extra auteur toevoegen'>` +
                   `<datalist id='inputAuthorsList${element.id}'>` + authorOptions + "</datalist></td><td>" +
                   tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList' class='form-control' placeholder='Extra tag toevoegen'>` +
                   `<datalist id='inputTagsList${element.id}'>` + tagOptions + "</datalist></td><td>" +
-                  copiesTotal + ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
+                  copiesTotal + 
+                  
+                  "<input class='form-control me-2' id='inputAmount' form='form1' type='text' name='amount' value='1'/>" +
+                  
+                  ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id, document.getElementById('inputAmount').value)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
                   copiesAvailable +
                   '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
               } else {
@@ -227,7 +232,7 @@
                     tags += ", "
                   }
                 }
-                rows += "<tr><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+                rows += "<tr><td>" + urlImage + "</td><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
                   '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
               }
             });
@@ -263,17 +268,24 @@
         });
     }
 
-    function addCopy(clickedId) {
+    function addCopy(clickedId, amount) {
+      console.log(amount);
       if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
         let idstr = clickedId.split("addCopy");
         let idnum = parseInt(idstr[1]);
-        fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
-          method: "POST"
-        })
-          .then(() => {
-            alert('Exemplaar toegevoegd');
-            location.reload()
-          });
+        for (let i=1; i<=amount; i++){
+          fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
+            method: "POST"
+          })
+            .then(() => {
+            }); 
+        }
+        if (amount==1){
+          alert('Exemplaar toegevoegd');
+        } else {
+          alert('Exemplaren toegevoegd');
+        }
+        location.reload()
       } else {
         return false;
       }
