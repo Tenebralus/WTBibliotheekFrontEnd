@@ -339,7 +339,6 @@ function searchLoansCurrent() {
           "<td>" + element.bookCopyNr + "</td>" +
           "<td>" + element.bookIsbn + "</td>" +
           "<td>" + authorNames + "</td>" +
-          "<td>" + element.bookCopyStatus + "</td>" +
           "<td>" + dateLoaned + "</td></tr>";
       }
     });
@@ -375,15 +374,17 @@ function searchLoansHistory() {
       dateReturned = "";
       if (element.dateReturned != null) {
         dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
+      } else {
+        dateReturned = '';//'<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
+      }
         rows +=
           "<tr><td>" + element.bookTitle + "</td>" +
           "<td>" + element.bookCopyNr + "</td>" +
           "<td>" + element.bookIsbn + "</td>" +
           "<td>" + authorNames + "</td>" +
-          "<td>" + element.bookCopyStatus + "</td>" +
           "<td>" + dateLoaned + "</td>" +
           "<td>" + dateReturned + "</td></tr>";
-      }
+
     });
     document.getElementById('loans-row-history').innerHTML = rows;
   });
