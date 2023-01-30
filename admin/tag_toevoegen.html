@@ -193,9 +193,13 @@
             fetch('http://localhost:8080/tag/delete/' + idnum, {
                 method: "DELETE"
             })
-                .then(() => {
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("Deze tag is nog aan een boek toegewezen, en kan niet worden verwijderd");
+                    } else {
                     alert('Tag verwijderd');
-                    location.reload()
+                    location.reload();
+                    }
                 })
         }
     </script>

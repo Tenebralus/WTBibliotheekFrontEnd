@@ -211,7 +211,7 @@
       createReservationTable(currentReservationPage);
     }
 
-    function search() {
+    /*function search() {
       let keyword = document.getElementById('searchField').value;
       fetch('http://localhost:8080/loan/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
@@ -249,7 +249,7 @@
         });
         document.getElementById('loans-row').innerHTML = rows;
       });
-    }
+    }*/
 
     //   function searchLoans() {
     //   let keyword = document.getElementById('searchField').value;
@@ -292,7 +292,7 @@
     //           "<td>" + authorNames + "</td>" +
     //           "<td>" + element.bookCopyStatus + "</td>" +
     //           "<td>" + dateLoaned + "</td></tr>";
-    //         } 
+    //         }
     //         // else {
     //         //   dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
     //         // }

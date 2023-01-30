@@ -56,10 +56,10 @@ function changePassword() {
       }
     )
   }).then(response => response.json()).then(data => {
-    
+
     if (data.succes) {
       return alert("Wachtwoord aangepast");
-    } else{
+    } else {
       return alert(data.errorMessage);
     }
   })
@@ -107,13 +107,13 @@ function createLoanTableCurrent(page) {
     let newData = [];
     let i = 0;
     data.forEach(element => {
-        if (element.dateReturned == null) {
-          newData[i] = element;
-          i++;
-        }
+      if (element.dateReturned == null) {
+        newData[i] = element;
+        i++;
+      }
     });
     data = newData;
-  
+
     data = data.sort((a, b) => {
       return new Date(a.dateLoaned) - new Date(b.dateLoaned);
     });
@@ -161,13 +161,13 @@ function createLoanTableHistory(page) {
     let newData = [];
     let i = 0;
     data.forEach(element => {
-        if (element.dateReturned != null) {
-          newData[i] = element;
-          i++;
-        }
+      if (element.dateReturned != null) {
+        newData[i] = element;
+        i++;
+      }
     });
     data = newData;
-    
+
     data = data.sort((a, b) => {
       return new Date(b.dateReturned) - new Date(a.dateReturned);
     });
@@ -212,7 +212,7 @@ function createReservationTable(page) {
       'token': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
-    
+
     data = data.sort((a, b) => {
       return new Date(b.dateLoaned) - new Date(a.dateLoaned);
     });
@@ -306,7 +306,7 @@ function pageSelector(data, page, table) {
   let elementsPerPage = 20;
   let numPages = Math.ceil(totalElements / elementsPerPage);
   if (page > 1) {
-    document.getElementById("previous-page" + table).innerHTML = '<button class="btn-success" onclick="previousPage'+ table +'()"><-</button>';
+    document.getElementById("previous-page" + table).innerHTML = '<button class="btn-success" onclick="previousPage' + table + '()"><-</button>';
   } else {
     document.getElementById("previous-page" + table).innerHTML = '';
   }
@@ -340,6 +340,15 @@ function searchLoansCurrent() {
       'token': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
+    data.sort(function (a, b) {
+      if (a.dateLoaned > b.dateLoaned) {
+        return 1;
+      }
+      if (a.dateLoaned < b.dateLoaned) {
+        return -1
+      }
+      return 0
+    });
     let rows = '';
     data.forEach(element => {
       let authorNames = "";
@@ -386,6 +395,15 @@ function searchLoansHistory() {
       'token': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
+    data.sort(function (a, b) {
+      if (a.dateReturned < b.dateReturned) {
+        return 1;
+      }
+      if (a.dateReturned > b.dateReturned) {
+        return -1
+      }
+      return 0
+    });
     let rows = '';
     data.forEach(element => {
       let authorNames = "";
@@ -405,13 +423,13 @@ function searchLoansHistory() {
       } else {
         dateReturned = '';//'<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
       }
-        rows +=
-          "<tr><td>" + element.bookTitle + "</td>" +
-          "<td>" + element.bookCopyNr + "</td>" +
-          "<td>" + element.bookIsbn + "</td>" +
-          "<td>" + authorNames + "</td>" +
-          "<td>" + dateLoaned + "</td>" +
-          "<td>" + dateReturned + "</td></tr>";
+      rows +=
+        "<tr><td>" + element.bookTitle + "</td>" +
+        "<td>" + element.bookCopyNr + "</td>" +
+        "<td>" + element.bookIsbn + "</td>" +
+        "<td>" + authorNames + "</td>" +
+        "<td>" + dateLoaned + "</td>" +
+        "<td>" + dateReturned + "</td></tr>";
 
     });
     document.getElementById('loans-row-history').innerHTML = rows;
