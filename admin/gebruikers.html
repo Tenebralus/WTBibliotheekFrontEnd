@@ -207,7 +207,7 @@
             admin = "Admin"
           }
           let status = "Actief"
-          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="update(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></tr>';
+          let copyButton = '</td><td><button class="btn btn-outline-success" type="button" onclick="changeUser(this.id)" id="updateUser' + element.id + '">Pas aan</button></td></tr>';
           if (element.active == false) {
             status = "Verwijderd"
             copyButton = '</td><td></td></tr>';
@@ -270,8 +270,10 @@
                 '</td><td>' + status
                 //"</td><td>"
               if (element.token != getCookie('Authentication')) {
+                rows += '<td>'
                 rows += 'Is admin <br>';
-                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + "" + "</td><td>";
+                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + "";
+                rows += '</td>'
               } else {
                 rows += '<td>'+admin+'</td>';
               }
@@ -295,8 +297,9 @@
       let newFirstName = document.getElementById('inputFirstName').value;
       let newLastName = document.getElementById('inputLastName').value;
       let newEmailAdress = document.getElementById('inputEmailAddress').value;
+      let newAdminValue = false;
       if(document.getElementById('inputAdmin')){
-        let newAdminValue = document.getElementById('inputAdmin').checked;
+        newAdminValue = document.getElementById('inputAdmin').checked;
       }else{
         newAdminValue = true;
       }
