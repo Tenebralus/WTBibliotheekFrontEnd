@@ -56,10 +56,11 @@ function changePassword() {
       }
     )
   }).then(response => response.json()).then(data => {
-    if (data) {
+    
+    if (data.succes) {
       return alert("Wachtwoord aangepast");
-    } else {
-      return alert("Er is iets fout gegaan");
+    } else{
+      return alert(data.errorMessage);
     }
   })
 }
