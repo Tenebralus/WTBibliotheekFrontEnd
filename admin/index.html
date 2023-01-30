@@ -93,11 +93,11 @@
       <tbody id="book-row"></tbody>
     </table>
     <div class="row">
-      <div class="col-5 text-end" id="previous-page"></div>
-      <div class="col-2 text-center" id="current-page"></div>
-      <div class="col-5 text-left" id="next-page"></div>
+      <div class="col-5 text-end" id="previous-page1"></div>
+      <div class="col-2 text-center" id="current-page1"></div>
+      <div class="col-5 text-left" id="next-page1"></div>
     </div>
-    <div class="row" id="page-info"></div>
+    <div class="row" id="page-info1"></div>
   </div>
 
   <script>
@@ -105,12 +105,12 @@
     let currentPage = 1;
     window.onload = createIndexTable(currentPage);
 
-    function nextPage() {
+    function nextPage1() {
       createIndexTable(currentPage + 1)
       currentPage++;
     }
 
-    function previousPage() {
+    function previousPage1() {
       createIndexTable(currentPage - 1)
       currentPage--;
     }

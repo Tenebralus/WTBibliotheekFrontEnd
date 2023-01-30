@@ -191,9 +191,13 @@
             fetch('http://localhost:8080/author/delete/' + idnum, {
                 method: "DELETE"
             })
-                .then(() => {
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("Deze auteur is nog aan een boek toegewezen, en kan niet worden verwijderd");
+                    } else {
                     alert('Auteur verwijderd');
                     location.reload();
+                }
                 })
         }
     </script>

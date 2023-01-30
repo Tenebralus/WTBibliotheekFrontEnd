@@ -99,13 +99,21 @@
       </thead>
       <tbody id="book-row"></tbody>
     </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page1"></div>
+      <div class="col-2 text-center" id="current-page1"></div>
+      <div class="col-5 text-left" id="next-page1"></div>
+    </div>
+    <div class="row" id="page-info1"></div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
-    window.onload = createUserTable();
+    let currentPage = 1;
+    window.onload = createUserTable(currentPage);
 
-    function createUserTable() {
+
+    function createUserTable(page) {
       fetch('http://localhost:8080/user/all', {
         method: 'GET',
         headers: {
@@ -115,7 +123,8 @@
       })
         .then(response => response.json()).then(data => {
           let rows = '';
-          data.forEach(element => {
+          let pageData = pageSelector(data, page, 1);
+          pageData.forEach(element => {
             let admin = "Gebruiker"
             if (element.admin == true) {
               admin = "Admin"
@@ -151,6 +160,16 @@
         });
     }
 
+    function nextPage1() {
+      createUserTable(currentPage + 1)
+      currentPage++;
+    }
+
+    function previousPage1() {
+      createUserTable(currentPage - 1)
+      currentPage--;
+    }
+
     function anonUser(clickedId) {
       console.log(clickedId);
       let idstr = clickedId.split("anon");
@@ -170,8 +189,10 @@
             //maar een admin mag zichzelf niet anonimiseren, dus.. button is removed
             fetch('http://localhost:8080/user/anonymize/' + idnum, {
               method: "PUT"
+            })
+            .then((data) => {
+              location.reload();
             });
-            location.reload();
           }
         });
     }
@@ -246,14 +267,15 @@
                 "</td><td>" + '<input type="text" id="inputEmailAddress" name="fname" placeholder=' + element.emailAddress + '>' +
                 "</td><td>" + dateAccountCreated +
                 "</td><td>" + dateAccountDeleted +
-                '</td><td>' + status +
-                "</td><td>"
+                '</td><td>' + status
+                //"</td><td>"
               if (element.token != getCookie('Authentication')) {
-                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin + "</td><td>";
+                rows += 'Is admin <br>';
+                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + "" + "</td><td>";
               } else {
-                rows += "</td><td>";
+                rows += '<td>'+admin+'</td>';
               }
-              rows += '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
+              rows += '<td>'+'<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>'+'</td>';
             } else {
               rows += "<tr><td>" + element.firstName +
                 "</td><td>" + element.lastName +
@@ -273,7 +295,11 @@
       let newFirstName = document.getElementById('inputFirstName').value;
       let newLastName = document.getElementById('inputLastName').value;
       let newEmailAdress = document.getElementById('inputEmailAddress').value;
-      let newAdminValue = document.getElementById('inputAdmin').checked;
+      if(document.getElementById('inputAdmin')){
+        let newAdminValue = document.getElementById('inputAdmin').checked;
+      }else{
+        newAdminValue = true;
+      }
       let idstr = clickedId.split("saveUser");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/user/update/' + idnum, {
