@@ -267,15 +267,15 @@
                 "</td><td>" + '<input type="text" id="inputEmailAddress" name="fname" placeholder=' + element.emailAddress + '>' +
                 "</td><td>" + dateAccountCreated +
                 "</td><td>" + dateAccountDeleted +
-                '</td><td>' + status +
-                "</td><td>"
+                '</td><td>' + status
+                //"</td><td>"
               if (element.token != getCookie('Authentication')) {
                 rows += 'Is admin <br>';
                 rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + "" + "</td><td>";
               } else {
-                rows += "</td><td>";
+                rows += '<td>'+admin+'</td>';
               }
-              rows += '<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>';
+              rows += '<td>'+'<button class="btn btn-outline-success" type="button" onclick="saveUser(this.id)" id="saveUser' + element.id + '">Bewaar wijzigingen</button>'+'</td>';
             } else {
               rows += "<tr><td>" + element.firstName +
                 "</td><td>" + element.lastName +
@@ -295,7 +295,11 @@
       let newFirstName = document.getElementById('inputFirstName').value;
       let newLastName = document.getElementById('inputLastName').value;
       let newEmailAdress = document.getElementById('inputEmailAddress').value;
-      let newAdminValue = document.getElementById('inputAdmin').checked;
+      if(document.getElementById('inputAdmin')){
+        let newAdminValue = document.getElementById('inputAdmin').checked;
+      }else{
+        newAdminValue = true;
+      }
       let idstr = clickedId.split("saveUser");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/user/update/' + idnum, {
