@@ -100,6 +100,12 @@
           </thead>
           <tbody id="book-row"></tbody>
         </table>
+        <div class="row">
+          <div class="col-5 text-end" id="previous-page1"></div>
+          <div class="col-2 text-center" id="current-page1"></div>
+          <div class="col-5 text-left" id="next-page1"></div>
+        </div>
+        <div class="row" id="page-info1"></div>
       </div>
     </div>
   </div>
@@ -107,12 +113,14 @@
   <script>
     InitializePage("../user/index.html", "");
 
-    window.onload = createLibraryTable();
+    let currentPage = 1;
+    window.onload = createLibraryTable(currentPage);
 
-    function createLibraryTable() {
+    function createLibraryTable(page) {
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
-        data.forEach(element => {
+        let pageData = pageSelector(data, page, 1);
+        pageData.forEach(element => {
           let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
           // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
           // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
@@ -146,6 +154,16 @@
         });
         document.getElementById('book-row').innerHTML = rows;
       });
+    }
+
+    function nextPage1() {
+      createLibraryTable(currentPage + 1)
+      currentPage++;
+    }
+
+    function previousPage1() {
+      createLibraryTable(currentPage - 1)
+      currentPage--;
     }
 
     function updateLibrary(clickedId) {

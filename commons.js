@@ -94,7 +94,7 @@ function createReservation(clickedId) {
     })
 }
 
-function createLoanTableCurrent() {
+function createLoanTableCurrent(page) {
   fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
@@ -102,11 +102,24 @@ function createLoanTableCurrent() {
       'token': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
+
+    // make a list with loans that are not returned, required for page system
+    let newData = [];
+    let i = 0;
+    data.forEach(element => {
+        if (element.dateReturned == null) {
+          newData[i] = element;
+          i++;
+        }
+    });
+    data = newData;
+  
     data = data.sort((a, b) => {
       return new Date(a.dateLoaned) - new Date(b.dateLoaned);
     });
     let rows = '';
-    data.forEach(element => {
+    let pageData = pageSelector(data, page, 2);
+    pageData.forEach(element => {
       let authorNames = "";
       for (let i = 0; i < element.authors.length; i++) {
         authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
@@ -135,7 +148,7 @@ function createLoanTableCurrent() {
   });
 }
 
-function createLoanTableHistory() {
+function createLoanTableHistory(page) {
   fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
@@ -143,11 +156,24 @@ function createLoanTableHistory() {
       'token': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
+
+    // make a list with loans that are returned, required for page system
+    let newData = [];
+    let i = 0;
+    data.forEach(element => {
+        if (element.dateReturned != null) {
+          newData[i] = element;
+          i++;
+        }
+    });
+    data = newData;
+    
     data = data.sort((a, b) => {
       return new Date(b.dateReturned) - new Date(a.dateReturned);
     });
     let rows = '';
-    data.forEach(element => {
+    let pageData = pageSelector(data, page, 3);
+    pageData.forEach(element => {
       let authorNames = "";
       for (let i = 0; i < element.authors.length; i++) {
         authorNames += element.authors[i].firstName + " " + element.authors[i].lastName;
@@ -178,7 +204,7 @@ function createLoanTableHistory() {
   });
 }
 
-function createReservationTable() {
+function createReservationTable(page) {
   fetch('http://localhost:8080/reservation/dto/user', {
     method: 'GET',
     headers: {
@@ -186,11 +212,13 @@ function createReservationTable() {
       'token': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
+    
     data = data.sort((a, b) => {
       return new Date(b.dateLoaned) - new Date(a.dateLoaned);
     });
     let rows = '';
-    data.forEach(element => {
+    let pageData = pageSelector(data, page, 1);
+    pageData.forEach(element => {
       let auths = '';
       for (let i = 0; i < element.authors.length; i++) {
         auths += element.authors[i].firstName + " " + element.authors[i].lastName
@@ -272,29 +300,29 @@ function InitializePage(userPage, adminPage) {
     });
 }
 
-function pageSelector(data) {
-  document.getElementById("current-page").innerHTML = '<p>' + currentPage + '</p>';
+function pageSelector(data, page, table) {
+  document.getElementById("current-page" + table).innerHTML = '<p>' + page + '</p>';
   let totalElements = data.length;
   let elementsPerPage = 20;
   let numPages = Math.ceil(totalElements / elementsPerPage);
-  if (currentPage > 1) {
-    document.getElementById("previous-page").innerHTML = '<button class="btn-success" onclick="previousPage()"><-</button>';
+  if (page > 1) {
+    document.getElementById("previous-page" + table).innerHTML = '<button class="btn-success" onclick="previousPage'+ table +'()"><-</button>';
   } else {
-    document.getElementById("previous-page").innerHTML = '';
+    document.getElementById("previous-page" + table).innerHTML = '';
   }
-  if (numPages > currentPage) {
-    document.getElementById("next-page").innerHTML = '<button class="btn-success" onclick="nextPage()">-></button>';
+  if (numPages > page) {
+    document.getElementById("next-page" + table).innerHTML = '<button class="btn-success" onclick="nextPage' + table + '()">-></button>';
   } else {
-    document.getElementById("next-page").innerHTML = '';
+    document.getElementById("next-page" + table).innerHTML = '';
   }
-  let sliceStart = 0 + ((currentPage - 1) * elementsPerPage);
+  let sliceStart = 0 + ((page - 1) * elementsPerPage);
   let lastEntry;
   if (sliceStart + 1 + elementsPerPage > totalElements) {
     lastEntry = totalElements;
   } else {
     lastEntry = sliceStart + elementsPerPage;
   }
-  document.getElementById("page-info").innerHTML = '<p>Pagina ' + currentPage + ' van ' + numPages
+  document.getElementById("page-info" + table).innerHTML = '<p>Pagina ' + page + ' van ' + numPages
     + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>';
   let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
   return pageData;
@@ -393,7 +421,7 @@ function searchLoansHistory() {
 function createIndexTable(page) {
   fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
     let rows = '';
-    let pageData = pageSelector(data);
+    let pageData = pageSelector(data, page, 1);
     pageData.forEach(element => {
       let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';//'<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
       // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"

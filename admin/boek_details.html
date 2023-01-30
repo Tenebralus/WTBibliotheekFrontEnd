@@ -181,6 +181,7 @@
               }
               let returnButtonHTML = '';
               if (data.bookCopyDetailsDTOs[i].status == "loaned") {
+                console.log(data.bookCopyDetailsDTOs[i].bookTitle) + "";
                 returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
               } else if (data.bookCopyDetailsDTOs[i].status == "available") {
                 usernameCurrentLoan = '<input list="userDataList" id="loanBookUser' + data.bookCopyDetailsDTOs[i].id + '" name="loanBook">';
