@@ -371,9 +371,7 @@
     }
 
     function makeLoan(bookCopyId, status) {
-      console.log("text");
       let name = document.getElementById("loanBookUser" + bookCopyId).value;
-      console.log(name);
       if (name) {
         console.log("text1");
         let newFirstName = name.split(" ")[0];
@@ -394,7 +392,6 @@
           }
         })
           .then(() => {
-            console.log("text3");
             location.reload();
           });
       }

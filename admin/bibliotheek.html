@@ -212,7 +212,11 @@
                   `<datalist id='inputAuthorsList${element.id}'>` + authorOptions + "</datalist></td><td>" +
                   tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList' class='form-control' placeholder='Extra tag toevoegen'>` +
                   `<datalist id='inputTagsList${element.id}'>` + tagOptions + "</datalist></td><td>" +
-                  copiesTotal + ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
+                  copiesTotal + 
+                  
+                  "<input class='form-control me-2' id='inputAmount' form='form1' type='text' name='amount' value='1'/>" +
+                  
+                  ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id, document.getElementById('inputAmount').value)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
                   copiesAvailable +
                   '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
               } else {
@@ -264,17 +268,24 @@
         });
     }
 
-    function addCopy(clickedId) {
+    function addCopy(clickedId, amount) {
+      console.log(amount);
       if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
         let idstr = clickedId.split("addCopy");
         let idnum = parseInt(idstr[1]);
-        fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
-          method: "POST"
-        })
-          .then(() => {
-            alert('Exemplaar toegevoegd');
-            location.reload()
-          });
+        for (let i=1; i<=amount; i++){
+          fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
+            method: "POST"
+          })
+            .then(() => {
+            }); 
+        }
+        if (amount==1){
+          alert('Exemplaar toegevoegd');
+        } else {
+          alert('Exemplaren toegevoegd');
+        }
+        location.reload()
       } else {
         return false;
       }
