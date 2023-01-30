@@ -300,10 +300,9 @@ function InitializePage(userPage, adminPage) {
     });
 }
 
-function pageSelector(data, page, table) {
+function pageSelector(data, page, table, elementsPerPage) {
   document.getElementById("current-page" + table).innerHTML = '<p>' + page + '</p>';
   let totalElements = data.length;
-  let elementsPerPage = 20;
   let numPages = Math.ceil(totalElements / elementsPerPage);
   if (page > 1) {
     document.getElementById("previous-page" + table).innerHTML = '<button class="btn-success" onclick="previousPage'+ table +'()"><-</button>';
@@ -322,8 +321,9 @@ function pageSelector(data, page, table) {
   } else {
     lastEntry = sliceStart + elementsPerPage;
   }
+  
   document.getElementById("page-info" + table).innerHTML = '<p>Pagina ' + page + ' van ' + numPages
-    + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>';
+    + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>'; 
   let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
   return pageData;
 }
@@ -418,10 +418,10 @@ function searchLoansHistory() {
   });
 }
 
-function createIndexTable(page) {
+function createIndexTable(page, elementsPerPage) {
   fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
     let rows = '';
-    let pageData = pageSelector(data, page, 1);
+    let pageData = pageSelector(data, page, 1, elementsPerPage);
     pageData.forEach(element => {
       let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';//'<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
       // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
