@@ -268,7 +268,8 @@
                 '</td><td>' + status +
                 "</td><td>"
               if (element.token != getCookie('Authentication')) {
-                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + admin + "</td><td>";
+                rows += 'Is admin <br>';
+                rows += '<input type="checkbox" id="inputAdmin" name="is_admin" value="admin" ' + adminCheckBox + '>' + "" + "</td><td>";
               } else {
                 rows += "</td><td>";
               }
