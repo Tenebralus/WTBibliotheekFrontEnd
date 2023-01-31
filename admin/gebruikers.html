@@ -211,7 +211,7 @@
               method: "PUT"
             })
             .then((data) => {
-              location.reload();
+              createUserTable(currentPage, elementsPerPage);
             });
           }
         });
@@ -224,7 +224,9 @@
       fetch('http://localhost:8080/user/search/' + keyword).then(response => response.json()).then(data => {
         
         let rows = '';
-        data.forEach(element => {
+        currentPage = 1;
+        let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+        pageData.forEach(element => {
           let admin = "Gebruiker"
           if (element.admin == true) {
             admin = "Admin"
@@ -266,12 +268,14 @@
           }
         })
           .then(response => response.json()).then(data => {
-            buildChangeUserTable(data, clickedId);
+            let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+            buildChangeUserTable(pageData, clickedId);
           });
       }else{
         let keyword = document.getElementById('searchField').value;
         fetch('http://localhost:8080/user/search/' + keyword).then(response => response.json()).then(data => {
-          buildChangeUserTable(data, clickedId);
+          let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+          buildChangeUserTable(pageData, clickedId);
         });
       }
     }
@@ -361,7 +365,7 @@
           alert('User is aangepast');
           
           if (globalSearchCurrentUsersKeyword == ""){
-            createUserTable(1);
+            createUserTable(currentPage, elementsPerPage);
           }else{
             searchUser();
           }

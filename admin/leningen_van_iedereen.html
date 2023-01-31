@@ -294,11 +294,11 @@
         .then(() => {
           alert('Exemplaar is ingeleverd');
           if (globalSearchCurrentLoansKeyword == "") {
-            createCurrentLoansTable(1);
-            createOldLoansTable(1);
+            createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
           } else {
             searchCurrentLoans();
           }
+          createOldLoansTable(currentOldLoansPage, elementsPerPage2);
         })
     }
 
@@ -307,7 +307,7 @@
       globalSearchCurrentLoansKeyword = keyword;
 
       if (!keyword) {
-        return createCurrentLoansTable(1);
+        return createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
       }
       fetch('http://localhost:8080/loan/search/current', {
         method: "POST",
@@ -351,7 +351,7 @@
     function searchOldLoans() {
       let keyword = document.getElementById('old-loans-search-field').value;
       if (!keyword) {
-        return createOldLoansTable(1);
+        return createOldLoansTable(currentOldLoansPage, elementsPerPage2);
       }
       fetch('http://localhost:8080/loan/search/old', {
         method: "POST",

@@ -190,16 +190,17 @@
     function updateLibrary(clickedId) {
       //let idstr = clickedId.split("updateLibrary");
       //let idnum = parseInt(idstr[1]);
-
       if (globalSearchAllBooksKeyword == "") {
         fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
-          buildUpdateLibraryTable(data, clickedId);
+          let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+          buildUpdateLibraryTable(pageData, clickedId);
         });
       } else {
         let keyword = document.getElementById('searchField').value;
 
         fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
-          buildUpdateLibraryTable(data, clickedId);
+          let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+          buildUpdateLibraryTable(pageData, clickedId);
         });
       }
     }
@@ -207,9 +208,8 @@
     function buildUpdateLibraryTable(data, clickedId) {
       let idstr = clickedId.split("updateLibrary");
       let idnum = parseInt(idstr[1]);
-      fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         fetch('http://localhost:8080/tag/all').then(response => response.json()).then(tagsData => {
-          fetch('http://localhost:8080/author/all').then(response => response.json()).then(authorData => {
+          fetch('http://localhost:8080/author/all').then(response => response.json()).then(authorData => {      
             let rows = '';
             data.forEach(element => {
               let tagOptions = '';
@@ -278,8 +278,7 @@
                     auths += ", "
                   }
                 }
-              }
-              for (let i = 0; i < element.tags.length; i++) {
+                for (let i = 0; i < element.tags.length; i++) {
                 tags += element.tags[i].name
                 if (i < element.tags.length - 1) {
                   tags += ", "
@@ -287,11 +286,12 @@
               }
               rows += "<tr><td>" + urlImage + "</td><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
                 '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
-            }
+              }
+              
+            });
+            document.getElementById('book-row').innerHTML = rows;
           });
-          document.getElementById('book-row').innerHTML = rows;
         });
-      });
     }
 
     function updateBook(clickedId) {
@@ -317,9 +317,9 @@
         .then(() => {
           alert('Boek is aangepast');
           if (globalSearchAllBooksKeyword == "") {
-            location.reload()
+            createLibraryTable(currentPage, elementsPerPage);
           } else {
-            search(globalSearchAllBooksKeyword);
+            search();
           }
         });
     }
@@ -343,7 +343,7 @@
         }
 
         if (globalSearchAllBooksKeyword == "") {
-          location.reload()
+          createLibraryTable(currentPage, elementsPerPage);
         } else {
           search(globalSearchAllBooksKeyword);
         }
@@ -369,7 +369,7 @@
           if (!response.ok) {
             alert("Deze tag is al aan het boek toegewezen");
           } else {
-            location.reload()
+            createLibraryTable(currentPage, elementsPerPage);
           }
         });
       }
@@ -395,7 +395,7 @@
           if (!response.ok) {
             alert("Deze auteur is al aan het boek toegewezen");
           } else {
-            location.reload()
+            createLibraryTable(currentPage, elementsPerPage);
           }
         });
       }
@@ -411,7 +411,7 @@
         })
           .then(() => {
             alert('Auteur verwijderd');
-            location.reload();
+            createLibraryTable(currentPage, elementsPerPage);
           });
       } else {
         return false;
@@ -428,7 +428,7 @@
         })
           .then(() => {
             alert('Tag verwijderd');
-            location.reload();
+            createLibraryTable(currentPage, elementsPerPage);
           });
       } else {
         return false;
@@ -441,7 +441,9 @@
 
       fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
-        data.forEach(element => {
+        currentPage = 1;
+        let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+        pageData.forEach(element => {
           let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';//'<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
           let auths = '';
           for (let i = 0; i < element.authors.length; i++) {

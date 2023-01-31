@@ -178,7 +178,7 @@
           method: 'POST'
         })
           .then(alert("Boek uitgeleend."));
-        createTable();
+        createTable(currentPage, elementsPerPage);
       } else {
         alert("Selecteer een exemplaar");
       }
@@ -187,7 +187,7 @@
     function search() {
       let keyword = document.getElementById('searchField').value;
       if (!keyword) {
-        return createTable(1);
+        return createTable(currentPage, elementsPerPage);
       }
       fetch('http://localhost:8080/reservation/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
