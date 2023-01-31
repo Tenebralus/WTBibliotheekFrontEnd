@@ -242,7 +242,7 @@ function createReservationTable(page) {
 function searchReservations() {
   let keyword = document.getElementById('searchField1').value;
   if (!keyword) {
-    return createReservationTable();
+    return createReservationTable(1);
   }
   fetch('http://localhost:8080/reservation/user/personal/search/' + keyword, {
     method: 'GET',
@@ -331,7 +331,7 @@ function pageSelector(data, page, table) {
 function searchLoansCurrent() {
   let keyword = document.getElementById('searchField').value;
   if (!keyword) {
-    return createLoanTableCurrent();
+    return createLoanTableCurrent(1);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',
@@ -386,7 +386,7 @@ function searchLoansCurrent() {
 function searchLoansHistory() {
   let keyword = document.getElementById('searchField3').value;
   if (!keyword) {
-    return createLoanTableHistory();
+    return createLoanTableHistory(1);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',

@@ -265,7 +265,7 @@
     function searchCurrentLoans() {
       let keyword = document.getElementById('current-loans-search-field').value;
       if (!keyword) {
-        return createCurrentLoansTable();
+        return createCurrentLoansTable(1);
       }
       fetch('http://localhost:8080/loan/search/current', {
         method: "POST",
