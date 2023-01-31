@@ -122,7 +122,7 @@
           placeholder="Zoek op boektitel, auteur, of gebruiker">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchOldLoans()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchOldLoans(1)">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -168,6 +168,7 @@
     window.onload = createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
     window.onload = createOldLoansTable(currentOldLoansPage, elementsPerPage2);
     let globalSearchCurrentLoansKeyword = "";
+    let globalSearchOldLoansKeyword = "";
 
     function createCurrentLoansTable(page, elementsPerPage) {
       fetch('http://localhost:8080/loan/dto/all/current').then(response => response.json()).then(data => {
@@ -211,23 +212,53 @@
 
 
     function nextPage1() {
-      createCurrentLoansTable(currentCurrentLoansPage + 1, elementsPerPage1)
       currentCurrentLoansPage++;
+      if(globalSearchCurrentLoansKeyword == "")
+      {
+        createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1)
+      }
+      else
+      {
+        searchCurrentLoans();
+      }
     }
 
     function previousPage1() {
-      createCurrentLoansTable(currentCurrentLoansPage - 1, elementsPerPage1)
       currentCurrentLoansPage--;
+      if(globalSearchCurrentLoansKeyword == "")
+      {
+        createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
+      }
+      else
+      {
+        searchCurrentLoans();
+      }  
     }
 
     function nextPage2() {
-      createOldLoansTable(currentOldLoansPage + 1, elementsPerPage2)
       currentOldLoansPage++;
+      searchOldLoans(currentOldLoansPage);
+      // if(globalSearchOldLoansKeyword == "")
+      // {
+      //   createOldLoansTable(currentOldLoansPage, elementsPerPage2)
+      // }
+      // else
+      // {
+      //   searchOldLoans(currentOldLoansPage);
+      // }
     }
 
     function previousPage2() {
-      createOldLoansTable(currentOldLoansPage - 1, elementsPerPage2)
       currentOldLoansPage--;
+      searchOldLoans(currentOldLoansPage);
+      // if(globalSearchOldLoansKeyword == "")
+      // {
+      //   createOldLoansTable(currentOldLoansPage, elementsPerPage2)
+      // }
+      // else
+      // {
+      //   searchOldLoans(currentOldLoansPage);
+      // }
     }
 
     function SelectPageElementCount1(count) {
@@ -321,8 +352,9 @@
         }
       }).then(response => response.json()).then(data => {
         let rows = '';
-
-        data.forEach(element => {
+        currentCurrentLoansPage = 1;
+        let pageData = pageSelector(data, currentCurrentLoansPage, 1, elementsPerPage2);
+        pageData.forEach(element => {
           let authorNames = "";
           if (element.authors) {
             for (let i = 0; i < element.authors.length; i++) {
@@ -348,9 +380,11 @@
       });
     }
 
-    function searchOldLoans() {
+    function searchOldLoans(page) {
       let keyword = document.getElementById('old-loans-search-field').value;
+      globalSearchOldLoansKeyword = keyword;
       if (!keyword) {
+        currentOldLoansPage = 1;
         return createOldLoansTable(currentOldLoansPage, elementsPerPage2);
       }
       fetch('http://localhost:8080/loan/search/old', {
@@ -375,7 +409,9 @@
             return 0
           });
           let rows = '';
-          data.forEach(element => {
+          currentOldLoansPage = page;
+          let pageData = pageSelector(data, currentOldLoansPage, 2, elementsPerPage2);
+          pageData.forEach(element => {
             let authorNames = "";
             if (element.authors) {
               for (let i = 0; i < element.authors.length; i++) {
@@ -400,6 +436,7 @@
           document.getElementById('old-loans-row').innerHTML = rows;
         });
     }
+    
   </script>
 
 </body>
