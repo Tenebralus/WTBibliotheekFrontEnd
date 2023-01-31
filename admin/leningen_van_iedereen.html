@@ -141,6 +141,7 @@
 
     let currentCurrentLoansPage = 1;
     let currentOldLoansPage = 1;
+    let globalSearchCurrentLoansKeyword = "";
     window.onload = createCurrentLoansTable(currentCurrentLoansPage);
     window.onload = createOldLoansTable(currentOldLoansPage);
 
@@ -257,13 +258,19 @@
         })
         .then(() => {
           alert('Exemplaar is ingeleverd');
-          createCurrentLoansTable();
-          createOldLoansTable();
+          if (globalSearchCurrentLoansKeyword == ""){
+            createCurrentLoansTable(1);
+            createOldLoansTable(1);
+          }else{
+            searchCurrentLoans();
+          }
         })
     }
 
     function searchCurrentLoans() {
       let keyword = document.getElementById('current-loans-search-field').value;
+      globalSearchCurrentLoansKeyword = keyword;
+
       if (!keyword) {
         return createCurrentLoansTable(1);
       }
