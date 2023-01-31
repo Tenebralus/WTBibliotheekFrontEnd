@@ -193,10 +193,15 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
+                
+            .then(response => response.json()).then(data => {
+
+                if (data.succes) {
                     alert('Boek is opgeslagen');
-                    //location.reload;
-                })
+                } else {
+                    alert(data.err);
+                }
+            });
         }
 
         //function createBookAndDone() {
