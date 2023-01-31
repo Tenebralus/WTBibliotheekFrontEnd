@@ -161,10 +161,15 @@
                     });
                 });
                 if (document.getElementById('inputAuthor' + i).value.length != 0 && typeof authorId !== 'undefined') {
-                    if (!authorsArr.find(element => { if (element.id == authorId) { return true } })) {
-                        authorsArr.push({ "id": authorId });
-                    }
+                    //if (!authorsArr.find(element => { if (element.id == authorId) { return true } })) {
+                    //    authorsArr.push({ "id": authorId });
+                    //}
+                    //authorsArr.push(document.getElementById('inputAuthor' + i).value);
+                    //authorsArr.push({ "AuthorName": document.getElementById('inputAuthor' + i).value });
+                    
                 }
+                authorsArr.push(document.getElementById('inputAuthor' + i).value);
+                console.log(authorsArr);
             }
             let tagsArr = [];
             for (let i = 0; i < tagNumber; i++) {
@@ -172,13 +177,16 @@
                     await searchTagId(document.getElementById('inputTag' + i).value).then(data => {
                         if (typeof data[0] !== 'undefined') {
                             tagId = data[0].id;
-                            if (!tagsArr.find(element => { if (element.id == tagId) { return true } })) {
-                                tagsArr.push({ "id": tagId });
-                            }
+                            //if (!tagsArr.find(element => { if (element.id == tagId) { return true } })) {
+                            //    tagsArr.push({ "id": tagId });
+                            //}
                         }
                     });
                 }
+                tagsArr.push(document.getElementById('inputTag' + i).value);
+                console.log(tagsArr);
             }
+            
             fetch('http://localhost:8080/book/create', {
                 method: 'POST',
                 body: JSON.stringify(
