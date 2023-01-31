@@ -94,7 +94,7 @@ function createReservation(clickedId) {
     })
 }
 
-function createLoanTableCurrent(page) {
+function createLoanTableCurrent(page, elementsPerPage) {
   fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
@@ -118,7 +118,7 @@ function createLoanTableCurrent(page) {
       return new Date(a.dateLoaned) - new Date(b.dateLoaned);
     });
     let rows = '';
-    let pageData = pageSelector(data, page, 2);
+    let pageData = pageSelector(data, page, 2, elementsPerPage);
     pageData.forEach(element => {
       let authorNames = "";
       for (let i = 0; i < element.authors.length; i++) {
@@ -148,7 +148,7 @@ function createLoanTableCurrent(page) {
   });
 }
 
-function createLoanTableHistory(page) {
+function createLoanTableHistory(page, elementsPerPage) {
   fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
@@ -172,7 +172,7 @@ function createLoanTableHistory(page) {
       return new Date(b.dateReturned) - new Date(a.dateReturned);
     });
     let rows = '';
-    let pageData = pageSelector(data, page, 3);
+    let pageData = pageSelector(data, page, 3, elementsPerPage);
     pageData.forEach(element => {
       let authorNames = "";
       for (let i = 0; i < element.authors.length; i++) {
@@ -204,7 +204,7 @@ function createLoanTableHistory(page) {
   });
 }
 
-function createReservationTable(page) {
+function createReservationTable(page, elementsPerPage) {
   fetch('http://localhost:8080/reservation/dto/user', {
     method: 'GET',
     headers: {
@@ -217,7 +217,7 @@ function createReservationTable(page) {
       return new Date(b.dateLoaned) - new Date(a.dateLoaned);
     });
     let rows = '';
-    let pageData = pageSelector(data, page, 1);
+    let pageData = pageSelector(data, page, 1, elementsPerPage);
     pageData.forEach(element => {
       let auths = '';
       for (let i = 0; i < element.authors.length; i++) {
@@ -239,10 +239,10 @@ function createReservationTable(page) {
   });
 }
 
-function searchReservations() {
+function searchReservations(page, elementsPerPage) {
   let keyword = document.getElementById('searchField1').value;
   if (!keyword) {
-    return createReservationTable(1);
+    return createReservationTable(page, elementsPerPage);
   }
   fetch('http://localhost:8080/reservation/user/personal/search/' + keyword, {
     method: 'GET',
@@ -300,10 +300,9 @@ function InitializePage(userPage, adminPage) {
     });
 }
 
-function pageSelector(data, page, table) {
+function pageSelector(data, page, table, elementsPerPage) {
   document.getElementById("current-page" + table).innerHTML = '<p>' + page + '</p>';
   let totalElements = data.length;
-  let elementsPerPage = 20;
   let numPages = Math.ceil(totalElements / elementsPerPage);
   if (page > 1) {
     document.getElementById("previous-page" + table).innerHTML = '<button class="btn-success" onclick="previousPage' + table + '()"><-</button>';
@@ -322,16 +321,17 @@ function pageSelector(data, page, table) {
   } else {
     lastEntry = sliceStart + elementsPerPage;
   }
+
   document.getElementById("page-info" + table).innerHTML = '<p>Pagina ' + page + ' van ' + numPages
     + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>';
   let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
   return pageData;
 }
 
-function searchLoansCurrent() {
+function searchLoansCurrent(page, elementsPerPage) {
   let keyword = document.getElementById('searchField').value;
   if (!keyword) {
-    return createLoanTableCurrent(1);
+    return createLoanTableCurrent(page, elementsPerPage);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',
@@ -383,10 +383,10 @@ function searchLoansCurrent() {
   });
 }
 
-function searchLoansHistory() {
+function searchLoansHistory(page, elementsPerPage) {
   let keyword = document.getElementById('searchField3').value;
   if (!keyword) {
-    return createLoanTableHistory(1);
+    return createLoanTableHistory(page, elementsPerPage);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',
@@ -433,10 +433,10 @@ function searchLoansHistory() {
   });
 }
 
-function createIndexTable(page) {
+function createIndexTable(page, elementsPerPage) {
   fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
     let rows = '';
-    let pageData = pageSelector(data, page, 1);
+    let pageData = pageSelector(data, page, 1, elementsPerPage);
     pageData.forEach(element => {
       let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';//'<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
       // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"

@@ -104,18 +104,29 @@
       <div class="col-2 text-center" id="current-page1"></div>
       <div class="col-5 text-left" id="next-page1"></div>
     </div>
-    <div class="row" id="page-info1"></div>
+    <div class="row">
+      <div class="col-sm-auto" id="page-info1"></div>
+        <div class="col-1">
+          <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)" autocomplete="off">
+            <option value = "0">5</option>
+            <option value = "1">10</option>
+            <option value = "2" selected>25</option>
+            <option value = "3">50</option>
+          </select>
+      </div>
+    </div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
     let currentPage = 1;
-    window.onload = createUserTable(currentPage);
+    let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
+    window.onload = createUserTable(currentPage, elementsPerPage);
 
     let globalSearchCurrentUsersKeyword = "";
 
 
-    function createUserTable(page) {
+    function createUserTable(page, elementsPerPage) {
       fetch('http://localhost:8080/user/all', {
         method: 'GET',
         headers: {
@@ -125,7 +136,7 @@
       })
         .then(response => response.json()).then(data => {
           let rows = '';
-          let pageData = pageSelector(data, page, 1);
+          let pageData = pageSelector(data, page, 1, elementsPerPage);
           pageData.forEach(element => {
             let admin = "Gebruiker"
             if (element.admin == true) {
@@ -163,13 +174,20 @@
     }
 
     function nextPage1() {
-      createUserTable(currentPage + 1)
+      createUserTable(currentPage + 1, elementsPerPage)
       currentPage++;
     }
 
     function previousPage1() {
-      createUserTable(currentPage - 1)
+      createUserTable(currentPage - 1, elementsPerPage)
       currentPage--;
+    }
+
+    function SelectPageElementCount(count)
+    {
+      elementsPerPage = parseInt(count);
+      currentPage = 1;
+      createUserTable(currentPage, elementsPerPage);
     }
 
     function anonUser(clickedId) {
@@ -193,7 +211,7 @@
               method: "PUT"
             })
             .then((data) => {
-              location.reload();
+              createUserTable(currentPage, elementsPerPage);
             });
           }
         });
@@ -206,7 +224,9 @@
       fetch('http://localhost:8080/user/search/' + keyword).then(response => response.json()).then(data => {
         
         let rows = '';
-        data.forEach(element => {
+        currentPage = 1;
+        let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+        pageData.forEach(element => {
           let admin = "Gebruiker"
           if (element.admin == true) {
             admin = "Admin"
@@ -248,12 +268,14 @@
           }
         })
           .then(response => response.json()).then(data => {
-            buildChangeUserTable(data, clickedId);
+            let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+            buildChangeUserTable(pageData, clickedId);
           });
       }else{
         let keyword = document.getElementById('searchField').value;
         fetch('http://localhost:8080/user/search/' + keyword).then(response => response.json()).then(data => {
-          buildChangeUserTable(data, clickedId);
+          let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+          buildChangeUserTable(pageData, clickedId);
         });
       }
     }
@@ -343,7 +365,7 @@
           alert('User is aangepast');
           
           if (globalSearchCurrentUsersKeyword == ""){
-            createUserTable(1);
+            createUserTable(currentPage, elementsPerPage);
           }else{
             searchUser();
           }

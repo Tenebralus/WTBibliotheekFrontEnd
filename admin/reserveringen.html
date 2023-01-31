@@ -97,19 +97,30 @@
       <div class="col-2 text-center" id="current-page1"></div>
       <div class="col-5 text-left" id="next-page1"></div>
     </div>
-    <div class="row" id="page-info1"></div>
+    <div class="row">
+      <div class="col-sm-auto" id="page-info1"></div>
+        <div class="col-1">
+          <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)" autocomplete="off">
+            <option value = "0">5</option>
+            <option value = "1">10</option>
+            <option value = "2" selected>25</option>
+            <option value = "3">50</option>
+          </select>
+      </div>
+    </div>
   </div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
     let currentPage = 1;
-    window.onload = createTable(currentPage);
+    let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
+    window.onload = createTable(currentPage, elementsPerPage);
 
-    function createTable(page) {
+    function createTable(page, elementsPerPage) {
       fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
         let rows = '';
-        let pageData = pageSelector(data, page, 1);
+        let pageData = pageSelector(data, page, 1, elementsPerPage);
         pageData.forEach(element => {
           //Prevents errors if no user is registered to a reservation
           let userName = ""
@@ -140,13 +151,20 @@
     }
 
     function nextPage1() {
-      createTable(currentPage + 1)
+      createTable(currentPage + 1, elementsPerPage)
       currentPage++;
     }
 
     function previousPage1() {
-      createTable(currentPage - 1)
+      createTable(currentPage - 1, elementsPerPage)
       currentPage--;
+    }
+
+    function SelectPageElementCount(count)
+    {
+      elementsPerPage = parseInt(count);
+      currentPage = 1;
+      createTable(currentPage, elementsPerPage);
     }
 
     function createLoan(clickedId) {
@@ -160,7 +178,7 @@
           method: 'POST'
         })
           .then(alert("Boek uitgeleend."));
-        createTable();
+        createTable(currentPage, elementsPerPage);
       } else {
         alert("Selecteer een exemplaar");
       }
@@ -169,7 +187,7 @@
     function search() {
       let keyword = document.getElementById('searchField').value;
       if (!keyword) {
-        return createTable(1);
+        return createTable(currentPage, elementsPerPage);
       }
       fetch('http://localhost:8080/reservation/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
