@@ -119,11 +119,16 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    alert('Auteur is opgeslagen');
-                    document.getElementById('inputFirstName').value = "";
-                    document.getElementById('inputLastName').value = "";
-                    location.reload();
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("Deze auteur bestaat al");
+                    } else {
+                        alert('Auteur is opgeslagen');
+                        document.getElementById('inputFirstName').value = "";
+                        document.getElementById('inputLastName').value = "";
+                        location.reload();
+                    }
+
                 })
         }
 

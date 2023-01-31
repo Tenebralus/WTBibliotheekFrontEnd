@@ -115,9 +115,13 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    alert('Tag is opgeslagen');
-                    location.reload()
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("Deze tag bestaat al");
+                    } else {
+                        alert('Tag is opgeslagen');
+                        location.reload()
+                    }
                 })
         }
 
