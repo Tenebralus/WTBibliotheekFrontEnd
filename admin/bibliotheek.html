@@ -213,11 +213,12 @@
                   tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList' class='form-control' placeholder='Extra tag toevoegen'>` +
                   `<datalist id='inputTagsList${element.id}'>` + tagOptions + "</datalist></td><td>" +
                   copiesTotal + 
-                  
-                  "<input class='form-control me-2' id='inputAmount' form='form1' type='text' name='amount' value='1'/>" +
-                  
+
+                  "<input class='form-control me-2' id='inputAmount' form='form1' type='text' name='amount' value='1' />" +
+
                   ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id, document.getElementById('inputAmount').value)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
-                  copiesAvailable +
+
+                    copiesAvailable +
                   '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
               } else {
                 for (let i = 0; i < element.authors.length; i++) {
