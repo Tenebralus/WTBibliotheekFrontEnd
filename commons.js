@@ -94,7 +94,7 @@ function createReservation(clickedId) {
     })
 }
 
-function createLoanTableCurrent(page) {
+function createLoanTableCurrent(page, elementsPerPage) {
   fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
@@ -118,7 +118,7 @@ function createLoanTableCurrent(page) {
       return new Date(a.dateLoaned) - new Date(b.dateLoaned);
     });
     let rows = '';
-    let pageData = pageSelector(data, page, 2);
+    let pageData = pageSelector(data, page, 2, elementsPerPage);
     pageData.forEach(element => {
       let authorNames = "";
       for (let i = 0; i < element.authors.length; i++) {
@@ -148,7 +148,7 @@ function createLoanTableCurrent(page) {
   });
 }
 
-function createLoanTableHistory(page) {
+function createLoanTableHistory(page, elementsPerPage) {
   fetch('http://localhost:8080/loan/dto/user', {
     method: 'GET',
     headers: {
@@ -172,7 +172,7 @@ function createLoanTableHistory(page) {
       return new Date(b.dateReturned) - new Date(a.dateReturned);
     });
     let rows = '';
-    let pageData = pageSelector(data, page, 3);
+    let pageData = pageSelector(data, page, 3, elementsPerPage);
     pageData.forEach(element => {
       let authorNames = "";
       for (let i = 0; i < element.authors.length; i++) {
@@ -204,7 +204,7 @@ function createLoanTableHistory(page) {
   });
 }
 
-function createReservationTable(page) {
+function createReservationTable(page, elementsPerPage) {
   fetch('http://localhost:8080/reservation/dto/user', {
     method: 'GET',
     headers: {
@@ -217,7 +217,7 @@ function createReservationTable(page) {
       return new Date(b.dateLoaned) - new Date(a.dateLoaned);
     });
     let rows = '';
-    let pageData = pageSelector(data, page, 1);
+    let pageData = pageSelector(data, page, 1, elementsPerPage);
     pageData.forEach(element => {
       let auths = '';
       for (let i = 0; i < element.authors.length; i++) {
@@ -239,10 +239,10 @@ function createReservationTable(page) {
   });
 }
 
-function searchReservations() {
+function searchReservations(page, elementsPerPage) {
   let keyword = document.getElementById('searchField1').value;
   if (!keyword) {
-    return createReservationTable();
+    return createReservationTable(page, elementsPerPage);
   }
   fetch('http://localhost:8080/reservation/user/personal/search/' + keyword, {
     method: 'GET',
@@ -328,10 +328,10 @@ function pageSelector(data, page, table, elementsPerPage) {
   return pageData;
 }
 
-function searchLoansCurrent() {
+function searchLoansCurrent(page, elementsPerPage) {
   let keyword = document.getElementById('searchField').value;
   if (!keyword) {
-    return createLoanTableCurrent();
+    return createLoanTableCurrent(page, elementsPerPage);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',
@@ -383,10 +383,10 @@ function searchLoansCurrent() {
   });
 }
 
-function searchLoansHistory() {
+function searchLoansHistory(page, elementsPerPage) {
   let keyword = document.getElementById('searchField3').value;
   if (!keyword) {
-    return createLoanTableHistory();
+    return createLoanTableHistory(page, elementsPerPage);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',

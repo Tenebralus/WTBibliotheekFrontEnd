@@ -86,10 +86,10 @@
     <div class="row">
       <div class="col-sm-auto" id="page-info1"></div>
         <div class="col-1">
-          <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)">
+          <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)" autocomplete="off">
             <option value = "0">5</option>
             <option value = "1">10</option>
-            <option value = "2">25</option>
+            <option value = "2" selected>25</option>
             <option value = "3">50</option>
           </select>
       </div>
@@ -99,7 +99,7 @@
   <script>
     InitializePage("", "../admin/index.html");
     let currentPage = 1;
-    let elementsPerPage = 25;
+    let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
     window.onload = createIndexTable(currentPage, elementsPerPage);
 
     function nextPage1() {
@@ -115,6 +115,7 @@
     function SelectPageElementCount(count)
     {
       elementsPerPage = parseInt(count);
+      currentPage = 1;
       createIndexTable(currentPage, elementsPerPage);
     }
   </script>

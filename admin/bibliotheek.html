@@ -105,7 +105,17 @@
           <div class="col-2 text-center" id="current-page1"></div>
           <div class="col-5 text-left" id="next-page1"></div>
         </div>
-        <div class="row" id="page-info1"></div>
+        <div class="row">
+          <div class="col-sm-auto" id="page-info1"></div>
+            <div class="col-1">
+              <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)" autocomplete="off">
+                <option value = "0">5</option>
+                <option value = "1">10</option>
+                <option value = "2" selected>25</option>
+                <option value = "3">50</option>
+              </select>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -114,12 +124,13 @@
     InitializePage("../user/index.html", "");
 
     let currentPage = 1;
-    window.onload = createLibraryTable(currentPage);
+    let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
+    window.onload = createLibraryTable(currentPage, elementsPerPage);
 
-    function createLibraryTable(page) {
+    function createLibraryTable(page, elementsPerPage) {
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
-        let pageData = pageSelector(data, page, 1);
+        let pageData = pageSelector(data, page, 1, elementsPerPage);
         pageData.forEach(element => {
           let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
           // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
@@ -157,13 +168,20 @@
     }
 
     function nextPage1() {
-      createLibraryTable(currentPage + 1)
+      createLibraryTable(currentPage + 1, elementsPerPage)
       currentPage++;
     }
 
     function previousPage1() {
-      createLibraryTable(currentPage - 1)
+      createLibraryTable(currentPage - 1, elementsPerPage)
       currentPage--;
+    }
+
+    function SelectPageElementCount(count)
+    {
+      elementsPerPage = parseInt(count);
+      currentPage = 1;
+      createLibraryTable(currentPage, elementsPerPage);
     }
 
     function updateLibrary(clickedId) {

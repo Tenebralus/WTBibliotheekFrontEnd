@@ -97,7 +97,17 @@
       <div class="col-2 text-center" id="current-page1"></div>
       <div class="col-5 text-left" id="next-page1"></div>
     </div>
-    <div class="row" id="page-info1"></div>
+    <div class="row">
+      <div class="col-sm-auto" id="page-info1"></div>
+        <div class="col-1">
+          <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)" autocomplete="off">
+            <option value = "0">5</option>
+            <option value = "1">10</option>
+            <option value = "2" selected>25</option>
+            <option value = "3">50</option>
+          </select>
+      </div>
+    </div>
   </div>
   <div class="container">
     <div class="row">
@@ -133,19 +143,31 @@
       <div class="col-2 text-center" id="current-page2"></div>
       <div class="col-5 text-left" id="next-page2"></div>
     </div>
-    <div class="row" id="page-info2"></div>
+    <div class="row">
+      <div class="col-sm-auto" id="page-info2"></div>
+        <div class="col-1">
+          <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)" autocomplete="off">
+            <option value = "0">5</option>
+            <option value = "1">10</option>
+            <option value = "2" selected>25</option>
+            <option value = "3">50</option>
+          </select>
+      </div>
+    </div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
 
     let currentCurrentLoansPage = 1;
+    let elementsPerPage1 = parseInt(document.getElementById("page-elements-count1").selectedOptions[0].label);
     let currentOldLoansPage = 1;
-    window.onload = createCurrentLoansTable(currentCurrentLoansPage);
-    window.onload = createOldLoansTable(currentOldLoansPage);
+    let elementsPerPage2 = parseInt(document.getElementById("page-elements-count2").selectedOptions[0].label);
+    window.onload = createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
+    window.onload = createOldLoansTable(currentOldLoansPage, elementsPerPage2);
 
 
-    function createCurrentLoansTable(page) {
+    function createCurrentLoansTable(page, elementsPerPage) {
       fetch('http://localhost:8080/loan/dto/all/current').then(response => response.json()).then(data => {
         let rows = '';
 
@@ -158,7 +180,7 @@
           }
           return 0
         });
-        let pageData = pageSelector(data, page, 1);
+        let pageData = pageSelector(data, page, 1, elementsPerPage);
         pageData.forEach(element => {
           let authorNames = "";
           if (element.authors) {
@@ -187,26 +209,40 @@
 
 
     function nextPage1() {
-      createCurrentLoansTable(currentCurrentLoansPage + 1)
+      createCurrentLoansTable(currentCurrentLoansPage + 1, elementsPerPage1)
       currentCurrentLoansPage++;
     }
 
     function previousPage1() {
-      createCurrentLoansTable(currentCurrentLoansPage - 1)
+      createCurrentLoansTable(currentCurrentLoansPage - 1, elementsPerPage1)
       currentCurrentLoansPage--;
     }
 
     function nextPage2() {
-      createOldLoansTable(currentOldLoansPage + 1)
+      createOldLoansTable(currentOldLoansPage + 1, elementsPerPage2)
       currentOldLoansPage++;
     }
 
     function previousPage2() {
-      createOldLoansTable(currentOldLoansPage - 1)
+      createOldLoansTable(currentOldLoansPage - 1, elementsPerPage2)
       currentOldLoansPage--;
     }
 
-    function createOldLoansTable(page) {
+    function SelectPageElementCount1(count)
+    {
+      elementsPerPage1 = parseInt(count);
+      currentCurrentLoansPage = 1;
+      createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
+    }
+
+    function SelectPageElementCount2(count)
+    {
+      elementsPerPage2 = parseInt(count);
+      currentOldLoansPage = 1;
+      createOldLoansTable(currentOldLoansPage, elementsPerPage2);
+    }
+
+    function createOldLoansTable(page, elementsPerPage) {
       fetch('http://localhost:8080/loan/dto/all/old').then(response => response.json()).then(data => {
         let rows = '';
 
@@ -219,7 +255,7 @@
           }
           return 0
         });
-        let pageData = pageSelector(data, page, 2);
+        let pageData = pageSelector(data, page, 2, elementsPerPage);
         pageData.forEach(element => {
           let authorNames = "";
           for (let i = 0; i < element.authors.length; i++) {
