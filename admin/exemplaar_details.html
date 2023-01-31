@@ -129,7 +129,9 @@
                     .then(response => response.json()).then(usersData => {
                         let userOptions = '<datalist id="userDataList">';
                         usersData.forEach(element => {
-                            userOptions += `<option value="${element.firstName + " " + element.lastName}">`
+                            if(element.firstName + " " + element.lastName != "anon anon"){
+                                userOptions += `<option value="${element.firstName + " " + element.lastName}">`
+                            }
                         });
                         userOptions += '</datalist>';
                         let title = data.bookTitle;
@@ -210,9 +212,16 @@
 
         function makeLoan(bookCopyId) {
             let name = document.getElementById("loanBookUser").value;
-            if (!!name) {
-                let newFirstName = name.split(" ")[0];
-                let newLastName = name.split(" ")[1];
+            if (name) {
+                names = name.split(" ");
+                newFirstName = names[0];
+                newLastName = names[1];
+        
+                for (i = 0; i < names.length; i++){
+                    if (i > 1){
+                    newLastName += " " + names[i];
+                }
+            }
                 fetch('http://localhost:8080/loan/createNew', {
                     method: "POST",
                     body: JSON.stringify(
@@ -283,7 +292,7 @@
                     let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
                     dateReturned = "";
                     if (element.dateReturned == null) {
-                        dateReturned = "";
+                        dateReturned = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";;
                     } else {
                         dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
                     }
@@ -360,7 +369,7 @@
                 })
                 .then(() => {
                     alert('Exemplaar is ingeleverd');
-                    populatePage();
+                    location.reload();
                 })
         }
     </script>

@@ -92,6 +92,12 @@
       </thead>
       <tbody id="current-loans-row"></tbody>
     </table>
+    <div class="row">
+      <div class="col-5 text-end" id="previous-page1"></div>
+      <div class="col-2 text-center" id="current-page1"></div>
+      <div class="col-5 text-left" id="next-page1"></div>
+    </div>
+    <div class="row" id="page-info1"></div>
   </div>
   <div class="container">
     <div class="row">
@@ -123,22 +129,26 @@
       <tbody id="old-loans-row"></tbody>
     </table>
     <div class="row">
-      <div class="col-5 text-end" id="previous-page"></div>
-      <div class="col-2 text-center" id="current-page"></div>
-      <div class="col-5 text-left" id="next-page"></div>
+      <div class="col-5 text-end" id="previous-page2"></div>
+      <div class="col-2 text-center" id="current-page2"></div>
+      <div class="col-5 text-left" id="next-page2"></div>
     </div>
-    <div class="row" id="page-info"></div>
+    <div class="row" id="page-info2"></div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
-    let currentPage = 1;
-    window.onload = createOldLoansTable(currentPage);
-    window.onload = createCurrentLoansTable();
 
-    function createCurrentLoansTable() {
+    let currentCurrentLoansPage = 1;
+    let currentOldLoansPage = 1;
+    window.onload = createCurrentLoansTable(currentCurrentLoansPage);
+    window.onload = createOldLoansTable(currentOldLoansPage);
+
+
+    function createCurrentLoansTable(page) {
       fetch('http://localhost:8080/loan/dto/all/current').then(response => response.json()).then(data => {
         let rows = '';
+
         data.sort(function (a, b) {
           if (a.dateLoaned < b.dateLoaned) {
             return -1;
@@ -148,7 +158,8 @@
           }
           return 0
         });
-        data.forEach(element => {
+        let pageData = pageSelector(data, page, 1);
+        pageData.forEach(element => {
           let authorNames = "";
           if (element.authors) {
             for (let i = 0; i < element.authors.length; i++) {
@@ -175,19 +186,30 @@
     }
 
 
-    function nextPage() {
-      createOldLoansTable(currentPage + 1)
-      currentPage++;
+    function nextPage1() {
+      createCurrentLoansTable(currentCurrentLoansPage + 1)
+      currentCurrentLoansPage++;
     }
 
-    function previousPage() {
-      createOldLoansTable(currentPage - 1)
-      currentPage--;
+    function previousPage1() {
+      createCurrentLoansTable(currentCurrentLoansPage - 1)
+      currentCurrentLoansPage--;
+    }
+
+    function nextPage2() {
+      createOldLoansTable(currentOldLoansPage + 1)
+      currentOldLoansPage++;
+    }
+
+    function previousPage2() {
+      createOldLoansTable(currentOldLoansPage - 1)
+      currentOldLoansPage--;
     }
 
     function createOldLoansTable(page) {
       fetch('http://localhost:8080/loan/dto/all/old').then(response => response.json()).then(data => {
         let rows = '';
+
         data.sort(function (a, b) {
           if (a.dateReturned < b.dateReturned) {
             return 1;
@@ -197,7 +219,7 @@
           }
           return 0
         });
-        let pageData = pageSelector(data);
+        let pageData = pageSelector(data, page, 2);
         pageData.forEach(element => {
           let authorNames = "";
           for (let i = 0; i < element.authors.length; i++) {
@@ -270,7 +292,7 @@
           }
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-          let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";;
+          let returnButton = '<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
           rows +=
             "<tr><td>" + element.bookTitle + "</td>" +
             "<td>" + element.bookCopyNr + "</td>" +
@@ -301,6 +323,15 @@
         }
       })
         .then(response => response.json()).then(data => {
+          data.sort(function (a, b) {
+            if (a.dateReturned < b.dateReturned) {
+              return 1;
+            }
+            if (a.dateReturned > b.dateReturned) {
+              return -1
+            }
+            return 0
+          });
           let rows = '';
           data.forEach(element => {
             let authorNames = "";

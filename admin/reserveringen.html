@@ -93,11 +93,11 @@
       </tbody>
     </table>
     <div class="row">
-      <div class="col-5 text-end" id="previous-page"></div>
-      <div class="col-2 text-center" id="current-page"></div>
-      <div class="col-5 text-left" id="next-page"></div>
+      <div class="col-5 text-end" id="previous-page1"></div>
+      <div class="col-2 text-center" id="current-page1"></div>
+      <div class="col-5 text-left" id="next-page1"></div>
     </div>
-    <div class="row" id="page-info"></div>
+    <div class="row" id="page-info1"></div>
   </div>
   </div>
 
@@ -109,7 +109,7 @@
     function createTable(page) {
       fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
         let rows = '';
-        let pageData = pageSelector(data);
+        let pageData = pageSelector(data, page, 1);
         pageData.forEach(element => {
           //Prevents errors if no user is registered to a reservation
           let userName = ""
@@ -139,12 +139,12 @@
       });
     }
 
-    function nextPage() {
+    function nextPage1() {
       createTable(currentPage + 1)
       currentPage++;
     }
 
-    function previousPage() {
+    function previousPage1() {
       createTable(currentPage - 1)
       currentPage--;
     }
