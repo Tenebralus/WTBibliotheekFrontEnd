@@ -321,9 +321,9 @@ function pageSelector(data, page, table, elementsPerPage) {
   } else {
     lastEntry = sliceStart + elementsPerPage;
   }
-  
+
   document.getElementById("page-info" + table).innerHTML = '<p>Pagina ' + page + ' van ' + numPages
-    + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>'; 
+    + ', resultaten ' + (sliceStart + 1) + ' - ' + lastEntry + ' van ' + totalElements + '</p>';
   let pageData = data.slice(sliceStart, sliceStart + elementsPerPage);
   return pageData;
 }
@@ -420,17 +420,14 @@ function searchLoansHistory(page, elementsPerPage) {
       dateReturned = "";
       if (element.dateReturned != null) {
         dateReturned = new Date(element.dateReturned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
-      } else {
-        dateReturned = '';//'<button class="btn btn-outline-success" type="button" id="Inleveren' + element.id + '" onclick="returnBookCopy(' + element.bookCopyId + ', ' + element.id + ')">' + "Inleveren" + "</button>";
+        rows +=
+          "<tr><td>" + element.bookTitle + "</td>" +
+          "<td>" + element.bookCopyNr + "</td>" +
+          "<td>" + element.bookIsbn + "</td>" +
+          "<td>" + authorNames + "</td>" +
+          "<td>" + dateLoaned + "</td>" +
+          "<td>" + dateReturned + "</td></tr>";
       }
-      rows +=
-        "<tr><td>" + element.bookTitle + "</td>" +
-        "<td>" + element.bookCopyNr + "</td>" +
-        "<td>" + element.bookIsbn + "</td>" +
-        "<td>" + authorNames + "</td>" +
-        "<td>" + dateLoaned + "</td>" +
-        "<td>" + dateReturned + "</td></tr>";
-
     });
     document.getElementById('loans-row-history').innerHTML = rows;
   });

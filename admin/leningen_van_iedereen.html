@@ -99,13 +99,14 @@
     </div>
     <div class="row">
       <div class="col-sm-auto" id="page-info1"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -145,13 +146,14 @@
     </div>
     <div class="row">
       <div class="col-sm-auto" id="page-info2"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -165,7 +167,7 @@
     let elementsPerPage2 = parseInt(document.getElementById("page-elements-count2").selectedOptions[0].label);
     window.onload = createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
     window.onload = createOldLoansTable(currentOldLoansPage, elementsPerPage2);
-
+    let globalSearchCurrentLoansKeyword = "";
 
     function createCurrentLoansTable(page, elementsPerPage) {
       fetch('http://localhost:8080/loan/dto/all/current').then(response => response.json()).then(data => {
@@ -228,15 +230,13 @@
       currentOldLoansPage--;
     }
 
-    function SelectPageElementCount1(count)
-    {
+    function SelectPageElementCount1(count) {
       elementsPerPage1 = parseInt(count);
       currentCurrentLoansPage = 1;
       createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
     }
 
-    function SelectPageElementCount2(count)
-    {
+    function SelectPageElementCount2(count) {
       elementsPerPage2 = parseInt(count);
       currentOldLoansPage = 1;
       createOldLoansTable(currentOldLoansPage, elementsPerPage2);
@@ -293,15 +293,21 @@
         })
         .then(() => {
           alert('Exemplaar is ingeleverd');
-          createCurrentLoansTable();
-          createOldLoansTable();
+          if (globalSearchCurrentLoansKeyword == "") {
+            createCurrentLoansTable(1);
+            createOldLoansTable(1);
+          } else {
+            searchCurrentLoans();
+          }
         })
     }
 
     function searchCurrentLoans() {
       let keyword = document.getElementById('current-loans-search-field').value;
+      globalSearchCurrentLoansKeyword = keyword;
+
       if (!keyword) {
-        return createCurrentLoansTable();
+        return createCurrentLoansTable(1);
       }
       fetch('http://localhost:8080/loan/search/current', {
         method: "POST",

@@ -107,13 +107,14 @@
         </div>
         <div class="row">
           <div class="col-sm-auto" id="page-info1"></div>
-            <div class="col-1">
-              <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)" autocomplete="off">
-                <option value = "0">5</option>
-                <option value = "1">10</option>
-                <option value = "2" selected>25</option>
-                <option value = "3">50</option>
-              </select>
+          <div class="col-1">
+            <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)"
+              autocomplete="off">
+              <option value="0">5</option>
+              <option value="1">10</option>
+              <option value="2" selected>25</option>
+              <option value="3">50</option>
+            </select>
           </div>
         </div>
       </div>
@@ -126,7 +127,7 @@
     let currentPage = 1;
     let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
     window.onload = createLibraryTable(currentPage, elementsPerPage);
-
+    let globalSearchAllBooksKeyword = "";
     function createLibraryTable(page, elementsPerPage) {
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
@@ -177,85 +178,101 @@
       currentPage--;
     }
 
-    function SelectPageElementCount(count)
-    {
+    function SelectPageElementCount(count) {
       elementsPerPage = parseInt(count);
       currentPage = 1;
       createLibraryTable(currentPage, elementsPerPage);
     }
 
     function updateLibrary(clickedId) {
+      //let idstr = clickedId.split("updateLibrary");
+      //let idnum = parseInt(idstr[1]);
+
+      if (globalSearchAllBooksKeyword == "") {
+        fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+          buildUpdateLibraryTable(data, clickedId);
+        });
+      } else {
+        let keyword = document.getElementById('searchField').value;
+
+        fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
+          buildUpdateLibraryTable(data, clickedId);
+        });
+      }
+    }
+
+    function buildUpdateLibraryTable(data, clickedId) {
       let idstr = clickedId.split("updateLibrary");
       let idnum = parseInt(idstr[1]);
-      fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
-        fetch('http://localhost:8080/tag/all').then(response => response.json()).then(tagsData => {
-          fetch('http://localhost:8080/author/all').then(response => response.json()).then(authorData => {
-            let rows = '';
-            let tagOptions = '';
-            let authorOptions = '';
-            tagsData.forEach(element => {
-              tagOptions += `<option value="${element.name}">`
-            });
-            authorData.forEach(element => {
-              authorOptions += `<option value="${element.firstName} ${element.lastName}">`
-            });
-            data.forEach(element => {
-              let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
-              let copiesTotal = 0;
-              let copiesAvailable = 0;
-              element.bookcopies.forEach(copy => {
-                if (copy.status == "available") {
-                  copiesAvailable++
-                }
-                copiesTotal++
-              })
-              let auths = '';
-              let inputs = '';
-              let tags = '';
-              if (element.id == idnum) {
-                for (let i = 0; i < element.authors.length; i++) {
-                  // Create buttons to remove authors
-                  auths += ' <button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="' + element.authors[i].id + " " + element.id + '">' + element.authors[i].firstName + " " + element.authors[i].lastName + ' x</button><br><br>'
-                }
-                for (let i = 0; i < element.tags.length; i++) {
-                  tags += ' <button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="' + element.tags[i].id + " " + element.id + '">' + element.tags[i].name + ' x</button><br><br>'
-                }
-                // add button to add tag
-                // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
-                // Create rows of the table with auths
-                rows += "<tr><td>" + urlImage + "</td><td>" +
-                  "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
-                  "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/></td><td>" +
-                  auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList' class='form-control' placeholder='Extra auteur toevoegen'>` +
-                  `<datalist id='inputAuthorsList${element.id}'>` + authorOptions + "</datalist></td><td>" +
-                  tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList' class='form-control' placeholder='Extra tag toevoegen'>` +
-                  `<datalist id='inputTagsList${element.id}'>` + tagOptions + "</datalist></td><td>" +
-                  copiesTotal + 
-                  
-                  "<input class='form-control me-2' id='inputAmount' form='form1' type='text' name='amount' value='1'/>" +
-                  
-                  ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id, document.getElementById('inputAmount').value)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
-                  copiesAvailable +
-                  '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
-              } else {
-                for (let i = 0; i < element.authors.length; i++) {
-                  auths += element.authors[i].firstName + " " + element.authors[i].lastName
-                  if (i < element.authors.length - 1) {
-                    auths += ", "
-                  }
-                }
-                for (let i = 0; i < element.tags.length; i++) {
-                  tags += element.tags[i].name
-                  if (i < element.tags.length - 1) {
-                    tags += ", "
-                  }
-                }
-                rows += "<tr><td>" + urlImage + "</td><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
-                  '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
-              }
-            });
-            document.getElementById('book-row').innerHTML = rows;
+
+      fetch('http://localhost:8080/tag/all').then(response => response.json()).then(tagsData => {
+        fetch('http://localhost:8080/author/all').then(response => response.json()).then(authorData => {
+          let rows = '';
+          let tagOptions = '';
+          let authorOptions = '';
+          tagsData.forEach(element => {
+            tagOptions += `<option value="${element.name}">`
           });
+          authorData.forEach(element => {
+            authorOptions += `<option value="${element.firstName} ${element.lastName}">`
+          });
+          data.forEach(element => {
+            let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
+            let copiesTotal = 0;
+            let copiesAvailable = 0;
+            element.bookcopies.forEach(copy => {
+              if (copy.status == "available") {
+                copiesAvailable++
+              }
+              copiesTotal++
+            })
+            let auths = '';
+            let inputs = '';
+            let tags = '';
+            if (element.id == idnum) {
+              for (let i = 0; i < element.authors.length; i++) {
+                // Create buttons to remove authors
+                auths += ' <button class="btn btn-outline-danger" type="button" onclick="deleteAuthor(this.id)" id="' + element.authors[i].id + " " + element.id + '">' + element.authors[i].firstName + " " + element.authors[i].lastName + ' x</button><br><br>'
+              }
+              for (let i = 0; i < element.tags.length; i++) {
+                tags += ' <button class="btn btn-outline-danger" type="button" onclick="deleteTag(this.id)" id="' + element.tags[i].id + " " + element.id + '">' + element.tags[i].name + ' x</button><br><br>'
+              }
+              // add button to add tag
+              // tags += '<button class="btn btn-outline-success" type="button" onclick="addTagField(this.id)" id="' + element.id + '">Voeg tag toe</button>';
+              // Create rows of the table with auths
+              rows += "<tr><td>" + urlImage + "</td><td>" +
+                "<input class='form-control me-2' id='inputBookTitle' form='form1' type='text' name='title' value='" + element.title + "'/>" + "</td><td>" +
+                "<input class='form-control me-2' id='inputIsbn' form='form1' type='text' name='isbn' value='" + element.isbn + "'/></td><td>" +
+                auths + `<input list='inputAuthorsList${element.id}' id='inputAuthorsList' name='inputAuthorsList' class='form-control' placeholder='Extra auteur toevoegen'>` +
+                `<datalist id='inputAuthorsList${element.id}'>` + authorOptions + "</datalist></td><td>" +
+                tags + `<input list='inputTagsList${element.id}' id='inputTagsList' name='inputTagsList' class='form-control' placeholder='Extra tag toevoegen'>` +
+                `<datalist id='inputTagsList${element.id}'>` + tagOptions + "</datalist></td><td>" +
+                copiesTotal +
+
+                "<input class='form-control me-2' id='inputAmount' form='form1' type='text' name='amount' value='1' />" +
+
+                ` <button class="btn btn-outline-success" type="button" onclick="addCopy(this.id, document.getElementById('inputAmount').value)" id="addCopy${element.id}">Exemplaar toevoegen</button></td><td>` +
+
+                copiesAvailable +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateBook(this.id)" id="updateBook' + element.id + '">Opslaan</button></td></tr>';
+            } else {
+              for (let i = 0; i < element.authors.length; i++) {
+                auths += element.authors[i].firstName + " " + element.authors[i].lastName
+                if (i < element.authors.length - 1) {
+                  auths += ", "
+                }
+              }
+              for (let i = 0; i < element.tags.length; i++) {
+                tags += element.tags[i].name
+                if (i < element.tags.length - 1) {
+                  tags += ", "
+                }
+              }
+              rows += "<tr><td>" + urlImage + "</td><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
+            }
+          });
+          document.getElementById('book-row').innerHTML = rows;
         });
       });
     }
@@ -282,7 +299,11 @@
       })
         .then(() => {
           alert('Boek is aangepast');
-          location.reload()
+          if (globalSearchAllBooksKeyword == "") {
+            location.reload()
+          } else {
+            search(globalSearchAllBooksKeyword);
+          }
         });
     }
 
@@ -291,19 +312,24 @@
       if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
         let idstr = clickedId.split("addCopy");
         let idnum = parseInt(idstr[1]);
-        for (let i=1; i<=amount; i++){
+        for (let i = 1; i <= amount; i++) {
           fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
             method: "POST"
           })
             .then(() => {
-            }); 
+            });
         }
-        if (amount==1){
+        if (amount == 1) {
           alert('Exemplaar toegevoegd');
         } else {
           alert('Exemplaren toegevoegd');
         }
-        location.reload()
+
+        if (globalSearchAllBooksKeyword == "") {
+          location.reload()
+        } else {
+          search(globalSearchAllBooksKeyword);
+        }
       } else {
         return false;
       }
@@ -385,6 +411,8 @@
 
     function search() {
       let keyword = document.getElementById('searchField').value;
+      globalSearchAllBooksKeyword = keyword;
+
       fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {
