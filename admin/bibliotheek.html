@@ -107,7 +107,18 @@
           <div class="col-2 text-center" id="current-page1"></div>
           <div class="col-5 text-left" id="next-page1"></div>
         </div>
-        <div class="row" id="page-info1"></div>
+        <div class="row">
+          <div class="col-sm-auto" id="page-info1"></div>
+          <div class="col-1">
+            <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)"
+              autocomplete="off">
+              <option value="0">5</option>
+              <option value="1">10</option>
+              <option value="2" selected>25</option>
+              <option value="3">50</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -116,12 +127,13 @@
     InitializePage("../user/index.html", "");
 
     let currentPage = 1;
-    window.onload = createLibraryTable(currentPage);
-
-    function createLibraryTable(page) {
+    let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
+    window.onload = createLibraryTable(currentPage, elementsPerPage);
+    let globalSearchAllBooksKeyword = "";
+    function createLibraryTable(page, elementsPerPage) {
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
         let rows = '';
-        let pageData = pageSelector(data, page, 1);
+        let pageData = pageSelector(data, page, 1, elementsPerPage);
         pageData.forEach(element => {
           let bookId = element.id;
           let bookQueryString = '?book=' + bookId;
@@ -160,16 +172,39 @@
     }
 
     function nextPage1() {
-      createLibraryTable(currentPage + 1)
+      createLibraryTable(currentPage + 1, elementsPerPage)
       currentPage++;
     }
 
     function previousPage1() {
-      createLibraryTable(currentPage - 1)
+      createLibraryTable(currentPage - 1, elementsPerPage)
       currentPage--;
     }
 
+    function SelectPageElementCount(count) {
+      elementsPerPage = parseInt(count);
+      currentPage = 1;
+      createLibraryTable(currentPage, elementsPerPage);
+    }
+
     function updateLibrary(clickedId) {
+      //let idstr = clickedId.split("updateLibrary");
+      //let idnum = parseInt(idstr[1]);
+
+      if (globalSearchAllBooksKeyword == "") {
+        fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
+          buildUpdateLibraryTable(data, clickedId);
+        });
+      } else {
+        let keyword = document.getElementById('searchField').value;
+
+        fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
+          buildUpdateLibraryTable(data, clickedId);
+        });
+      }
+    }
+
+    function buildUpdateLibraryTable(data, clickedId) {
       let idstr = clickedId.split("updateLibrary");
       let idnum = parseInt(idstr[1]);
       fetch('http://localhost:8080/book/all').then(response => response.json()).then(data => {
@@ -243,18 +278,18 @@
                     auths += ", "
                   }
                 }
-                for (let i = 0; i < element.tags.length; i++) {
-                  tags += element.tags[i].name
-                  if (i < element.tags.length - 1) {
-                    tags += ", "
-                  }
-                }
-                rows += "<tr><td>" + urlImage + "</td><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
-                  '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
               }
-            });
-            document.getElementById('book-row').innerHTML = rows;
+              for (let i = 0; i < element.tags.length; i++) {
+                tags += element.tags[i].name
+                if (i < element.tags.length - 1) {
+                  tags += ", "
+                }
+              }
+              rows += "<tr><td>" + urlImage + "</td><td>" + element.title + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
+                '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
+            }
           });
+          document.getElementById('book-row').innerHTML = rows;
         });
       });
     }
@@ -281,7 +316,11 @@
       })
         .then(() => {
           alert('Boek is aangepast');
-          location.reload()
+          if (globalSearchAllBooksKeyword == "") {
+            location.reload()
+          } else {
+            search(globalSearchAllBooksKeyword);
+          }
         });
     }
 
@@ -302,7 +341,12 @@
         } else {
           alert('Exemplaren toegevoegd');
         }
-        location.reload()
+
+        if (globalSearchAllBooksKeyword == "") {
+          location.reload()
+        } else {
+          search(globalSearchAllBooksKeyword);
+        }
       } else {
         return false;
       }
@@ -393,6 +437,8 @@
 
     function search() {
       let keyword = document.getElementById('searchField').value;
+      globalSearchAllBooksKeyword = keyword;
+
       fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
         data.forEach(element => {

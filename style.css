@@ -35,3 +35,7 @@ div {
   color: rgb(5, 173, 5);
   font-weight: 500;
 }
+
+input:invalid {
+  border: 3px solid red;
+}

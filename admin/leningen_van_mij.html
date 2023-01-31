@@ -74,7 +74,7 @@
         <input class="form-control me-2" type="search" id="searchField1" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchReservations()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchReservations(currentReservationPage, elementsPerPage1)">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -94,7 +94,17 @@
       <div class="col-2 text-center" id="current-page1"></div>
       <div class="col-5 text-left" id="next-page1"></div>
     </div>
-    <div class="row" id="page-info1"></div>
+    <div class="row">
+      <div class="col-sm-auto" id="page-info1"></div>
+        <div class="col-1">
+          <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)" autocomplete="off">
+            <option value = "0">5</option>
+            <option value = "1">10</option>
+            <option value = "2" selected>25</option>
+            <option value = "3">50</option>
+          </select>
+      </div>
+    </div>
   </div>
   <div class="container">
     <h3>Mijn huidige leningen</h3>
@@ -103,7 +113,7 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansCurrent()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchLoansCurrent(currentCurrentLoanPage, elementsPerPage2)">Zoek</button>
       </div>
     </div>
   </div>
@@ -126,7 +136,17 @@
       <div class="col-2 text-center" id="current-page2"></div>
       <div class="col-5 text-left" id="next-page2"></div>
     </div>
-    <div class="row" id="page-info2"></div>
+    <div class="row">
+      <div class="col-sm-auto" id="page-info2"></div>
+        <div class="col-1">
+          <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)" autocomplete="off">
+            <option value = "0">5</option>
+            <option value = "1">10</option>
+            <option value = "2" selected>25</option>
+            <option value = "3">50</option>
+          </select>
+      </div>
+    </div>
   </div>
   <div class="container">
     <h3>Mijn beëindigde leningen</h3>
@@ -135,7 +155,7 @@
         <input class="form-control me-2" type="search" id="searchField3" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansHistory()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchLoansHistory(currentHistoryLoanPage, elementsPerPage3)">Zoek</button>
       </div>
     </div>
   </div>
@@ -159,46 +179,80 @@
       <div class="col-2 text-center" id="current-page3"></div>
       <div class="col-5 text-left" id="next-page3"></div>
     </div>
-    <div class="row" id="page-info3"></div>
+    <div class="row">
+      <div class="col-sm-auto" id="page-info3"></div>
+        <div class="col-1">
+          <select class="" id="page-elements-count3" onchange="SelectPageElementCount3(this.selectedOptions[0].label)" autocomplete="off">
+            <option value = "0">5</option>
+            <option value = "1">10</option>
+            <option value = "2" selected>25</option>
+            <option value = "3">50</option>
+          </select>
+      </div>
+    </div>
   </div>
 
   <script>
     InitializePage("../user/index.html", "");
     let currentReservationPage = 1;
-    window.onload = createReservationTable(currentReservationPage);
+    let elementsPerPage1 = parseInt(document.getElementById("page-elements-count1").selectedOptions[0].label);
+    window.onload = createReservationTable(currentReservationPage, elementsPerPage1);
     let currentCurrentLoanPage = 1;
-    window.onload = createLoanTableCurrent(currentCurrentLoanPage);
+    let elementsPerPage2 = parseInt(document.getElementById("page-elements-count2").selectedOptions[0].label);
+    window.onload = createLoanTableCurrent(currentCurrentLoanPage, elementsPerPage2);
     let currentHistoryLoanPage = 1;
-    window.onload = createLoanTableHistory(currentHistoryLoanPage);
+    let elementsPerPage3 = parseInt(document.getElementById("page-elements-count3").selectedOptions[0].label);
+    window.onload = createLoanTableHistory(currentHistoryLoanPage, elementsPerPage3);
 
     function nextPage1() {
-      createReservationTable(currentReservationPage + 1)
+      createReservationTable(currentReservationPage + 1, elementsPerPage1)
       currentReservationPage++;
     }
 
     function previousPage1() {
-      createReservationTable(currentReservationPage - 1)
+      createReservationTable(currentReservationPage - 1, elementsPerPage1)
       currentReservationPage--;
     }
 
     function nextPage2() {
-      createLoanTableCurrent(currentCurrentLoanPage + 1)
+      createLoanTableCurrent(currentCurrentLoanPage + 1, elementsPerPage2)
       currentCurrentLoanPage++;
     }
 
     function previousPage2() {
-      createLoanTableCurrent(currentCurrentLoanPage - 1)
+      createLoanTableCurrent(currentCurrentLoanPage - 1, elementsPerPage2)
       currentCurrentLoanPage--;
     }
 
     function nextPage3() {
-      createLoanTableHistory(currentHistoryLoanPage + 1)
+      createLoanTableHistory(currentHistoryLoanPage + 1, elementsPerPage3)
       currentHistoryLoanPage++;
     }
 
     function previousPage3() {
-      createLoanTableHistory(currentHistoryLoanPage - 1)
+      createLoanTableHistory(currentHistoryLoanPage - 1, elementsPerPage3)
       currentHistoryLoanPage--;
+    }
+
+    function SelectPageElementCount1(count)
+    {
+      elementsPerPage1 = parseInt(count);
+      currentReservationPage = 1;
+      createReservationTable(currentReservationPage, elementsPerPage1);
+    }
+
+    function SelectPageElementCount2(count)
+    {
+      elementsPerPage2 = parseInt(count);
+      currentCurrentLoanPage = 1;
+      createLoanTableCurrent(currentCurrentLoanPage, elementsPerPage2);
+    }
+
+    function SelectPageElementCount3(count)
+    {
+      elementsPerPage3 = parseInt(count);
+      currentHistoryLoanPage = 1;
+      createLoanTableHistory(currentHistoryLoanPage, elementsPerPage3);
     }
 
     function cancel(clickedId) {
