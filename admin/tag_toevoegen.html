@@ -181,9 +181,13 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    alert('Tag is aangepast');
-                    location.reload()
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("Deze tag bestaat al, de naam kan niet worden aangepast");
+                    } else {
+                        alert('Tag is aangepast');
+                        location.reload()
+                    }
                 });
         }
 
@@ -197,8 +201,8 @@
                     if (!response.ok) {
                         alert("Deze tag is nog aan een boek toegewezen, en kan niet worden verwijderd");
                     } else {
-                    alert('Tag verwijderd');
-                    location.reload();
+                        alert('Tag verwijderd');
+                        location.reload()
                     }
                 })
         }

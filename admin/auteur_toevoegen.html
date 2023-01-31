@@ -179,9 +179,13 @@
                     'Content-Type': 'application/json'
                 }
             })
-                .then(() => {
-                    alert('Auteur is aangepast');
-                    location.reload();
+                .then((response) => {
+                    if (!response.ok) {
+                        alert("Deze auteur bestaat al, de naam kan niet worden aangepast");
+                    } else {
+                        alert('Auteur is aangepast');
+                        location.reload();
+                    }
                 });
         }
 
