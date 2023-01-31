@@ -378,7 +378,6 @@ function searchLoansHistory() {
           "<td>" + element.bookCopyNr + "</td>" +
           "<td>" + element.bookIsbn + "</td>" +
           "<td>" + authorNames + "</td>" +
-          "<td>" + element.bookCopyStatus + "</td>" +
           "<td>" + dateLoaned + "</td>" +
           "<td>" + dateReturned + "</td></tr>";
       }
