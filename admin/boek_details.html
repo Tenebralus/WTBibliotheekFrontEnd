@@ -130,7 +130,9 @@
           .then(response => response.json()).then(usersData => {
             let userOptions = '<datalist id="userDataList">';
             usersData.forEach(element => {
-              userOptions += `<option value="${element.firstName + " " + element.lastName}">`
+              if(element.firstName + " " + element.lastName != "anon anon"){
+                userOptions += `<option value="${element.firstName + " " + element.lastName}">`
+              }
             });
             userOptions += '</datalist>';
             let rows = '';
@@ -369,15 +371,18 @@
     }
 
     function makeLoan(bookCopyId, status) {
-      console.log("text");
       let name = document.getElementById("loanBookUser" + bookCopyId).value;
-      console.log(name);
+      
       if (name) {
-        console.log("text1");
-        let newFirstName = name.split(" ")[0];
-        let newLastName = name.split(" ")[1];
-        console.log(newFirstName);
-        console.log(newLastName);
+        names = name.split(" ");
+        newFirstName = names[0];
+        newLastName = names[1];
+        for (i = 0; i < names.length; i++){
+          if (i > 1){
+            newLastName += " " + names[i];
+          }
+        }
+
         fetch('http://localhost:8080/loan/createNew', {
           method: "POST",
           body: JSON.stringify(
@@ -392,7 +397,6 @@
           }
         })
           .then(() => {
-            console.log("text3");
             location.reload();
           });
       }
