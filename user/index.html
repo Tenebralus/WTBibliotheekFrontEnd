@@ -85,13 +85,14 @@
     </div>
     <div class="row">
       <div class="col-sm-auto" id="page-info1"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -112,8 +113,7 @@
       currentPage--;
     }
 
-    function SelectPageElementCount(count)
-    {
+    function SelectPageElementCount(count) {
       elementsPerPage = parseInt(count);
       currentPage = 1;
       createIndexTable(currentPage, elementsPerPage);

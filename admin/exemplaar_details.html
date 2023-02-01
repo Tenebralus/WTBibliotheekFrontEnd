@@ -92,16 +92,15 @@
                 <div id="userLoanButton"></div>
             </div>
             <div class="col-4">
-                <button class="btn btn-outline-success" type="button" id="archiveButton"
-                        onclick="updateBookCopy()">text
+                <button class="btn btn-outline-success" type="button" id="archiveButton" onclick="updateBookCopy()">text
                 </button>
             </div>
             <!-- field -->
         </div>
     </div>
     <div class="container">
-            <div class="container" id="currentLoan">
-            </div>
+        <div class="container" id="currentLoan">
+        </div>
     </div>
     <div class="container" id="loanHistory">
         <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
@@ -129,7 +128,7 @@
                     .then(response => response.json()).then(usersData => {
                         let userOptions = '<datalist id="userDataList">';
                         usersData.forEach(element => {
-                            if(element.firstName + " " + element.lastName != "anon anon"){
+                            if (element.firstName + " " + element.lastName != "anon anon") {
                                 userOptions += `<option value="${element.firstName + " " + element.lastName}">`
                             }
                         });
@@ -171,7 +170,7 @@
                             document.getElementById("user-select").innerHTML =
                                 '<input list="userDataList" id="loanBookUser" name="loanBook">' + userOptions;
                             document.getElementById("userLoanButton").innerHTML =
-                                '<button class="btn btn-outline-primary" type="button" id="loanButttonSave" onclick="makeLoan('+data.id+')">Uitlenen</button>';
+                                '<button class="btn btn-outline-primary" type="button" id="loanButttonSave" onclick="makeLoan(' + data.id + ')">Uitlenen</button>';
                         }
                         if (data.currentLoan == null) {
                             document.getElementById("currentLoan").innerHTML =
@@ -216,12 +215,12 @@
                 names = name.split(" ");
                 newFirstName = names[0];
                 newLastName = names[1];
-        
-                for (i = 0; i < names.length; i++){
-                    if (i > 1){
-                    newLastName += " " + names[i];
+
+                for (i = 0; i < names.length; i++) {
+                    if (i > 1) {
+                        newLastName += " " + names[i];
+                    }
                 }
-            }
                 fetch('http://localhost:8080/loan/createNew', {
                     method: "POST",
                     body: JSON.stringify(
@@ -248,8 +247,6 @@
             //copy is the id of the selected bookCopy
             idstr = clickedId.split(" ");
             let copy = parseInt(idstr[1]);
-            console.log(clickedId);
-            console.log(idstr);
             let user = document.getElementById("user" + idnum + "dropdown").value;
             fetch('http://localhost:8080/loan/' + idnum + '/' + copy + '/create', {
                 method: 'POST'

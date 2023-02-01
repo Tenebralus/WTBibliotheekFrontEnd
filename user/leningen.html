@@ -59,7 +59,8 @@
         <input class="form-control me-2" type="search" id="searchField1" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchReservations(currentReservationPage, elementsPerPage1)">Zoek</button>
+        <button class="btn btn-outline-success" type="button"
+          onclick="searchReservations(currentReservationPage, elementsPerPage1)">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -81,13 +82,14 @@
     </div>
     <div class="row">
       <div class="col-sm-auto" id="page-info1"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -98,7 +100,8 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansCurrent(currentCurrentLoanPage, elementsPerPage2)">Zoek</button>
+        <button class="btn btn-outline-success" type="button"
+          onclick="searchLoansCurrent(currentCurrentLoanPage, elementsPerPage2)">Zoek</button>
       </div>
     </div>
   </div>
@@ -123,13 +126,14 @@
     </div>
     <div class="row">
       <div class="col-sm-auto" id="page-info2"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -140,7 +144,8 @@
         <input class="form-control me-2" type="search" id="searchField3" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansHistory(currentHistoryLoanPage, elementsPerPage3)">Zoek</button>
+        <button class="btn btn-outline-success" type="button"
+          onclick="searchLoansHistory(currentHistoryLoanPage, elementsPerPage3)">Zoek</button>
       </div>
     </div>
   </div>
@@ -166,13 +171,14 @@
     </div>
     <div class="row">
       <div class="col-sm-auto" id="page-info3"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count3" onchange="SelectPageElementCount3(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count3" onchange="SelectPageElementCount3(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -220,22 +226,19 @@
       currentHistoryLoanPage--;
     }
 
-    function SelectPageElementCount1(count)
-    {
+    function SelectPageElementCount1(count) {
       elementsPerPage1 = parseInt(count);
       currentReservationPage = 1;
       createReservationTable(currentReservationPage, elementsPerPage1);
     }
 
-    function SelectPageElementCount2(count)
-    {
+    function SelectPageElementCount2(count) {
       elementsPerPage2 = parseInt(count);
       currentCurrentLoanPage = 1;
       createLoanTableCurrent(currentCurrentLoanPage, elementsPerPage2);
     }
 
-    function SelectPageElementCount3(count)
-    {
+    function SelectPageElementCount3(count) {
       elementsPerPage3 = parseInt(count);
       currentHistoryLoanPage = 1;
       createLoanTableHistory(currentHistoryLoanPage, elementsPerPage3);

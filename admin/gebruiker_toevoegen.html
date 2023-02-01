@@ -135,14 +135,14 @@
           'Content-Type': 'application/json'
         }
       })
-      .then(response => response.json()).then(data => {
-          if (data){ // als niet bestaat, dus true gelukt
+        .then(response => response.json()).then(data => {
+          if (data) { // als niet bestaat, dus true gelukt
             alert("Gebruiker toegevoegd!");
             location.reload();
           } else {
             alert("Email bestaat al!");
           }
-          
+
         })
     }
   </script>
