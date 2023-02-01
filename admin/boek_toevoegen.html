@@ -159,14 +159,15 @@
                 alert("Voer een titel en isbn in")
                 return;
             }
-
             //https://www.csuohio.edu/sites/default/files/88-2015.pdf
             //1*9+2*0+3*4+4*5+5*3+6*5+7*5+8*4+9*5+10*0
             let isbnSum = 0;
             let validIsbn = false;
+            newIsbn = newIsbn.replace(/\s+/g, ''); //removes all spaces
+            newIsbn = newIsbn.replace(/-+/g, ''); //remove all -
+            console.log(newIsbn);
             if(newIsbn.length == 10){
                 for(let i = 0; i < newIsbn.length; i++){
-                    console.log(isbnSum);
                     if(newIsbn[i] == "x" || newIsbn[i] == "X"){
                         isbnSum = isbnSum + (i + 1) * 10;
                     }else{
@@ -182,14 +183,10 @@
             }else{
                 validIsbn = false;
             }
-            console.log("Sum: "+isbnSum);
-            console.log("valid: "+validIsbn);
-
             if(validIsbn == false){
                 alert("Voer een geldig isbn nummer in")
                 return;
             }
-
             if (isNaN(newCopyNumbers) ){
                 alert("Voer een geldig aantal exemplaren in")
                 return;
@@ -198,7 +195,6 @@
             }else{
                 newCopyNumbers = parseInt(newCopyNumbers);
             }
-            
             let authorsArr = [];
             for (let i = 0; i < authorNumber; i++) {
                 await searchAuthorId().then(data => {
@@ -218,7 +214,6 @@
                     
                 }
                 authorsArr.push(document.getElementById('inputAuthor' + i).value);
-                console.log(authorsArr);
             }
             let tagsArr = [];
             for (let i = 0; i < tagNumber; i++) {
@@ -233,7 +228,6 @@
                     });
                 }
                 tagsArr.push(document.getElementById('inputTag' + i).value);
-                console.log(tagsArr);
             }
             
             fetch('http://localhost:8080/book/create', {
@@ -253,7 +247,6 @@
             })
                 
             .then(response => response.json()).then(data => {
-                console.log(data);
                 if (data.succes) {
                     alert('Boek is opgeslagen');
                 } else {
