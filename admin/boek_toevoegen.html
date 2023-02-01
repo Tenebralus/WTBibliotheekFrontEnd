@@ -174,11 +174,12 @@
                         isbnSum += ((i + 1) * parseInt(newIsbn[i]));
                     }
                 }
-
                 if(isbnSum % 11 == 0){
                     validIsbn = true;
                 }
             }else if(newIsbn.length == 13){
+
+
 
             }else{
                 validIsbn = false;
@@ -244,8 +245,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            })
-                
+            })    
             .then(response => response.json()).then(data => {
                 if (data.succes) {
                     alert('Boek is opgeslagen');
