@@ -75,7 +75,7 @@
           placeholder="Zoek op boektitel, auteur, of gebruiker">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchCurrentLoans()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchCurrentLoansButton(1)">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -122,7 +122,7 @@
           placeholder="Zoek op boektitel, auteur, of gebruiker">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchOldLoans(1)">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchOldLoansButton(1)">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -160,6 +160,8 @@
 
   <script>
     InitializePage("../user/index.html", "");
+
+    clearInputFields();
 
     let currentCurrentLoansPage = 1;
     let elementsPerPage1 = parseInt(document.getElementById("page-elements-count1").selectedOptions[0].label);
@@ -210,67 +212,36 @@
       });
     }
 
-
     function nextPage1() {
       currentCurrentLoansPage++;
-      if(globalSearchCurrentLoansKeyword == "")
-      {
-        createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1)
-      }
-      else
-      {
-        searchCurrentLoans();
-      }
+      searchCurrentLoans(currentCurrentLoansPage, globalSearchCurrentLoansKeyword);
     }
 
     function previousPage1() {
       currentCurrentLoansPage--;
-      if(globalSearchCurrentLoansKeyword == "")
-      {
-        createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
-      }
-      else
-      {
-        searchCurrentLoans();
-      }  
+      searchCurrentLoans(currentCurrentLoansPage, globalSearchCurrentLoansKeyword); 
     }
 
     function nextPage2() {
       currentOldLoansPage++;
-      searchOldLoans(currentOldLoansPage);
-      // if(globalSearchOldLoansKeyword == "")
-      // {
-      //   createOldLoansTable(currentOldLoansPage, elementsPerPage2)
-      // }
-      // else
-      // {
-      //   searchOldLoans(currentOldLoansPage);
-      // }
+      searchOldLoans(currentOldLoansPage, globalSearchOldLoansKeyword);
     }
 
     function previousPage2() {
       currentOldLoansPage--;
-      searchOldLoans(currentOldLoansPage);
-      // if(globalSearchOldLoansKeyword == "")
-      // {
-      //   createOldLoansTable(currentOldLoansPage, elementsPerPage2)
-      // }
-      // else
-      // {
-      //   searchOldLoans(currentOldLoansPage);
-      // }
+      searchOldLoans(currentOldLoansPage, globalSearchOldLoansKeyword);
     }
 
     function SelectPageElementCount1(count) {
       elementsPerPage1 = parseInt(count);
       currentCurrentLoansPage = 1;
-      createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
+      searchCurrentLoans(currentCurrentLoansPage, globalSearchCurrentLoansKeyword);
     }
 
     function SelectPageElementCount2(count) {
       elementsPerPage2 = parseInt(count);
       currentOldLoansPage = 1;
-      createOldLoansTable(currentOldLoansPage, elementsPerPage2);
+      searchOldLoans(currentOldLoansPage, globalSearchOldLoansKeyword);
     }
 
     function createOldLoansTable(page, elementsPerPage) {
@@ -327,19 +298,13 @@
           if (globalSearchCurrentLoansKeyword == "") {
             createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
           } else {
-            searchCurrentLoans();
+            searchCurrentLoans(currentCurrentLoansPage, globalSearchCurrentLoansKeyword);
           }
           createOldLoansTable(currentOldLoansPage, elementsPerPage2);
         })
     }
 
-    function searchCurrentLoans() {
-      let keyword = document.getElementById('current-loans-search-field').value;
-      globalSearchCurrentLoansKeyword = keyword;
-
-      if (!keyword) {
-        return createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
-      }
+    function searchCurrentLoans(page, keyword) {
       fetch('http://localhost:8080/loan/search/current', {
         method: "POST",
         body: JSON.stringify(
@@ -352,8 +317,8 @@
         }
       }).then(response => response.json()).then(data => {
         let rows = '';
-        currentCurrentLoansPage = 1;
-        let pageData = pageSelector(data, currentCurrentLoansPage, 1, elementsPerPage2);
+        currentCurrentLoansPage = page;
+        let pageData = pageSelector(data, currentCurrentLoansPage, 1, elementsPerPage1);
         pageData.forEach(element => {
           let authorNames = "";
           if (element.authors) {
@@ -380,13 +345,19 @@
       });
     }
 
-    function searchOldLoans(page) {
-      let keyword = document.getElementById('old-loans-search-field').value;
-      globalSearchOldLoansKeyword = keyword;
+    function searchCurrentLoansButton(page)
+    {
+      let keyword = document.getElementById('current-loans-search-field').value;
+      globalSearchCurrentLoansKeyword = keyword;
+
       if (!keyword) {
-        currentOldLoansPage = 1;
-        return createOldLoansTable(currentOldLoansPage, elementsPerPage2);
+        currentCurrentLoansPage = 1;
+        return createCurrentLoansTable(currentCurrentLoansPage, elementsPerPage1);
       }
+      searchCurrentLoans(page, keyword);
+    }
+
+    function searchOldLoans(page, keyword) {
       fetch('http://localhost:8080/loan/search/old', {
         method: "POST",
         body: JSON.stringify(
@@ -436,7 +407,24 @@
           document.getElementById('old-loans-row').innerHTML = rows;
         });
     }
+
+    function searchOldLoansButton(page)
+    {
+      let keyword = document.getElementById('old-loans-search-field').value;
+      globalSearchOldLoansKeyword = keyword;
+      if (!keyword) {
+        currentOldLoansPage = 1;
+        return createOldLoansTable(currentOldLoansPage, elementsPerPage2);
+      }
+      searchOldLoans(page, keyword);
+    }
     
+    function clearInputFields()
+    {
+      document.getElementById('current-loans-search-field').value = '';
+      document.getElementById('old-loans-search-field').value = '';  
+    }
+
   </script>
 
 </body>
