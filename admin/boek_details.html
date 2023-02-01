@@ -117,7 +117,7 @@
     const bookCopyId = urlParams.get('bookcopy');
     let loanId = null;
     window.onload = createBookCopiesTable();
-    
+
     function createBookCopiesTable() {
       fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
         fetch("http://localhost:8080/user/all/", {
@@ -130,13 +130,12 @@
           .then(response => response.json()).then(usersData => {
             let userOptions = '<datalist id="userDataList">';
             usersData.forEach(element => {
-              if(element.firstName + " " + element.lastName != "anon anon"){
+              if (element.firstName + " " + element.lastName != "anon anon") {
                 userOptions += `<option value="${element.firstName + " " + element.lastName}">`
               }
             });
             userOptions += '</datalist>';
             let rows = '';
-            console.log(data);
             let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + data.bookIsbn + '.jpg style="width: 135px; height: 180px"/>'; //data.urlImage;//"https://covers.openlibrary.org/b/isbn/"+data.bookIsbn+"-S.jpg";
             let bookAuthors = '';
             for (let i = 0; i < data.bookAuthors.length; i++) {
@@ -181,14 +180,15 @@
               }
               let returnButtonHTML = '';
               if (data.bookCopyDetailsDTOs[i].status == "loaned") {
-                console.log(data.bookCopyDetailsDTOs[i].bookTitle) + "";
                 returnButtonHTML = '<button class="btn btn-outline-success" type="button" id="Inleveren' + data.bookCopyDetailsDTOs[i].currentLoan.id + '" onclick="returnBookCopy(' + data.bookCopyDetailsDTOs[i].id + ', ' + data.bookCopyDetailsDTOs[i].currentLoan.id + ')">' + "Inleveren" + "</button>";
               } else if (data.bookCopyDetailsDTOs[i].status == "available") {
                 usernameCurrentLoan = '<input list="userDataList" id="loanBookUser' + data.bookCopyDetailsDTOs[i].id + '" name="loanBook">';
                 returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="loanButttonSave' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="makeLoan(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')">Uitlenen</button>'
               }
               rows += "<tr><td>" +
-                '<a href=exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '>Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+                '<a class="link-dark" onclick="window.open(\'exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '\', \'boek details\', \'width:200, height=200\')"  >Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+                //onclick="window.open(urlNaam, boek details, width:300,height=300)"
+                //'<a href="URL"                         onclick="window.open('URL', 'venster_naam', 'venster_opties'); return false"                >linktekst</a>
                 data.bookCopyDetailsDTOs[i].status + "</td><td>" +
                 dateLoaned + "</td><td>" +
                 usernameCurrentLoan + userOptions + "</td><td>" +
@@ -372,13 +372,13 @@
 
     function makeLoan(bookCopyId, status) {
       let name = document.getElementById("loanBookUser" + bookCopyId).value;
-      
+
       if (name) {
         names = name.split(" ");
         newFirstName = names[0];
         newLastName = names[1];
-        for (i = 0; i < names.length; i++){
-          if (i > 1){
+        for (i = 0; i < names.length; i++) {
+          if (i > 1) {
             newLastName += " " + names[i];
           }
         }

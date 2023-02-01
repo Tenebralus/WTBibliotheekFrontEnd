@@ -506,7 +506,7 @@ function searchIndex() {
         }
       })
       rows += "</tr><td>" +
-        urlImage + "</tr><td>" +
+        urlImage + "</td><td>" +
         element.title + "</td><td>" +
         element.isbn + "</td><td>" +
         auths + "</td><td>" +
