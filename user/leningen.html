@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -59,7 +59,8 @@
         <input class="form-control me-2" type="search" id="searchField1" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchReservationsButton(1)">Zoek</button>
+        <button class="btn btn-outline-success" type="button"
+          onclick="searchReservationsButton(1)">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -78,16 +79,15 @@
       <div class="col-5 text-end" id="previous-page1"></div>
       <div class="col-2 text-center" id="current-page1"></div>
       <div class="col-5 text-left" id="next-page1"></div>
-    </div>
-    <div class="row">
       <div class="col-sm-auto" id="page-info1"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count1" onchange="SelectPageElementCount1(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -98,7 +98,8 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansCurrentButton(1)">Zoek</button>
+        <button class="btn btn-outline-success" type="button"
+          onclick="searchLoansCurrentButton(1)">Zoek</button>
       </div>
     </div>
   </div>
@@ -120,12 +121,10 @@
       <div class="col-5 text-end" id="previous-page2"></div>
       <div class="col-2 text-center" id="current-page2"></div>
       <div class="col-5 text-left" id="next-page2"></div>
-    </div>
-    <div class="row">
       <div class="col-sm-auto" id="page-info2"></div>
         <div class="col-1">
           <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">1</option>
+            <option value = "0">5</option>
             <option value = "1">10</option>
             <option value = "2" selected>25</option>
             <option value = "3">50</option>
@@ -140,7 +139,8 @@
         <input class="form-control me-2" type="search" id="searchField3" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansHistoryButton(1)">Zoek</button>
+        <button class="btn btn-outline-success" type="button"
+        onclick="searchLoansHistoryButton(1)">Zoek</button>
       </div>
     </div>
   </div>
@@ -163,16 +163,15 @@
       <div class="col-5 text-end" id="previous-page3"></div>
       <div class="col-2 text-center" id="current-page3"></div>
       <div class="col-5 text-left" id="next-page3"></div>
-    </div>
-    <div class="row">
       <div class="col-sm-auto" id="page-info3"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count3" onchange="SelectPageElementCount3(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count3" onchange="SelectPageElementCount3(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -225,22 +224,19 @@
       searchLoansHistory(currentHistoryLoanPage, globalSearchHistoryLoansKeyword);
     }
 
-    function SelectPageElementCount1(count)
-    {
+    function SelectPageElementCount1(count) {
       elementsPerPage1 = parseInt(count);
       currentReservationPage = 1;
       searchReservations(currentReservationPage, globalSearchReservationsKeyword);
     }
 
-    function SelectPageElementCount2(count)
-    {
+    function SelectPageElementCount2(count) {
       elementsPerPage2 = parseInt(count);
       currentCurrentLoanPage = 1;
       searchLoansCurrent(currentCurrentLoanPage, globalSearchCurrentLoansKeyword);
     }
 
-    function SelectPageElementCount3(count)
-    {
+    function SelectPageElementCount3(count) {
       elementsPerPage3 = parseInt(count);
       currentHistoryLoanPage = 1;
       searchLoansHistory(currentHistoryLoanPage, globalSearchHistoryLoansKeyword);

@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -71,9 +71,9 @@
                 <h3>Boek toevoegen</h3>
             </div>
         </div>
-        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur
+        <a onclick="window.open('../admin/auteur_toevoegen.html', 'Auteurs', 'width=650, height=900, top=0, left=400')"><button class="btn btn-outline-success" type="button">Auteur
                 toevoegen</button></a>
-        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag
+        <a onclick="window.open('../admin/tag_toevoegen.html', 'Tags', 'width=650, height=900, top=0, left=600')"><button class="btn btn-outline-success" type="button">Tag
                 toevoegen</button></a>
         <div class="row">
             <div class="col-4">
@@ -86,6 +86,14 @@
                 <div class="mb-3">
                     <label for="inputIsbn" class="form-label">ISBN</label>
                     <input type="text" class="form-control" id="inputIsbn" placeholder="111111-1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="mb-3">
+                    <label for="inputCopyNumbers" class="form-label">Aantal exemplaren</label>
+                    <input type="text" class="form-control" id="inputCopyNumbers" placeholder="1">
                 </div>
             </div>
         </div>
@@ -146,9 +154,57 @@
         async function createBook() {
             let newBookTitle = document.getElementById('inputBookTitle').value;
             let newIsbn = document.getElementById('inputIsbn').value;
+            let newCopyNumbers = document.getElementById('inputCopyNumbers').value;
             if (newBookTitle.length == 0 || newIsbn.length == 0) {
                 alert("Voer een titel en isbn in")
                 return;
+            }
+            
+            //https://www.csuohio.edu/sites/default/files/88-2015.pdf
+            let isbnSum = 0;
+            let validIsbn = false;
+            newIsbn = newIsbn.replace(/\s+/g, ''); //removes all spaces
+            newIsbn = newIsbn.replace(/-+/g, ''); //remove all -
+            
+            if(newIsbn.length == 10){
+                for(let i = 0; i < newIsbn.length; i++){
+                    if(newIsbn[i] == "x" || newIsbn[i] == "X"){
+                        isbnSum = isbnSum + (i + 1) * 10;
+                    }else{
+                        isbnSum += ((i + 1) * parseInt(newIsbn[i]));
+                    }
+                }
+
+                if(isbnSum % 11 == 0){
+                    validIsbn = true;
+                }
+            }else if(newIsbn.length == 13){
+                for(let i = 0; i < newIsbn.length; i++){
+                    if((i+1) % 2 == 0){
+                        isbnSum += 3 * parseInt(newIsbn[i]);
+                    }else{
+                        isbnSum += 1 * parseInt(newIsbn[i]);
+                    }
+                }
+                
+                if(isbnSum % 10 == 0){
+                    validIsbn = true;
+                }
+            }else{
+                validIsbn = false;
+            }
+            
+            if(validIsbn == false){
+                alert("Voer een geldig isbn nummer in")
+                return;
+            }
+            if (isNaN(newCopyNumbers) ){
+                alert("Voer een geldig aantal exemplaren in")
+                return;
+            }else if (newCopyNumbers.length == 0){
+                newCopyNumbers = 1;
+            }else{
+                newCopyNumbers = parseInt(newCopyNumbers);
             }
             let authorsArr = [];
             for (let i = 0; i < authorNumber; i++) {
@@ -169,7 +225,6 @@
                     
                 }
                 authorsArr.push(document.getElementById('inputAuthor' + i).value);
-                console.log(authorsArr);
             }
             let tagsArr = [];
             for (let i = 0; i < tagNumber; i++) {
@@ -184,7 +239,6 @@
                     });
                 }
                 tagsArr.push(document.getElementById('inputTag' + i).value);
-                console.log(tagsArr);
             }
             
             fetch('http://localhost:8080/book/create', {
@@ -194,7 +248,8 @@
                         title: newBookTitle,
                         isbn: newIsbn,
                         authors: authorsArr,
-                        tags: tagsArr
+                        tags: tagsArr,
+                        bookCopyNumber: newCopyNumbers
                     }
                 ),
                 headers: {
@@ -203,7 +258,6 @@
             })
                 
             .then(response => response.json()).then(data => {
-
                 if (data.succes) {
                     alert('Boek is opgeslagen');
                 } else {

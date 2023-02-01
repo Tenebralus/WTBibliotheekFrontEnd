@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -96,16 +96,15 @@
       <div class="col-5 text-end" id="previous-page1"></div>
       <div class="col-2 text-center" id="current-page1"></div>
       <div class="col-5 text-left" id="next-page1"></div>
-    </div>
-    <div class="row">
       <div class="col-sm-auto" id="page-info1"></div>
-        <div class="col-1">
-          <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
-            <option value = "1">10</option>
-            <option value = "2" selected>25</option>
-            <option value = "3">50</option>
-          </select>
+      <div class="col-1">
+        <select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)"
+          autocomplete="off">
+          <option value="0">5</option>
+          <option value="1">10</option>
+          <option value="2" selected>25</option>
+          <option value="3">50</option>
+        </select>
       </div>
     </div>
   </div>
@@ -160,8 +159,7 @@
       currentPage--;
     }
 
-    function SelectPageElementCount(count)
-    {
+    function SelectPageElementCount(count) {
       elementsPerPage = parseInt(count);
       currentPage = 1;
       createTable(currentPage, elementsPerPage);
