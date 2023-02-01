@@ -159,13 +159,13 @@
                 alert("Voer een titel en isbn in")
                 return;
             }
+            
             //https://www.csuohio.edu/sites/default/files/88-2015.pdf
-            //1*9+2*0+3*4+4*5+5*3+6*5+7*5+8*4+9*5+10*0
             let isbnSum = 0;
             let validIsbn = false;
             newIsbn = newIsbn.replace(/\s+/g, ''); //removes all spaces
             newIsbn = newIsbn.replace(/-+/g, ''); //remove all -
-            console.log(newIsbn);
+            
             if(newIsbn.length == 10){
                 for(let i = 0; i < newIsbn.length; i++){
                     if(newIsbn[i] == "x" || newIsbn[i] == "X"){
@@ -179,10 +179,21 @@
                     validIsbn = true;
                 }
             }else if(newIsbn.length == 13){
-
+                for(let i = 0; i < newIsbn.length; i++){
+                    if((i+1) % 2 == 0){
+                        isbnSum += 3 * parseInt(newIsbn[i]);
+                    }else{
+                        isbnSum += 1 * parseInt(newIsbn[i]);
+                    }
+                }
+                
+                if(isbnSum % 10 == 0){
+                    validIsbn = true;
+                }
             }else{
                 validIsbn = false;
             }
+            
             if(validIsbn == false){
                 alert("Voer een geldig isbn nummer in")
                 return;
