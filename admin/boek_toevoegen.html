@@ -159,6 +159,37 @@
                 alert("Voer een titel en isbn in")
                 return;
             }
+
+            //https://www.csuohio.edu/sites/default/files/88-2015.pdf
+            //1*9+2*0+3*4+4*5+5*3+6*5+7*5+8*4+9*5+10*0
+            let isbnSum = 0;
+            let validIsbn = false;
+            if(newIsbn.length == 10){
+                for(let i = 0; i < newIsbn.length; i++){
+                    console.log(isbnSum);
+                    if(newIsbn[i] == "x" || newIsbn[i] == "X"){
+                        isbnSum = isbnSum + (i + 1) * 10;
+                    }else{
+                        isbnSum += ((i + 1) * parseInt(newIsbn[i]));
+                    }
+                }
+
+                if(isbnSum % 11 == 0){
+                    validIsbn = true;
+                }
+            }else if(newIsbn.length == 13){
+
+            }else{
+                validIsbn = false;
+            }
+            console.log("Sum: "+isbnSum);
+            console.log("valid: "+validIsbn);
+
+            if(validIsbn == false){
+                alert("Voer een geldig isbn nummer in")
+                return;
+            }
+
             if (isNaN(newCopyNumbers) ){
                 alert("Voer een geldig aantal exemplaren in")
                 return;
