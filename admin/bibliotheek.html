@@ -163,7 +163,8 @@
             }
             copiesTotal++
           })
-          let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
+          let linkToBookDetails = '<a class="link-dark" onclick="window.open(\'boek_details.html' + bookQueryString + '\', \'boekexemplaar details\', \'width=650, height=900\')" >' + element.title + '</a>';
+          //href="boek_details.html' + bookQueryString + '"
           rows += "<tr><td>" + urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
             '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
         });
