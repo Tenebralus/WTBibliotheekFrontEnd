@@ -159,13 +159,11 @@
                 alert("Voer een titel en isbn in")
                 return;
             }
-            
             //https://www.csuohio.edu/sites/default/files/88-2015.pdf
             let isbnSum = 0;
             let validIsbn = false;
             newIsbn = newIsbn.replace(/\s+/g, ''); //removes all spaces
             newIsbn = newIsbn.replace(/-+/g, ''); //remove all -
-            
             if(newIsbn.length == 10){
                 for(let i = 0; i < newIsbn.length; i++){
                     if(newIsbn[i] == "x" || newIsbn[i] == "X"){
@@ -174,7 +172,6 @@
                         isbnSum += ((i + 1) * parseInt(newIsbn[i]));
                     }
                 }
-
                 if(isbnSum % 11 == 0){
                     validIsbn = true;
                 }
@@ -186,14 +183,12 @@
                         isbnSum += 1 * parseInt(newIsbn[i]);
                     }
                 }
-                
                 if(isbnSum % 10 == 0){
                     validIsbn = true;
                 }
-            }else{
+            }else{ //length isbn not 10 or 13
                 validIsbn = false;
             }
-            
             if(validIsbn == false){
                 alert("Voer een geldig isbn nummer in")
                 return;
@@ -222,7 +217,6 @@
                     //}
                     //authorsArr.push(document.getElementById('inputAuthor' + i).value);
                     //authorsArr.push({ "AuthorName": document.getElementById('inputAuthor' + i).value });
-                    
                 }
                 authorsArr.push(document.getElementById('inputAuthor' + i).value);
             }
@@ -255,8 +249,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            })
-                
+            })    
             .then(response => response.json()).then(data => {
                 if (data.succes) {
                     alert('Boek is opgeslagen');
