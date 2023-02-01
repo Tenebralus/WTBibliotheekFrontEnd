@@ -21,7 +21,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -186,7 +186,7 @@
                 returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="loanButttonSave' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="makeLoan(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')">Uitlenen</button>'
               }
               rows += "<tr><td>" +
-                '<a class="link-dark" onclick="window.open(\'exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '\', \'boek details\', \'width:200, height=200\')"  >Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
+                '<a class="link-dark" onclick="window.open(\'exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '\', \'boek details\', \'width=650, height=900, top=0, left=560\')"  >Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
                 //onclick="window.open(urlNaam, boek details, width:300,height=300)"
                 //'<a href="URL"                         onclick="window.open('URL', 'venster_naam', 'venster_opties'); return false"                >linktekst</a>
                 data.bookCopyDetailsDTOs[i].status + "</td><td>" +

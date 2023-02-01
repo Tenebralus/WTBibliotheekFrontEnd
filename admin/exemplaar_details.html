@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
         <div class="container-fluid">
             <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -108,7 +108,6 @@
 
     <script>
         InitializePage("../user/index.html", "");
-        window.resizeTo(810, 750);
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const bookCopyId = urlParams.get('bookcopy');

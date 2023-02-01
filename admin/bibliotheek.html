@@ -23,7 +23,7 @@
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+  <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"><img src='../images/WT-Basislogo-RGB.png' width="200"></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
@@ -79,12 +79,12 @@
         <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
       </div>
       <div class="col-6">
-        <a href="../admin/auteur_toevoegen.html"><button class="btn btn-outline-success" type="button">Auteur
-            toevoegen</button></a>
-        <a href="../admin/tag_toevoegen.html"><button class="btn btn-outline-success" type="button">Tag
-            toevoegen</button></a>
-        <a href="../admin/boek_toevoegen.html"><button class="btn btn-outline-success" type="button">Boek
-            toevoegen</button></a>
+        <a onclick="window.open('../admin/auteur_toevoegen.html', 'Auteurs', 'width=650, height=900, top=0, left=400')">
+          <button class="btn btn-outline-success" type="button">Auteur aanpassen</button></a>
+        <a onclick="window.open('../admin/tag_toevoegen.html', 'Tags', 'width=650, height=900, top=0, left=600')">
+          <button class="btn btn-outline-success" type="button">Tag aanpassen</button></a>
+        <a onclick="window.open('../admin/boek_toevoegen.html', 'Boeken', 'width=650, height=900')">
+          <button class="btn btn-outline-success" type="button">Boek toevoegen</button></a>
       </div>
       <div class="container">
         <table class="table sortable">
@@ -163,7 +163,8 @@
             }
             copiesTotal++
           })
-          let linkToBookDetails = '<a class="link-dark" href="boek_details.html' + bookQueryString + '">' + element.title + '</a>';
+          let linkToBookDetails = '<a class="link-dark" onclick="window.open(\'boek_details.html' + bookQueryString + '\', \'boekexemplaar details\', \'width=650, height=900\')" >' + element.title + '</a>';
+          //href="boek_details.html' + bookQueryString + '"
           rows += "<tr><td>" + urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
             '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
         });
