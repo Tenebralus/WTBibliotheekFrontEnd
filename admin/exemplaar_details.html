@@ -108,6 +108,7 @@
 
     <script>
         InitializePage("../user/index.html", "");
+        window.resizeTo(810, 750);
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
         const bookCopyId = urlParams.get('bookcopy');
