@@ -92,6 +92,14 @@
         <div class="row">
             <div class="col-4">
                 <div class="mb-3">
+                    <label for="inputCopyNumbers" class="form-label">Aantal exemplaren</label>
+                    <input type="text" class="form-control" id="inputCopyNumbers" placeholder="1">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4">
+                <div class="mb-3">
                     <fieldset class="inputs-set" id="author-list" class="input-field">
                         <label for="inputBookTitle" class="form-label">Auteur(s)</label>
                         <br>
@@ -146,10 +154,20 @@
         async function createBook() {
             let newBookTitle = document.getElementById('inputBookTitle').value;
             let newIsbn = document.getElementById('inputIsbn').value;
+            let newCopyNumbers = document.getElementById('inputCopyNumbers').value;
             if (newBookTitle.length == 0 || newIsbn.length == 0) {
                 alert("Voer een titel en isbn in")
                 return;
             }
+            if (isNaN(newCopyNumbers) ){
+                alert("Voer een geldig aantal exemplaren in")
+                return;
+            }else if (newCopyNumbers.length == 0){
+                newCopyNumbers = 1;
+            }else{
+                newCopyNumbers = parseInt(newCopyNumbers);
+            }
+            
             let authorsArr = [];
             for (let i = 0; i < authorNumber; i++) {
                 await searchAuthorId().then(data => {
@@ -194,7 +212,8 @@
                         title: newBookTitle,
                         isbn: newIsbn,
                         authors: authorsArr,
-                        tags: tagsArr
+                        tags: tagsArr,
+                        bookCopyNumber: newCopyNumbers
                     }
                 ),
                 headers: {
