@@ -59,7 +59,7 @@
         <input class="form-control me-2" type="search" id="searchField1" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchReservations(currentReservationPage, elementsPerPage1)">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchReservationsButton(1)">Zoek</button>
       </div>
     </div>
     <table class="table">
@@ -98,7 +98,7 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansCurrent(currentCurrentLoanPage, elementsPerPage2)">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchLoansCurrentButton(1)">Zoek</button>
       </div>
     </div>
   </div>
@@ -125,7 +125,7 @@
       <div class="col-sm-auto" id="page-info2"></div>
         <div class="col-1">
           <select class="" id="page-elements-count2" onchange="SelectPageElementCount2(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
+            <option value = "0">1</option>
             <option value = "1">10</option>
             <option value = "2" selected>25</option>
             <option value = "3">50</option>
@@ -140,7 +140,7 @@
         <input class="form-control me-2" type="search" id="searchField3" placeholder="Zoek op boektitel of auteur">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchLoansHistory(currentHistoryLoanPage, elementsPerPage3)">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchLoansHistoryButton(1)">Zoek</button>
       </div>
     </div>
   </div>
@@ -168,7 +168,7 @@
       <div class="col-sm-auto" id="page-info3"></div>
         <div class="col-1">
           <select class="" id="page-elements-count3" onchange="SelectPageElementCount3(this.selectedOptions[0].label)" autocomplete="off">
-            <option value = "0">5</option>
+            <option value = "0">2</option>
             <option value = "1">10</option>
             <option value = "2" selected>25</option>
             <option value = "3">50</option>
@@ -180,6 +180,7 @@
 
   <script>
     InitializePage("", "../admin/index.html");
+    clearInputFields();
     let currentReservationPage = 1;
     let elementsPerPage1 = parseInt(document.getElementById("page-elements-count1").selectedOptions[0].label);
     window.onload = createReservationTable(currentReservationPage, elementsPerPage1);
@@ -190,55 +191,59 @@
     let elementsPerPage3 = parseInt(document.getElementById("page-elements-count3").selectedOptions[0].label);
     window.onload = createLoanTableHistory(currentHistoryLoanPage, elementsPerPage3);
 
+    let globalSearchReservationsKeyword = "";
+    let globalSearchCurrentLoansKeyword = "";
+    let globalSearchHistoryLoansKeyword = "";
+
     function nextPage1() {
-      createReservationTable(currentReservationPage + 1, elementsPerPage1)
       currentReservationPage++;
+      searchReservations(currentReservationPage, globalSearchReservationsKeyword);
     }
 
     function previousPage1() {
-      createReservationTable(currentReservationPage - 1, elementsPerPage1)
       currentReservationPage--;
+      searchReservations(currentReservationPage, globalSearchReservationsKeyword);
     }
 
     function nextPage2() {
-      createLoanTableCurrent(currentCurrentLoanPage + 1, elementsPerPage2)
       currentCurrentLoanPage++;
+      searchLoansCurrent(currentCurrentLoanPage, globalSearchCurrentLoansKeyword);
     }
 
     function previousPage2() {
-      createLoanTableCurrent(currentCurrentLoanPage - 1, elementsPerPage2)
       currentCurrentLoanPage--;
+      searchLoansCurrent(currentCurrentLoanPage, globalSearchCurrentLoansKeyword);
     }
 
     function nextPage3() {
-      createLoanTableHistory(currentHistoryLoanPage + 1, elementsPerPage3)
       currentHistoryLoanPage++;
+      searchLoansHistory(currentHistoryLoanPage, globalSearchHistoryLoansKeyword);
     }
 
     function previousPage3() {
-      createLoanTableHistory(currentHistoryLoanPage - 1, elementsPerPage3)
       currentHistoryLoanPage--;
+      searchLoansHistory(currentHistoryLoanPage, globalSearchHistoryLoansKeyword);
     }
 
     function SelectPageElementCount1(count)
     {
       elementsPerPage1 = parseInt(count);
       currentReservationPage = 1;
-      createReservationTable(currentReservationPage, elementsPerPage1);
+      searchReservations(currentReservationPage, globalSearchReservationsKeyword);
     }
 
     function SelectPageElementCount2(count)
     {
       elementsPerPage2 = parseInt(count);
       currentCurrentLoanPage = 1;
-      createLoanTableCurrent(currentCurrentLoanPage, elementsPerPage2);
+      searchLoansCurrent(currentCurrentLoanPage, globalSearchCurrentLoansKeyword);
     }
 
     function SelectPageElementCount3(count)
     {
       elementsPerPage3 = parseInt(count);
       currentHistoryLoanPage = 1;
-      createLoanTableHistory(currentHistoryLoanPage, elementsPerPage3);
+      searchLoansHistory(currentHistoryLoanPage, globalSearchHistoryLoansKeyword);
     }
 
     function cancel(clickedId) {
@@ -248,14 +253,16 @@
         method: "DELETE"
       })
         .then(alert("Reservering geannuleerd"));
-      createReservationTable();
+      searchReservations(currentReservationPage, globalSearchReservationsKeyword);
     }
 
-    function search() {
-      let keyword = document.getElementById('searchField').value;
+    // unused function
+    function search(page, keyword) {
       fetch('http://localhost:8080/loan/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
-        data.forEach(element => {
+        currentCurrentLoanPage = page;
+        let pageData = pageSelector(data, currentCurrentLoanPage, 2, elementsPerPage2);
+        pageData.forEach(element => {
           let authorNames = "";
           if (element.authors) {
             for (let i = 0; i < element.authors.length; i++) {
@@ -289,6 +296,26 @@
         });
         document.getElementById('loans-row').innerHTML = rows;
       });
+    }
+
+    function searchButton(page)
+    {
+      let keyword = document.getElementById('searchField').value;
+      globalSearchCurrentLoanKeyword = keyword;
+
+      if (!keyword) {
+        currentCurrentLoanPage = 1;
+        return createCurrentLoansTable(currentCurrentLoanPage, elementsPerPage2);
+      }
+
+      search(page, keyword);
+    }
+
+    function clearInputFields()
+    {
+      document.getElementById('searchField1').value = '';
+      document.getElementById('searchField').value = '';
+      document.getElementById('searchField3').value = '';
     }
   </script>
 

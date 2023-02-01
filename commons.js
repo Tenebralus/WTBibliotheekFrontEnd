@@ -239,10 +239,9 @@ function createReservationTable(page, elementsPerPage) {
   });
 }
 
-function searchReservations(page, elementsPerPage) {
-  let keyword = document.getElementById('searchField1').value;
+function searchReservations(page, keyword) {
   if (!keyword) {
-    return createReservationTable(page, elementsPerPage);
+    return createReservationTable(currentReservationPage, elementsPerPage1);
   }
   fetch('http://localhost:8080/reservation/user/personal/search/' + keyword, {
     method: 'GET',
@@ -252,7 +251,9 @@ function searchReservations(page, elementsPerPage) {
     }
   }).then(response => response.json()).then(data => {
     let rows = '';
-    data.forEach(element => {
+    currentReservationPage = page;
+    let pageData = pageSelector(data, currentReservationPage, 1, elementsPerPage1);
+    pageData.forEach(element => {
       let auths = '';
       if (element.book.authors) {
         for (let i = 0; i < element.book.authors.length; i++) {
@@ -271,6 +272,17 @@ function searchReservations(page, elementsPerPage) {
     });
     document.getElementById('reservations-row').innerHTML = rows;
   });
+}
+
+function searchReservationsButton(page)
+{
+  let keyword = document.getElementById('searchField1').value;
+  globalSearchReservationsKeyword = keyword;
+  if (!keyword) {
+    currentReservationPage = 1;
+    return createReservationTable(currentReservationPage, elementsPerPage1);
+  }
+  searchReservations(page, keyword);
 }
 
 function InitializePage(userPage, adminPage) {
@@ -328,10 +340,9 @@ function pageSelector(data, page, table, elementsPerPage) {
   return pageData;
 }
 
-function searchLoansCurrent(page, elementsPerPage) {
-  let keyword = document.getElementById('searchField').value;
+function searchLoansCurrent(page, keyword) {
   if (!keyword) {
-    return createLoanTableCurrent(page, elementsPerPage);
+    return createLoanTableCurrent(page, elementsPerPage2);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',
@@ -339,7 +350,19 @@ function searchLoansCurrent(page, elementsPerPage) {
       'Content-Type': 'application/json',
       'token': getCookie('Authentication')
     }
-  }).then(response => response.json()).then(data => {
+  }).then(response => response.json()).then(data => {  
+
+    // make a list with current loans only, no returned loans, required for page system
+    let newData = [];
+    let i = 0;
+    data.forEach(element => {
+      if (element.dateReturned == null) {
+        newData[i] = element;
+        i++;
+      }
+    });
+    data = newData;
+
     data.sort(function (a, b) {
       if (a.dateLoaned > b.dateLoaned) {
         return 1;
@@ -350,7 +373,9 @@ function searchLoansCurrent(page, elementsPerPage) {
       return 0
     });
     let rows = '';
-    data.forEach(element => {
+    currentCurrentLoanPage = page;
+    let pageData = pageSelector(data, currentCurrentLoanPage, 2, elementsPerPage2);
+    pageData.forEach(element => {
       let authorNames = "";
       if (element.authors) {
         for (let i = 0; i < element.authors.length; i++) {
@@ -383,10 +408,21 @@ function searchLoansCurrent(page, elementsPerPage) {
   });
 }
 
-function searchLoansHistory(page, elementsPerPage) {
-  let keyword = document.getElementById('searchField3').value;
+function searchLoansCurrentButton(page)
+{
+  let keyword = document.getElementById('searchField').value;
+  globalSearchCurrentLoansKeyword = keyword;
+
   if (!keyword) {
-    return createLoanTableHistory(page, elementsPerPage);
+    currentCurrentLoanPage = 1;
+    return createLoanTableCurrent(currentCurrentLoanPage, elementsPerPage2);
+  }
+  searchLoansCurrent(page, keyword);
+}
+
+function searchLoansHistory(page, keyword) {
+  if (!keyword) {
+    return createLoanTableHistory(page, elementsPerPage3);
   }
   fetch('http://localhost:8080/loan/search/user/' + keyword, {
     method: 'GET',
@@ -395,6 +431,18 @@ function searchLoansHistory(page, elementsPerPage) {
       'token': getCookie('Authentication')
     }
   }).then(response => response.json()).then(data => {
+
+    // make a list with history loans only, no current loans, required for page system
+    let newData = [];
+    let i = 0;
+    data.forEach(element => {
+      if (element.dateReturned != null) {
+        newData[i] = element;
+        i++;
+      }
+    });
+    data = newData;
+
     data.sort(function (a, b) {
       if (a.dateReturned < b.dateReturned) {
         return 1;
@@ -405,7 +453,9 @@ function searchLoansHistory(page, elementsPerPage) {
       return 0
     });
     let rows = '';
-    data.forEach(element => {
+    currentHistoryLoanPage = page;
+    let pageData = pageSelector(data, currentHistoryLoanPage, 3, elementsPerPage3);
+    pageData.forEach(element => {
       let authorNames = "";
       if (element.authors) {
         for (let i = 0; i < element.authors.length; i++) {
@@ -431,6 +481,18 @@ function searchLoansHistory(page, elementsPerPage) {
     });
     document.getElementById('loans-row-history').innerHTML = rows;
   });
+}
+
+function searchLoansHistoryButton(page)
+{
+  let keyword = document.getElementById('searchField3').value;
+  globalSearchHistoryLoansKeyword = keyword;
+
+  if (!keyword) {
+    currentHistoryLoanPage = 1;
+    return createLoanTableHistory(currentHistoryLoanPage, elementsPerPage3);
+  }
+  searchLoansHistory(page, keyword);
 }
 
 function createIndexTable(page, elementsPerPage) {
