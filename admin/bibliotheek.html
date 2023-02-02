@@ -330,25 +330,23 @@
         let idstr = clickedId.split("addCopy");
         let idnum = parseInt(idstr[1]);
         console.log("hiernogwel " + idnum + " " + amount);
-        for (let i = 1; i <= amount; i++) {
-          fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
-            method: "POST",
-            body: JSON.stringify(
-              {
-                id: idnum,
-                bookCopyNumber: amount
-              }
-            ),
-            headers: {
-              'Content-Type': 'application/json',
-              'Authentication': getCookie('Authentication'),
-              'Access-Control-Allow-Origin': '*'
+
+        fetch('http://localhost:8080/book/createbookcopy', {
+          method: "POST",
+          body: JSON.stringify(
+            {
+              id: idnum,
+              bookCopyNumber: amount
             }
-          })
-            .then(() => {
-              console.log("hier?");
-            });
-        }
+          ),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+          .then(() => {
+            console.log("hier?");
+          });
+
         if (amount == 1) {
           alert('Exemplaar toegevoegd');
         } else {
