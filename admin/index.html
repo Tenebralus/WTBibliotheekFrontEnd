@@ -74,7 +74,7 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op titel, auteur, of tags">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchIndex()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchIndexButton(1)">Zoek</button>
       </div>
     </div>
   </div>
@@ -113,25 +113,33 @@
 
   <script>
     InitializePage("../user/index.html", "");
+    clearInputField();
     let currentPage = 1;
     let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
     window.onload = createIndexTable(currentPage, elementsPerPage);
+    globalSearchKeyword = "";
 
     function nextPage1() {
-      createIndexTable(currentPage + 1, elementsPerPage)
       currentPage++;
+      searchIndex(currentPage, globalSearchKeyword)
     }
 
     function previousPage1() {
-      createIndexTable(currentPage - 1, elementsPerPage)
       currentPage--;
+      searchIndex(currentPage, globalSearchKeyword)
     }
 
     function SelectPageElementCount(count) {
       elementsPerPage = parseInt(count);
       currentPage = 1;
-      createIndexTable(currentPage, elementsPerPage);
+      searchIndex(currentPage, globalSearchKeyword)
     }
+
+    function clearInputField()
+    {
+      document.getElementById('searchField').value = '';
+    }
+
   </script>
 
 </body>

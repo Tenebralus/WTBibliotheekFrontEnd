@@ -536,16 +536,16 @@ function createIndexTable(page, elementsPerPage) {
   });
 }
 
-function searchIndex() {
-  let keyword = document.getElementById('searchField').value;
+function searchIndex(page, keyword) {
   if (!keyword) {
-    return createIndexTable(1);
+    return createIndexTable(page, elementsPerPage);
   }
   fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
     let rows = '';
     let urlImage = '';
-    //'<img src=' + data.urlImage + ' style="width: 45px; height: 60px"/>';
-    data.forEach(element => {
+    currentPage = page;
+    let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+    pageData.forEach(element => {
       urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';
       let auths = '';
       for (let i = 0; i < element.authors.length; i++) {
@@ -578,4 +578,15 @@ function searchIndex() {
     });
     document.getElementById('book-row').innerHTML = rows;
   });
+}
+
+function searchIndexButton(page)
+{
+  let keyword = document.getElementById('searchField').value;
+  globalSearchKeyword = keyword;
+  if (!keyword) {
+    currentPage = 1;
+    return createIndexTable(currentPage, elementsPerPage);
+  }
+  searchIndex(page, keyword);
 }
