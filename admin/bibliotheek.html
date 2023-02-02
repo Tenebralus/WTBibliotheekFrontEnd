@@ -329,11 +329,24 @@
       if (confirm('Weet je zeker dat je een exemplaar wil toevoegen?')) {
         let idstr = clickedId.split("addCopy");
         let idnum = parseInt(idstr[1]);
+        console.log("hiernogwel " + idnum + " " + amount);
         for (let i = 1; i <= amount; i++) {
           fetch('http://localhost:8080/book/' + idnum + '/createbookcopy', {
-            method: "POST"
+            method: "POST",
+            body: JSON.stringify(
+              {
+                id: idnum,
+                bookCopyNumber: amount
+              }
+            ),
+            headers: {
+              'Content-Type': 'application/json',
+              'Authentication': getCookie('Authentication'),
+              'Access-Control-Allow-Origin': '*'
+            }
           })
             .then(() => {
+              console.log("hier?");
             });
         }
         if (amount == 1) {
