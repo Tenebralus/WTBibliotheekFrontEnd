@@ -159,6 +159,13 @@
                                 }
                             }
                         }
+                        if (status=='loaned'){ //nederlandse webpagina
+                            status = 'uitgeleend';
+                        } else if (status=='available'){
+                            status = 'beschikbaar';
+                        } else if (status=='archived'){
+                            status = 'gearchiveerd';
+                        }
                         document.getElementById("image").innerHTML = urlImage;
                         document.getElementById("bookTitle").innerText = "Titel: " + title + ' (' + bookId + '.' + bookCopyNr + ')';
                         document.getElementById("book-authors").innerText = "Auteur(s): " + bookAuthors;
