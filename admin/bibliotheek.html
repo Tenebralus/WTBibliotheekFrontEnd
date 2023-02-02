@@ -138,7 +138,7 @@
         pageData.forEach(element => {
           let bookId = element.id;
           let bookQueryString = '?book=' + bookId;
-          let urlImage = '<a onclick="window.open(\'boek_details.html' + bookQueryString + '\', \'boekexemplaar details\', \'width=650, height=900\')" >' + '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/></a>';
+          let urlImage = '<a class="link_cursor" onclick="window.open(\'boek_details.html' + bookQueryString + '\', \'boekexemplaar details\', \'width=650, height=900\')" >' + '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/></a>';
           // Url = "https://covers.openlibrary.org/b/isbn/" + element.isbn + "-M.jpg"
           // let urlImage = '<img src=' + Url + ' style="width: 45px; height: 60px"/>';
           let auths = '';
@@ -163,7 +163,7 @@
             }
             copiesTotal++
           })
-          let linkToBookDetails = '<a class="link-dark" onclick="window.open(\'boek_details.html' + bookQueryString + '\', \'boekexemplaar details\', \'width=650, height=900\')" >' + element.title + '</a>';
+          let linkToBookDetails = '<a class="link-dark link_cursor" onclick="window.open(\'boek_details.html' + bookQueryString + '\', \'boekexemplaar details\', \'width=650, height=900\')" >' + element.title + '</a>';
           //href="boek_details.html' + bookQueryString + '"
           rows += "<tr><td>" + urlImage + "</td><td>" + linkToBookDetails + "</td><td>" + element.isbn + "</td><td>" + auths + "</td><td>" + tags + "</td><td>" + copiesTotal + "</td><td>" + copiesAvailable +
             '</td><td><button class="btn btn-outline-success" type="button" onclick="updateLibrary(this.id)" id="updateLibrary' + element.id + '">Pas aan</button></td></tr>';
