@@ -39,3 +39,6 @@ div {
 input:invalid {
   border: 3px solid red;
 }
+.link_cursor {
+  cursor: pointer;
+}
