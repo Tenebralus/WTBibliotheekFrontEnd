@@ -105,8 +105,9 @@
     </div>
   </div>
   <div class="container" id="loanHistory">
-    <button onclick="getLoanHistory()" class="btn btn-success">Uitleengeschiedenis</button>
+    <button onclick="getLoanHistory(1, '')" class="btn btn-success">Uitleengeschiedenis</button>
   </div>
+  <div class="row" id="row-limit">
   <div></div>
 
   <script>
@@ -116,7 +117,26 @@
     const bookId = urlParams.get('book');
     const bookCopyId = urlParams.get('bookcopy');
     let loanId = null;
+    let currentPage = 1;
+    let elementsPerPage = 0;
     window.onload = createBookCopiesTable();
+    globalSearchKeyword = "";
+
+    function nextPage1() {
+      currentPage++;
+      search(currentPage, globalSearchKeyword);
+    }
+
+    function previousPage1() {
+      currentPage--;
+      search(currentPage, globalSearchKeyword); 
+    }
+
+    function SelectPageElementCount(count) {
+      elementsPerPage = parseInt(count);
+      currentPage = 1;
+      search(currentPage, globalSearchKeyword);
+    }
 
     function createBookCopiesTable() {
       fetch('http://localhost:8080/book/details/' + bookId).then(response => response.json()).then(data => {
@@ -256,16 +276,21 @@
         })
     }
 
-    function getLoanHistory() {
+    function getLoanHistory(page) {
       fetch('http://localhost:8080/loan/dto/book/' + bookId).then(response => response.json()).then(data => {
         data = data.sort((a, b) => {
           return new Date(b.dateLoaned) - new Date(a.dateLoaned);
         });
-        let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button></div></div></div>'
+        let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="searchButton(1)">Zoek</button></div></div></div>'
         let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
         let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
+        let rowLimit = '<div class="col-5 text-end" id="previous-page1"></div><div class="col-2 text-center" id="current-page1"></div><div class="col-5 text-left" id="next-page1"></div><div class="col-sm-auto" id="page-info1"></div><div class="col-1"><select class="" id="page-elements-count" onchange="SelectPageElementCount(this.selectedOptions[0].label)"autocomplete="off"><option value="0">2</option><option value="1">10</option><option value="2" selected>25</option><option value="3">50</option></select></div></div>'
+        document.getElementById('row-limit').innerHTML = rowLimit;
         let rows = '';
-        data.forEach(element => {
+        elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
+        currentPage = page;
+        let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+        pageData.forEach(element => {
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           dateReturned = "";
@@ -281,6 +306,7 @@
             "<td>" + dateReturned + "</td></tr>";
         });
         document.getElementById('loanHistory').innerHTML = tableTitle + searchBar + tableHead + rows;
+        
       });
     }
 
@@ -322,11 +348,7 @@
       }
     }
 
-    function search() {
-      let keyword = document.getElementById('searchField').value;
-      if (!keyword) {
-        return getLoanHistory();
-      }
+    function search(page, keyword) {
       fetch('http://localhost:8080/loan/search/bookdetails', {
         method: 'POST',
         body: JSON.stringify(
@@ -342,11 +364,14 @@
         data = data.sort((a, b) => {
           return new Date(b.dateLoaned) - new Date(a.dateLoaned);
         });
-        let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button></div></div></div>'
+        let searchBar = '<div class="container"><div class="row"><div class="col-4"><input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op gebruiker"></div><div class="col"><button class="btn btn-outline-success" type="button" onclick="searchButton(1)">Zoek</button></div></div></div>'
         let tableTitle = '<div class="row"><h3>Uitleengeschiedenis</h3></div>'
         let tableHead = '<table class="table"><thead><tr><th>Exemplaar nummer</th><th>Gebruiker</th><th>Datum uitgeleend</th><th>Datum teruggegeven</th></tr></thead>'
         let rows = '';
-        data.forEach(element => {
+        currentPage = page;
+        let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+        
+        pageData.forEach(element => {
           //do not want to see null but empty space
           let dateLoaned = new Date(element.dateLoaned).toLocaleString('nl-NL', { dateStyle: 'medium', timeStyle: 'short' });
           dateReturned = "";
@@ -363,6 +388,17 @@
         });
         document.getElementById('loanHistory').innerHTML = tableTitle + searchBar + tableHead + rows;
       });
+    }
+
+    function searchButton(page)
+    {
+      let keyword = document.getElementById('searchField').value;
+      globalSearchKeyword = keyword;
+      if (!keyword) {
+        currentPage = 1;
+        return getLoanHistory(currentPage);
+      }
+      search(page, keyword);
     }
 
     function loanBookDateList(bookCopyId, status) {
