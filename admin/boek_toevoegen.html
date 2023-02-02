@@ -239,7 +239,7 @@
                 tagsArr.push(document.getElementById('inputTag' + i).value);
             }
 
-            fetch('http://localhost:8080/book/create', {
+            await fetch('http://localhost:8080/book/create', {
                 method: 'POST',
                 body: JSON.stringify(
                     {
@@ -267,22 +267,13 @@
         //    createBook();
         //    window.location = 'bibliotheek.html';
         //}
-        function createBookAndNext() {
-            createBook();
+        async function createBookAndNext() {
+            await createBook();
             document.getElementById('inputBookTitle').value = "";
             document.getElementById('inputIsbn').value = "";
             document.getElementById('inputCopyNumbers').value = "";
-            const elements1 = document.querySelectorAll('input[type="Author"]');
-            const elements2 = document.querySelectorAll('input[type="Tag"]');
-            console.log(elements1); //
-            elements1[0].value='';
-            elements2[0].value='';
-            for (let i=1; i<elements1.length; i++){
-                elements1[i].remove();
-            }
-            for (let i=1; i<elements2.length; i++){
-                elements2[i].remove();
-            }
+            eraseFieldInputs();
+            
             //document.getElementById('INPUT').value='';
         }
 
@@ -346,6 +337,20 @@
             x.appendChild(newTagField);
             myTagForm.appendChild(x);
             tagNumber++;
+        }
+
+        function eraseFieldInputs() {
+            const elements1 = document.querySelectorAll('input[type="Author"]');
+            const elements2 = document.querySelectorAll('input[type="Tag"]');
+            console.log(elements1); //
+            elements1[0].value='';
+            elements2[0].value='';
+            for (let i=1; i<elements1.length; i++){
+                elements1[i].remove();
+            }
+            for (let i=1; i<elements2.length; i++){
+                elements2[i].remove();
+            }
         }
     </script>
 
