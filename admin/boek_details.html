@@ -205,11 +205,18 @@
                 usernameCurrentLoan = '<input list="userDataList" id="loanBookUser' + data.bookCopyDetailsDTOs[i].id + '" name="loanBook">';
                 returnButtonHTML = '<button class="btn btn-outline-primary" type="button" id="loanButttonSave' + data.bookCopyDetailsDTOs[i].bookId + " " + data.bookCopyDetailsDTOs[i].id + '" onclick="makeLoan(' + data.bookCopyDetailsDTOs[i].id + ',\'' + data.bookCopyDetailsDTOs[i].status + '\')">Uitlenen</button>'
               }
+              if (data.bookCopyDetailsDTOs[i].status == 'loaned') { //nederlandse webpagina
+                status = 'uitgeleend';
+              } else if (data.bookCopyDetailsDTOs[i].status == 'available') {
+                status = 'beschikbaar';
+              } else if (data.bookCopyDetailsDTOs[i].status == 'archived') {
+                status = 'gearchiveerd';
+              }
               rows += "<tr><td>" +
                 '<a class="link-dark" onclick="window.open(\'exemplaar_details.html?bookcopy=' + data.bookCopyDetailsDTOs[i].id + '\', \'boek details\', \'width=650, height=900, top=0, left=560\')"  >Exemplaar ' + data.bookCopyDetailsDTOs[i].bookCopyNr + '</a>' + "</td><td>" +
                 //onclick="window.open(urlNaam, boek details, width:300,height=300)"
                 //'<a href="URL"                         onclick="window.open('URL', 'venster_naam', 'venster_opties'); return false"                >linktekst</a>
-                data.bookCopyDetailsDTOs[i].status + "</td><td>" +
+                status + "</td><td>" +
                 dateLoaned + "</td><td>" +
                 usernameCurrentLoan + userOptions + "</td><td>" +
                 //userDropDown + "</td><td>" + 
