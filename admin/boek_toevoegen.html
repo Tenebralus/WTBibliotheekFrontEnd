@@ -71,9 +71,11 @@
                 <h3>Boek toevoegen</h3>
             </div>
         </div>
-        <a onclick="window.open('../admin/auteur_toevoegen.html', 'Auteurs', 'width=650, height=900, top=0, left=400')"><button class="btn btn-outline-success" type="button">Auteur
+        <a onclick="window.open('../admin/auteur_toevoegen.html', 'Auteurs', 'width=650, height=900, top=0, left=400')"><button
+                class="btn btn-outline-success" type="button">Auteur
                 toevoegen</button></a>
-        <a onclick="window.open('../admin/tag_toevoegen.html', 'Tags', 'width=650, height=900, top=0, left=600')"><button class="btn btn-outline-success" type="button">Tag
+        <a onclick="window.open('../admin/tag_toevoegen.html', 'Tags', 'width=650, height=900, top=0, left=600')"><button
+                class="btn btn-outline-success" type="button">Tag
                 toevoegen</button></a>
         <div class="row">
             <div class="col-4">
@@ -103,8 +105,10 @@
                     <fieldset class="inputs-set" id="author-list" class="input-field">
                         <label for="inputBookTitle" class="form-label">Auteur(s)</label>
                         <br>
-
+                        <!--<div id=""></div>-->
+                        <!-- <input type="text" class="form-control" list="inputAuthorList" id="inputAuthor" placeholder="Auteur"> -->
                         <body onLoad="loadFields();"></body>
+
                         <!-- </input> -->
                     </fieldset>
                 </div>
@@ -156,7 +160,7 @@
             let newIsbn = document.getElementById('inputIsbn').value;
             let newCopyNumbers = document.getElementById('inputCopyNumbers').value;
             if (newBookTitle.length == 0 || newIsbn.length == 0) {
-                alert("Voer een titel en isbn in")
+                alert("Voer een titel en isbn in");
                 return;
             }
             //https://www.csuohio.edu/sites/default/files/88-2015.pdf
@@ -164,41 +168,41 @@
             let validIsbn = false;
             newIsbn = newIsbn.replace(/\s+/g, ''); //removes all spaces
             newIsbn = newIsbn.replace(/-+/g, ''); //remove all -
-            if(newIsbn.length == 10){
-                for(let i = 0; i < newIsbn.length; i++){
-                    if(newIsbn[i] == "x" || newIsbn[i] == "X"){
+            if (newIsbn.length == 10) {
+                for (let i = 0; i < newIsbn.length; i++) {
+                    if (newIsbn[i] == "x" || newIsbn[i] == "X") {
                         isbnSum = isbnSum + (i + 1) * 10;
-                    }else{
+                    } else {
                         isbnSum += ((i + 1) * parseInt(newIsbn[i]));
                     }
                 }
-                if(isbnSum % 11 == 0){
+                if (isbnSum % 11 == 0) {
                     validIsbn = true;
                 }
-            }else if(newIsbn.length == 13){
-                for(let i = 0; i < newIsbn.length; i++){
-                    if((i+1) % 2 == 0){
+            } else if (newIsbn.length == 13) {
+                for (let i = 0; i < newIsbn.length; i++) {
+                    if ((i + 1) % 2 == 0) {
                         isbnSum += 3 * parseInt(newIsbn[i]);
-                    }else{
+                    } else {
                         isbnSum += 1 * parseInt(newIsbn[i]);
                     }
                 }
-                if(isbnSum % 10 == 0){
+                if (isbnSum % 10 == 0) {
                     validIsbn = true;
                 }
-            }else{ //length isbn not 10 or 13
+            } else { //length isbn not 10 or 13
                 validIsbn = false;
             }
-            if(validIsbn == false){
-                alert("Voer een geldig isbn nummer in")
+            if (validIsbn == false) {
+                alert("Voer een geldig isbn nummer in");
                 return;
             }
-            if (isNaN(newCopyNumbers) ){
-                alert("Voer een geldig aantal exemplaren in")
+            if (isNaN(newCopyNumbers)) {
+                alert("Voer een geldig aantal exemplaren in");
                 return;
-            }else if (newCopyNumbers.length == 0){
+            } else if (newCopyNumbers.length == 0) {
                 newCopyNumbers = 1;
-            }else{
+            } else {
                 newCopyNumbers = parseInt(newCopyNumbers);
             }
             let authorsArr = [];
@@ -234,7 +238,7 @@
                 }
                 tagsArr.push(document.getElementById('inputTag' + i).value);
             }
-            
+
             fetch('http://localhost:8080/book/create', {
                 method: 'POST',
                 body: JSON.stringify(
@@ -249,14 +253,14 @@
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            })    
-            .then(response => response.json()).then(data => {
-                if (data.succes) {
-                    alert('Boek is opgeslagen');
-                } else {
-                    alert(data.err);
-                }
-            });
+            })
+                .then(response => response.json()).then(data => {
+                    if (data.succes) {
+                        alert('Boek is opgeslagen');
+                    } else {
+                        alert(data.err);
+                    }
+                });
         }
 
         //function createBookAndDone() {
@@ -267,6 +271,19 @@
             createBook();
             document.getElementById('inputBookTitle').value = "";
             document.getElementById('inputIsbn').value = "";
+            document.getElementById('inputCopyNumbers').value = "";
+            const elements1 = document.querySelectorAll('input[type="Author"]');
+            const elements2 = document.querySelectorAll('input[type="Tag"]');
+            console.log(elements1); //
+            elements1[0].value='';
+            elements2[0].value='';
+            for (let i=1; i<elements1.length; i++){
+                elements1[i].remove();
+            }
+            for (let i=1; i<elements2.length; i++){
+                elements2[i].remove();
+            }
+            //document.getElementById('INPUT').value='';
         }
 
         async function searchAuthorId() {
@@ -284,6 +301,7 @@
         function addAuthorField() {
             const myAuthorForm = document.getElementById("author-list");
             var x = document.createElement("INPUT");
+            x.setAttribute("type", "Author");
             x.setAttribute("list", "inputAuthorList" + authorNumber);
             x.setAttribute("id", "inputAuthor" + authorNumber);
             x.setAttribute("placeholder", "Auteur");
@@ -308,6 +326,7 @@
         function addTagField() {
             const myTagForm = document.getElementById("tag-list");
             var x = document.createElement("INPUT");
+            x.setAttribute("type", "Tag");
             x.setAttribute("list", "inputTagList" + tagNumber);
             x.setAttribute("id", "inputTag" + tagNumber);
             x.setAttribute("placeholder", "Tag");
