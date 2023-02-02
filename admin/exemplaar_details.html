@@ -159,18 +159,19 @@
                                 }
                             }
                         }
+                        let statuss='';
                         if (status=='loaned'){ //nederlandse webpagina
-                            status = 'uitgeleend';
+                            statuss = 'uitgeleend';
                         } else if (status=='available'){
-                            status = 'beschikbaar';
+                            statuss = 'beschikbaar';
                         } else if (status=='archived'){
-                            status = 'gearchiveerd';
+                            statuss = 'gearchiveerd';
                         }
                         document.getElementById("image").innerHTML = urlImage;
                         document.getElementById("bookTitle").innerText = "Titel: " + title + ' (' + bookId + '.' + bookCopyNr + ')';
                         document.getElementById("book-authors").innerText = "Auteur(s): " + bookAuthors;
                         document.getElementById("book-tags").innerText = "Tag(s): " + bookTags;
-                        document.getElementById("status").innerText = "Huidige status: " + status;
+                        document.getElementById("status").innerText = "Huidige status: " + statuss;
                         document.getElementById("timesLoaned").innerText = "Keren uitgeleend: " + timesLoaned;
                         let currentLoan = data.currentLoan
                         if (data.status == "available") {
