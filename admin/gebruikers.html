@@ -75,7 +75,7 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op naam of emailadres">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="searchUser()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchUserButton(1)">Zoek</button>
       </div>
       <div class="col-2">
         <a href='gebruiker_toevoegen.html'><button class="btn btn-outline-success" type="button">Gebruiker
@@ -121,10 +121,10 @@
 
   <script>
     InitializePage("../user/index.html", "");
+    clearInputField();
     let currentPage = 1;
     let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
     window.onload = createUserTable(currentPage, elementsPerPage);
-
     let globalSearchCurrentUsersKeyword = "";
 
 
@@ -176,19 +176,19 @@
     }
 
     function nextPage1() {
-      createUserTable(currentPage + 1, elementsPerPage)
       currentPage++;
+      searchUser(currentPage, globalSearchCurrentUsersKeyword);
     }
 
     function previousPage1() {
-      createUserTable(currentPage - 1, elementsPerPage)
       currentPage--;
+      searchUser(currentPage, globalSearchCurrentUsersKeyword);
     }
 
     function SelectPageElementCount(count) {
       elementsPerPage = parseInt(count);
       currentPage = 1;
-      createUserTable(currentPage, elementsPerPage);
+      searchUser(currentPage, globalSearchCurrentUsersKeyword);
     }
 
     function anonUser(clickedId) {
@@ -211,21 +211,20 @@
               method: "PUT"
             })
               .then((data) => {
-                createUserTable(currentPage, elementsPerPage);
+                searchUser(currentPage, globalSearchCurrentUsersKeyword);
               });
           }
         });
         location.reload();
     }
 
-    function searchUser() {
-      let keyword = document.getElementById('searchField').value;
-      globalSearchCurrentUsersKeyword = keyword;
-
+    function searchUser(page, keyword) {
+      if (!keyword) {
+        return createUserTable(page, elementsPerPage);
+      }
       fetch('http://localhost:8080/user/search/' + keyword).then(response => response.json()).then(data => {
-
         let rows = '';
-        currentPage = 1;
+        currentPage = page;
         let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
         pageData.forEach(element => {
           let admin = "Gebruiker"
@@ -254,6 +253,17 @@
         });
         document.getElementById('book-row').innerHTML = rows;
       });
+    }
+
+    function searchUserButton(page)
+    {
+      let keyword = document.getElementById('searchField').value;
+      globalSearchCurrentUsersKeyword = keyword;
+      if (!keyword) {
+        currentPage = 1;
+        return createUserTable(currentPage, elementsPerPage);
+      }
+      searchUser(page, keyword);
     }
 
     function changeUser(clickedId) {
@@ -368,9 +378,14 @@
           if (globalSearchCurrentUsersKeyword == "") {
             createUserTable(currentPage, elementsPerPage);
           } else {
-            searchUser();
+            searchUser(currentPage, globalSearchCurrentUsersKeyword);
           }
         });
+    }
+
+    function clearInputField()
+    {
+      document.getElementById('searchField').value = '';
     }
   </script>
 

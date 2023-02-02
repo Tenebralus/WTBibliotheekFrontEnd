@@ -76,7 +76,7 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op titel, auteur, of tags">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchButton(1)">Zoek</button>
       </div>
       <div class="col-6">
         <a onclick="window.open('../admin/auteur_toevoegen.html', 'Auteurs', 'width=650, height=900, top=0, left=400')">
@@ -125,7 +125,7 @@
 
   <script>
     InitializePage("../user/index.html", "");
-
+    clearInputField();
     let currentPage = 1;
     let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
     window.onload = createLibraryTable(currentPage, elementsPerPage);
@@ -173,19 +173,21 @@
     }
 
     function nextPage1() {
-      createLibraryTable(currentPage + 1, elementsPerPage)
       currentPage++;
+      search(currentPage, globalSearchAllBooksKeyword);
+      console.log(currentPage);
     }
 
     function previousPage1() {
-      createLibraryTable(currentPage - 1, elementsPerPage)
       currentPage--;
+      search(currentPage, globalSearchAllBooksKeyword);
+      
     }
 
     function SelectPageElementCount(count) {
       elementsPerPage = parseInt(count);
       currentPage = 1;
-      createLibraryTable(currentPage, elementsPerPage);
+      search(currentPage, globalSearchAllBooksKeyword);
     }
 
     function updateLibrary(clickedId) {
@@ -320,7 +322,7 @@
           if (globalSearchAllBooksKeyword == "") {
             createLibraryTable(currentPage, elementsPerPage);
           } else {
-            search();
+            search(currentPage, globalSearchAllBooksKeyword);
           }
         });
     }
@@ -356,7 +358,7 @@
         if (globalSearchAllBooksKeyword == "") {
           createLibraryTable(currentPage, elementsPerPage);
         } else {
-          search(globalSearchAllBooksKeyword);
+          search(currentPage, globalSearchAllBooksKeyword);
         }
       } else {
         return false;
@@ -446,13 +448,13 @@
       }
     }
 
-    function search() {
-      let keyword = document.getElementById('searchField').value;
-      globalSearchAllBooksKeyword = keyword;
-
+    function search(page, keyword) {
+      if (!keyword) {
+        return createLibraryTable(page, elementsPerPage);
+      }
       fetch('http://localhost:8080/book/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
-        currentPage = 1;
+        currentPage = page;
         let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
         pageData.forEach(element => {
           let urlImage = '<img src= https://covers.openlibrary.org/b/isbn/' + element.isbn + '.jpg style="width: 45px; height: 60px"/>';//'<img src=' + element.urlImage + ' style="width: 45px; height: 60px"/>';
@@ -486,6 +488,22 @@
         });
         document.getElementById('book-row').innerHTML = rows;
       });
+    }
+
+    function searchButton(page)
+    {
+      let keyword = document.getElementById('searchField').value;
+      globalSearchAllBooksKeyword = keyword;
+      if (!keyword) {
+        currentPage = 1;
+        return createLibraryTable(currentPage, elementsPerPage);
+      }
+      search(page, keyword);
+    }
+
+    function clearInputField()
+    {
+      document.getElementById('searchField').value = '';
     }
   </script>
 

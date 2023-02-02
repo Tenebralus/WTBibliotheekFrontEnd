@@ -75,7 +75,7 @@
         <input class="form-control me-2" type="search" id="searchField" placeholder="Zoek op boektitel of gebruiker">
       </div>
       <div class="col">
-        <button class="btn btn-outline-success" type="button" onclick="search()">Zoek</button>
+        <button class="btn btn-outline-success" type="button" onclick="searchButton(1)">Zoek</button>
       </div>
     </div>
   </div>
@@ -113,9 +113,11 @@
 
   <script>
     InitializePage("../user/index.html", "");
+    clearInputField();
     let currentPage = 1;
     let elementsPerPage = parseInt(document.getElementById("page-elements-count").selectedOptions[0].label);
     window.onload = createTable(currentPage, elementsPerPage);
+    globalSearchKeyword = "";
 
     function createTable(page, elementsPerPage) {
       fetch('http://localhost:8080/reservation/dto').then(response => response.json()).then(data => {
@@ -151,19 +153,19 @@
     }
 
     function nextPage1() {
-      createTable(currentPage + 1, elementsPerPage)
       currentPage++;
+      search(currentPage, globalSearchKeyword);
     }
 
     function previousPage1() {
-      createTable(currentPage - 1, elementsPerPage)
       currentPage--;
+      search(currentPage, globalSearchKeyword);
     }
 
     function SelectPageElementCount(count) {
       elementsPerPage = parseInt(count);
       currentPage = 1;
-      createTable(currentPage, elementsPerPage);
+      search(currentPage, globalSearchKeyword);
     }
 
     function createLoan(clickedId) {
@@ -177,20 +179,28 @@
           method: 'POST'
         })
           .then(alert("Boek uitgeleend."));
-        createTable(currentPage, elementsPerPage);
+          if(globalSearchKeyword == "")
+          {
+            createTable(currentPage, elementsPerPage);
+          }
+          else
+          {
+            search(currentPage, globalSearchKeyword);
+          }
       } else {
         alert("Selecteer een exemplaar");
       }
     }
 
-    function search() {
-      let keyword = document.getElementById('searchField').value;
+    function search(page, keyword) {
       if (!keyword) {
         return createTable(currentPage, elementsPerPage);
       }
       fetch('http://localhost:8080/reservation/search/' + keyword).then(response => response.json()).then(data => {
         let rows = '';
-        data.forEach(element => {
+        currentPage = page;
+        let pageData = pageSelector(data, currentPage, 1, elementsPerPage);
+        pageData.forEach(element => {
           //Prevents errors if no user is registered to a reservation
           let userName = ""
           if (element.firstName && element.lastName) {
@@ -217,6 +227,22 @@
         });
         document.getElementById('book-row').innerHTML = rows;
       });
+    }
+
+    function searchButton(page)
+    {
+      let keyword = document.getElementById('searchField').value;
+      globalSearchKeyword = keyword;
+      if (!keyword) {
+        currentPage = 1;
+        return createTable(currentPage, elementsPerPage);
+      }
+      search(page, keyword);
+    }
+
+    function clearInputField()
+    {
+      document.getElementById('searchField').value = '';
     }
   </script>
 
