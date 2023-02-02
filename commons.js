@@ -344,11 +344,12 @@ function searchLoansCurrent(page, keyword) {
   if (!keyword) {
     return createLoanTableCurrent(page, elementsPerPage2);
   }
-  fetch('http://localhost:8080/loan/search/user/' + keyword, {
-    method: 'GET',
+  fetch('http://localhost:8080/loan/search/user/', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'token': getCookie('Authentication')
+      'token': getCookie('Authentication'),
+      'keyword': 'keyword'
     }
   }).then(response => response.json()).then(data => {  
 
@@ -424,11 +425,12 @@ function searchLoansHistory(page, keyword) {
   if (!keyword) {
     return createLoanTableHistory(page, elementsPerPage3);
   }
-  fetch('http://localhost:8080/loan/search/user/' + keyword, {
-    method: 'GET',
+  fetch('http://localhost:8080/loan/search/user/', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'token': getCookie('Authentication')
+      'token': getCookie('Authentication'),
+      'keyword': 'keyword'
     }
   }).then(response => response.json()).then(data => {
 
